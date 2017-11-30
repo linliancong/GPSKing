@@ -1,7 +1,9 @@
 package com.zxhl.gpsking;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,10 @@ import android.widget.Toast;
 
 import com.zxhl.util.FragmentUtils;
 import com.zxhl.util.MyFragmentPagerAdapter;
+import com.zxhl.util.NetWorkBroadcastReceiver;
+
+
+import org.w3c.dom.Text;
 
 /**
  * Created by Administrator on 2017/11/24.
@@ -33,9 +39,10 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
     private TextView txt_topbar;
 
     private ViewPager vpager;
-    private MyFragmentPagerAdapter mAdapter;
+    private MyFragmentPagerAdapter mAdapter=null;
 
     private long mTime=0;
+    NetWorkBroadcastReceiver net;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,5 +162,26 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
         else {
             super.onBackPressed();
         }
+
     }
+
+    @Override
+    protected void onResume() {
+       /* if(net==null)
+        {
+            net=new NetWorkBroadcastReceiver();
+        }
+        IntentFilter it=new IntentFilter("android.intent.action.NETWORK_CONNECT_STATE");
+        registerReceiver(net,it);*/
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        //unregisterReceiver(net);
+        super.onDestroy();
+    }
+
 }
+
+

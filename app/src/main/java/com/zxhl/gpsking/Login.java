@@ -43,7 +43,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Tex
     private MaterialEditText user;
     private MaterialEditText passwd;
     private long time=0;
-    private boolean state;
+
+    SharedPreferenceUtils sp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,16 +58,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Tex
     @Override
     protected void onStart() {
         super.onStart();
-        //判断网络状态
-        ConnectivityManager cm = (ConnectivityManager) Login.this
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm != null)  {
-            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-            if (networkInfo != null) {
-                state=true;
-            }
-        }
-        SharedPreferenceUtils sp=new SharedPreferenceUtils(this,Constants.SAVE_USER);
+        sp=new SharedPreferenceUtils(this,Constants.SAVE_USER);
         if(!sp.getIsFirst()) {
             user.setText(sp.getNickName());
             passwd.setText(sp.getPWD());
@@ -104,7 +96,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Tex
         switch (v.getId())
         {
             case R.id.btn_login:
-                if(!state)
+                if(!sp.getIsNetworkConnect())
                 {
                     Toast.makeText(Login.this,"网络不可用，请检查连接",Toast.LENGTH_SHORT).show();
                 }

@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         SharedPreferenceUtils sp=new SharedPreferenceUtils(MainActivity.this,Constants.SAVE_USER);
+        sp.setIsNetworkConnect(state);
         if(sp.getIsFirst()||!state) {
             handler.sendEmptyMessageDelayed(tag, 3000);
         }

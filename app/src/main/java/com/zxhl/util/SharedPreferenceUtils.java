@@ -144,4 +144,14 @@ public class SharedPreferenceUtils {
         return sp.getString("RolePermission", "");
     }
 
+    //网络是否连接
+    public void setIsNetworkConnect(boolean state){
+        editor.putBoolean("IsNetworkConnect",state);
+        editor.commit();
+    }
+
+    public boolean getIsNetworkConnect(){
+        return sp.getBoolean("IsNetworkConnect",false);
+    }
+
 }
