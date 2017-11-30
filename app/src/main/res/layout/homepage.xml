@@ -3,20 +3,110 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+
+    <RelativeLayout
+        android:id="@+id/ly_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/bg_topbar"
         >
 
         <TextView
+            android:id="@+id/txt_topbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="欢迎来到GPSKing"
-            android:textSize="30sp"
-            android:textColor="@color/colorAccent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@color/text_topbar"
+            android:text="首页"
             />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@color/div_white"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+    
+    <RadioGroup
+        android:id="@+id/rg_tab_bar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bg_white"
+        android:orientation="horizontal"
+        >
+
+        <RadioButton
+            android:id="@+id/rb_home"
+            style="@style/menu_item"
+            android:text="首页"
+            />
+
+        <RadioButton
+            android:id="@+id/rb_query"
+            style="@style/menu_item"
+            android:text="查询"
+            />
+
+        <RadioButton
+            android:id="@+id/rb_me"
+            style="@style/menu_item"
+            android:text="我的"
+            />
+
+        <RadioButton
+            android:id="@+id/rb_setting"
+            style="@style/menu_item"
+            android:text="设置"
+            />
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/ly_below"
+        android:layout_width="match_parent"
+        android:layout_height="5px"
+        android:layout_above="@id/rg_tab_bar"
+        android:orientation="horizontal"
+        >
+        <View
+            android:id="@+id/view_home"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/menu_view_color"/>
+        <View
+            android:id="@+id/view_query"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/menu_view_color"/>
+        <View
+            android:id="@+id/view_me"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/menu_view_color"/>
+        <View
+            android:id="@+id/view_setting"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/menu_view_color"/>
+
     </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ly_top_bar"
+        android:layout_above="@+id/ly_below"
+        >
+
+    </android.support.v4.view.ViewPager>
 
 
 </RelativeLayout>

@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -15,21 +17,30 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
+import com.zxhl.util.Constants;
+import com.zxhl.util.SharedPreferenceUtils;
+
 public class MainActivity extends AppCompatActivity {
     private ImageView img;
+    private boolean state=false;
 
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what)
             {
-                case 0x123:
+                case 0x001:
+                    finish();
+                    break;
+                case 0x002:
                     Intent intent=new Intent(MainActivity.this, Login.class);
                     startActivity(intent);
                     finish();
                     break;
-                case 0x001:
-                    break;
+                case 0x003:
+                    Intent intent2=new Intent(MainActivity.this, HomePage.class);
+                    startActivity(intent2);
+                    finish();
             }
         }
     };
@@ -41,7 +52,25 @@ public class MainActivity extends AppCompatActivity {
         img= (ImageView) findViewById(R.id.img);
         int tag=scaleImage(this,img,R.drawable.login_bg);
 
-        handler.sendEmptyMessageDelayed(tag,3000);
+        //判断网络状态
+        ConnectivityManager cm = (ConnectivityManager) MainActivity.this
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        //如果仅仅是用来判断网络连接
+        // 则可以使用 cm.getActiveNetworkInfo().isAvailable();
+        if (cm != null)  {
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            if (networkInfo != null) {
+                state=true;
+            }
+        }
+
+        SharedPreferenceUtils sp=new SharedPreferenceUtils(MainActivity.this,Constants.SAVE_USER);
+        if(sp.getIsFirst()||!state) {
+            handler.sendEmptyMessageDelayed(tag, 3000);
+        }
+        else {
+            handler.sendEmptyMessageDelayed(0x003,3000);
+        }
 
     }
 
@@ -99,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        return 0x123;
+        return 0x002;
     }
+
 }

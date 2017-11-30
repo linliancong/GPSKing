@@ -1,6 +1,9 @@
 package com.zxhl.gpsking;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,9 +11,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -36,6 +43,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Tex
     private MaterialEditText user;
     private MaterialEditText passwd;
     private long time=0;
+    private boolean state;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,9 +57,24 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Tex
     @Override
     protected void onStart() {
         super.onStart();
+        //判断网络状态
+        ConnectivityManager cm = (ConnectivityManager) Login.this
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null)  {
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            if (networkInfo != null) {
+                state=true;
+            }
+        }
         SharedPreferenceUtils sp=new SharedPreferenceUtils(this,Constants.SAVE_USER);
-        user.setText(sp.getNickName());
-        passwd.setText(sp.getPWD());
+        if(!sp.getIsFirst()) {
+            user.setText(sp.getNickName());
+            passwd.setText(sp.getPWD());
+        }
+        else
+        {
+            user.setText(sp.getNickName());
+        }
     }
 
     //退出按钮
@@ -81,7 +104,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Tex
         switch (v.getId())
         {
             case R.id.btn_login:
-                submit();
+                if(!state)
+                {
+                    Toast.makeText(Login.this,"网络不可用，请检查连接",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    submit();
+                }
                 break;
             default:
                 break;
@@ -94,6 +123,20 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Tex
         final String pwd=passwd.getText().toString();
 
         HashMap<String,String> proper=new HashMap<String,String>();
+        SharedPreferenceUtils utils;
+
+        final PopupWindow pop=new PopupWindow();
+        //设置宽高
+        pop.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+        pop.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        //设置焦点
+        pop.setFocusable(true);
+        View view= LayoutInflater.from(this).inflate(R.layout.pop_content,null);
+        //设置显示的view
+        pop.setContentView(view);
+        //设置显示的位置
+        pop.showAtLocation(getWindow().getDecorView(), Gravity.CENTER,0,0);
+
         proper.put("NickName",username);
         proper.put("PWD",pwd);
         //调用WebService接口
@@ -101,30 +144,36 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Tex
             //WebService接口返回的数据回调到这个方法中
             @Override
             public void callBack(SoapObject result) {
+                SharedPreferenceUtils utils=new SharedPreferenceUtils(Login.this, Constants.SAVE_USER);
                 if(result!=null)
                 {
                     List<String> list=new ArrayList<String>();
                     list= parseSoap(result);
                     if(list.size()==0)
                     {
+                        pop.dismiss();
+                        utils.setIsFirst(true);
                         Toast.makeText(Login.this,"账号或密码错误！",Toast.LENGTH_SHORT).show();
                         return;
                     }
                     //保存用户信息
-                    SharedPreferenceUtils utils=new SharedPreferenceUtils(Login.this, Constants.SAVE_USER);
                     utils.setNickName(username);
                     utils.setPWD(pwd);
                     utils.setOperatorID(list.get(0));
                     utils.setOperatorName(list.get(1));
                     utils.setVGroupID(list.get(2));
                     utils.setRolePermission(list.get(3));
+                    utils.setIsFirst(false);
                     Intent it=new Intent(Login.this,HomePage.class);
                     startActivity(it);
+                    pop.dismiss();
                     finish();
                     Toast.makeText(Login.this,"登录成功",Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
+                    pop.dismiss();
+                    utils.setIsFirst(true);
                     Toast.makeText(Login.this,"账号或密码错误！",Toast.LENGTH_SHORT).show();
                 }
 
@@ -175,4 +224,5 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Tex
             btn_login.setEnabled(true);
         }
     }
+
 }
