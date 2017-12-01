@@ -75,7 +75,7 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
         //viewPager相关的设置
         vpager= (ViewPager) findViewById(R.id.vpager);
         vpager.setAdapter(mAdapter);
-        vpager.setCurrentItem(0);
+        //vpager.setCurrentItem(0);
         vpager.addOnPageChangeListener(this);
     }
 
@@ -106,6 +106,7 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
                 view_setting.setSelected(true);
                 vpager.setCurrentItem(FragmentUtils.PAG_FOUR);
                 break;
+            default:break;
         }
     }
 

@@ -38,7 +38,7 @@ public class FragmentUtils extends Fragment {
                 TextView txt_content1 = (TextView) view1.findViewById(R.id.hp_txt_content);
                 txt_content1.setText(content);
                 view=view1;
-            break;
+                break;
             case PAG_TWO:
                 View view2 = inflater.inflate(R.layout.hp_content, container, false);
                 TextView txt_content2 = (TextView) view2.findViewById(R.id.hp_txt_content);
@@ -46,15 +46,15 @@ public class FragmentUtils extends Fragment {
                 view=view2;
                 break;
             case PAG_THREE:
-                View view3 = inflater.inflate(R.layout.hp_content, container, false);
-                TextView txt_content3 = (TextView) view3.findViewById(R.id.hp_txt_content);
-                txt_content3.setText(content);
+                View view3 = inflater.inflate(R.layout.sy_me, container, false);
+                /*TextView txt_content3 = (TextView) view3.findViewById(R.id.hp_txt_content);
+                txt_content3.setText(content);*/
                 view=view3;
                 break;
             case PAG_FOUR:
-                View view4 = inflater.inflate(R.layout.hp_content, container, false);
-                TextView txt_content4 = (TextView) view4.findViewById(R.id.hp_txt_content);
-                txt_content4.setText(content);
+                View view4 = inflater.inflate(R.layout.sy_setting, container, false);
+                /*TextView txt_content4 = (TextView) view4.findViewById(R.id.hp_txt_content);
+                txt_content4.setText(content);*/
                 view=view4;
                 break;
         }
