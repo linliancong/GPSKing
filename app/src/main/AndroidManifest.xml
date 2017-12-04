@@ -35,6 +35,13 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".MeSyGd">
+            <intent-filter>
+                <action android:name="android.intent.action.MESYGD"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <!--监听网络变化的广播-->
         <receiver android:name="com.zxhl.util.NetWorkBroadcastReceiver">
             <intent-filter>

@@ -26,6 +26,11 @@ import org.w3c.dom.Text;
 
 public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,ViewPager.OnPageChangeListener{
 
+    public static final int PAG_ONE=0;
+    public static final int PAG_TWO=1;
+    public static final int PAG_THREE=2;
+    public static final int PAG_FOUR=3;
+
     private RadioGroup rg_tab_bar;
     private RadioButton rb_home;
     private RadioButton rb_query;
@@ -49,7 +54,7 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homepage);
 
-        mAdapter=new MyFragmentPagerAdapter(getSupportFragmentManager());
+        mAdapter=new MyFragmentPagerAdapter(getSupportFragmentManager(),HomePage.this);
         bindView();
         rb_home.setChecked(true);
     }
@@ -86,25 +91,25 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
                 txt_topbar.setText("首页");
                 setSelected();
                 view_home.setSelected(true);
-                vpager.setCurrentItem(FragmentUtils.PAG_ONE);
+                vpager.setCurrentItem(PAG_ONE);
                 break;
             case R.id.rb_query:
                 txt_topbar.setText("查询");
                 setSelected();
                 view_query.setSelected(true);
-                vpager.setCurrentItem(FragmentUtils.PAG_TWO);
+                vpager.setCurrentItem(PAG_TWO);
                 break;
             case R.id.rb_me:
                 txt_topbar.setText("我的");
                 setSelected();
                 view_me.setSelected(true);
-                vpager.setCurrentItem(FragmentUtils.PAG_THREE);
+                vpager.setCurrentItem(PAG_THREE);
                 break;
             case R.id.rb_setting:
                 txt_topbar.setText("设置");
                 setSelected();
                 view_setting.setSelected(true);
-                vpager.setCurrentItem(FragmentUtils.PAG_FOUR);
+                vpager.setCurrentItem(PAG_FOUR);
                 break;
             default:break;
         }
@@ -135,16 +140,16 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
         if (state==2)
         {
             switch (vpager.getCurrentItem()){
-                case FragmentUtils.PAG_ONE:
+                case HomePage.PAG_ONE:
                     rb_home.setChecked(true);
                     break;
-                case FragmentUtils.PAG_TWO:
+                case HomePage.PAG_TWO:
                     rb_query.setChecked(true);
                     break;
-                case FragmentUtils.PAG_THREE:
+                case HomePage.PAG_THREE:
                     rb_me.setChecked(true);
                     break;
-                case FragmentUtils.PAG_FOUR:
+                case HomePage.PAG_FOUR:
                     rb_setting.setChecked(true);
                     break;
             }

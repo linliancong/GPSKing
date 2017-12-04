@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Dimension;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -167,6 +168,12 @@ public class ImgTxtLayout extends RelativeLayout{
                 custom_txt.setTextSize(textSize);
             }
             //设置两个控件的位置结构
+            float dp=a.getDimension(R.styleable.ImgTxtLayout_spacing,0);
+            if(dp!=0)
+            {
+                Float f1=new Float(dp);
+                spacing=f1.intValue();
+            }
             mStyle = a.getInt(R.styleable.ImgTxtLayout_style, 0);
             setIconStyle(mStyle);
             a.recycle();
