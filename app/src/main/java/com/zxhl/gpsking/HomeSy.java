@@ -25,9 +25,11 @@ public class HomeSy extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.hp_content, container, false);
-        init();
-        content="Home";
+        if(view==null) {
+            view = inflater.inflate(R.layout.hp_content, container, false);
+            init();
+            content = "Home";
+        }
         TextView txt_content1 = (TextView) view.findViewById(R.id.hp_txt_content);
         txt_content1.setText(content);
         return view;

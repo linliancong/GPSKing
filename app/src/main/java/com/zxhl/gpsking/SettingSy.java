@@ -24,8 +24,10 @@ public class SettingSy extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.sy_setting, container, false);
-        init();
+        if(view==null) {
+            view = inflater.inflate(R.layout.sy_setting, container, false);
+            init();
+        }
         return view;
     }
 

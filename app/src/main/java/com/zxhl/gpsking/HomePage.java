@@ -24,7 +24,7 @@ import org.w3c.dom.Text;
  * Created by Administrator on 2017/11/24.
  */
 
-public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,ViewPager.OnPageChangeListener{
+public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,ViewPager.OnPageChangeListener,MeSy.ShowAct{
 
     public static final int PAG_ONE=0;
     public static final int PAG_TWO=1;
@@ -188,6 +188,21 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
         super.onDestroy();
     }
 
+    @Override
+    public void callBack(int result) {
+        if(result==0x001){
+            Toast.makeText(getApplicationContext(),"登录超时，请重新登录",Toast.LENGTH_SHORT).show();
+            Intent it=new Intent(getApplicationContext(),Login.class);
+            startActivity(it);
+            finish();
+        }
+        if(result==0x003){
+            Toast.makeText(getApplicationContext(),"没有读取到数据",Toast.LENGTH_SHORT).show();
+            Intent it=new Intent(getApplicationContext(),Login.class);
+            startActivity(it);
+            finish();
+        }
+    }
 }
 
 

@@ -1,5 +1,6 @@
 package com.zxhl.gpsking;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -49,11 +50,14 @@ public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
     HashMap<String,String> map=null;
     List<Map<String,String>> listM=null;
 
+    private Context context;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sy_me_gd);
+        context=getApplicationContext();
 
         init();
         getIntents();
@@ -102,22 +106,85 @@ public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.me_ly_gsmc:
+                Intent it_gsmc=new Intent();
+                it_gsmc.setClass(context,MeSyUpdate.class);
+                Bundle bd_gsmc=new Bundle();
+                bd_gsmc.putString("STR",map.get("公司名称"));
+                bd_gsmc.putInt("VALUE",2);
+                it_gsmc.putExtras(bd_gsmc);
+                startActivity(it_gsmc);
                 break;
             case R.id.me_ly_lxdh:
+                Intent it_lxdh=new Intent();
+                 it_lxdh.setClass(context,MeSyUpdate.class);
+                Bundle bd_lxdh=new Bundle();
+                bd_lxdh.putString("STR",map.get("联系电话"));
+                bd_lxdh.putInt("VALUE",3);
+                 it_lxdh.putExtras(bd_lxdh);
+                startActivity( it_lxdh);
                 break;
             case R.id.me_ly_qq:
+                Intent it_qq=new Intent();
+                it_qq.setClass(context,MeSyUpdate.class);
+                Bundle bd_qq=new Bundle();
+                bd_qq.putString("STR",map.get("QQ"));
+                bd_qq.putInt("VALUE",4);
+                it_qq.putExtras(bd_qq);
+                startActivity(it_qq);
                 break;
             case R.id.me_ly_email:
+                Intent it_email=new Intent();
+                it_email.setClass(context,MeSyUpdate.class);
+                Bundle bd_email=new Bundle();
+                bd_email.putString("STR",map.get("Email"));
+                bd_email.putInt("VALUE",5);
+                it_email.putExtras(bd_email);
+                startActivity(it_email);
                 break;
             case R.id.me_ly_sfz:
+                Intent it_sfz=new Intent();
+                it_sfz.setClass(context,MeSyUpdate.class);
+                Bundle bd_sfz=new Bundle();
+                bd_sfz.putString("STR",map.get("身份证号码"));
+                bd_sfz.putInt("VALUE",6);
+                it_sfz.putExtras(bd_sfz);
+                startActivity(it_sfz);
                 break;
             case R.id.me_ly_jg:
+                Intent it_jg=new Intent();
+                it_jg.setClass(context,MeSyUpdate.class);
+                Bundle bd_jg=new Bundle();
+                bd_jg.putString("STR",map.get("籍贯"));
+                bd_jg.putInt("VALUE",7);
+                it_jg.putExtras(bd_jg);
+                startActivity(it_jg);
                 break;
             case R.id.me_ly_jtdz:
+                Intent it_jtdz=new Intent();
+                it_jtdz.setClass(context,MeSyUpdate.class);
+                Bundle bd_jtdz=new Bundle();
+                bd_jtdz.putString("STR",map.get("家庭地址"));
+                bd_jtdz.putInt("VALUE",8);
+                it_jtdz.putExtras(bd_jtdz);
+                startActivity(it_jtdz);
                 break;
             case R.id.me_ly_jtdh:
+                Intent it_jtdh=new Intent();
+                it_jtdh.setClass(context,MeSyUpdate.class);
+                Bundle bd_jtdh=new Bundle();
+                bd_jtdh.putString("STR",map.get("家庭电话"));
+                bd_jtdh.putInt("VALUE",9);
+                it_jtdh.putExtras(bd_jtdh);
+                startActivity(it_jtdh);
                 break;
             case R.id.me_ly_bz:
+                Intent it_bz=new Intent();
+                it_bz.setClass(context,MeSyUpdate.class);
+                Bundle bd_bz=new Bundle();
+                bd_bz.putString("STR",map.get("备注"));
+                bd_bz.putInt("VALUE",10);
+                it_bz.putExtras(bd_bz);
+                startActivity(it_bz);
                 break;
             default:break;
         }

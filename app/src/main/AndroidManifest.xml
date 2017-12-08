@@ -42,6 +42,14 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".MeSyUpdate">
+            <intent-filter>
+                <action android:name="android.intent.action.MESYUPDATE"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <!--监听网络变化的广播-->
         <receiver android:name="com.zxhl.util.NetWorkBroadcastReceiver">
             <intent-filter>
@@ -58,5 +66,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- 指定添加权限   获取网络信息状态，如当前的网络连接是否有效-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--获取存储权限-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
 </manifest>
