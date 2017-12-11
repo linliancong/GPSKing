@@ -318,7 +318,7 @@ public class MeSy extends Fragment implements View.OnClickListener {
             Bitmap photo=bd.getParcelable("data");
             me_img_tx.setImageBitmap(photo);
             saveImage(photo);
-            //sendImage(photo);
+            sendImage(photo);
         }
     }
 
@@ -381,12 +381,13 @@ public class MeSy extends Fragment implements View.OnClickListener {
         ByteArrayOutputStream stream=new ByteArrayOutputStream();
         bt.compress(Bitmap.CompressFormat.PNG, 100,stream);
         byte[] bytes=stream.toByteArray();
+        String name=sp.getOperatorID()+".png";
         String img=new String(Base64.encodeToString(bytes,Base64.DEFAULT));
         AsyncHttpClient client=new AsyncHttpClient();
         RequestParams params=new RequestParams();
         params.add("img",img);
-
-        client.post(Constants.PHOTO_SAVE+"icon.png", params, new AsyncHttpResponseHandler() {
+        params.add("name",name);
+        client.post(Constants.PHOTO_SAVE, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
                 Toast.makeText(context,"上传成功",Toast.LENGTH_SHORT).show();
