@@ -22,6 +22,7 @@ import android.os.Message;
 import android.os.Process;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.annotation.StringDef;
@@ -42,6 +43,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.zxhl.util.Constants;
+import com.zxhl.util.FileDownloadUtil.DownloadProgressListener;
+import com.zxhl.util.FileDownloadUtil.FileDownloadered;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.WebServiceUtils;
@@ -206,7 +209,9 @@ public class MeSy extends Fragment implements View.OnClickListener {
     public void getUserInfo(){
         HashMap<String,String> prepro=new HashMap<String,String>();
         prepro.put("OperatorID",sp.getOperatorID());
-        readImage();
+        if(!readImage()){
+            downloadImage();
+        }
 
         WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetOperatorInfo", prepro, new WebServiceUtils.WebServiceCallBack() {
             @Override
@@ -336,7 +341,7 @@ public class MeSy extends Fragment implements View.OnClickListener {
         }
         FileOutputStream fos = null;
         try {
-            File file = new File(filesDir,"icon.png");
+            File file = new File(filesDir,sp.getOperatorID()+".png");
             fos = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100,fos);
         } catch (Exception e) {
@@ -364,7 +369,7 @@ public class MeSy extends Fragment implements View.OnClickListener {
             //路径2：data/data/包名/files
             filesDir = context.getFilesDir();
         }
-        File file = new File(filesDir,"icon.png");
+        File file = new File(filesDir,sp.getOperatorID()+".png");
         if(file.exists()){
             //存储--->内存
             Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -390,14 +395,48 @@ public class MeSy extends Fragment implements View.OnClickListener {
         client.post(Constants.PHOTO_SAVE, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
-                Toast.makeText(context,"上传成功",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"保存成功",Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int i, org.apache.http.Header[] headers, byte[] bytes, Throwable throwable) {
-                Toast.makeText(context,"上传失败",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"保存失败",Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /**
+     *下载头像到本地
+     * */
+    public void downloadImage(){
+        String path=Constants.PHOTO_PATH + sp.getOperatorID()+".png";
+        File saveDir=null;
+        FileDownloadered loader;
+        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){//判断sd卡是否挂载
+            //路径1：storage/sdcard/Android/data/包名/files
+            saveDir = context.getExternalFilesDir("");
+        }else{//手机内部存储
+            //路径2：data/data/包名/files
+            saveDir = context.getFilesDir();
+        }
+        File file=new File(saveDir,sp.getOperatorID()+".png");
+        try {
+            loader = new FileDownloadered(context, path, saveDir, 3);
+            loader.download(new DownloadProgressListener() {
+                @Override
+                public void onDownloadSize(int downloadedSize) {
+
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if (file.exists()){
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+            me_img_tx.setImageBitmap(bitmap);
+        }
+
     }
 
 }

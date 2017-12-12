@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 // 设置图片显示
-                view.setBackgroundDrawable(new BitmapDrawable(activity.getResources(), finallyBitmap));
+                //view.setBackgroundDrawable(new BitmapDrawable(activity.getResources(), finallyBitmap));
                 return true;
             }
         });

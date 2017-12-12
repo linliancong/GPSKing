@@ -12,7 +12,8 @@ public class Constants {
     public static final String IP_PORT="ip_port";           //保存ip和port的文件名
     public static final String SAVE_USER="save_user";       //保存用户信息的文件名
     public static final String DATABASE="TXServer";         //连接的数据库名称
-    public static final String PHOTO_SAVE="http://110.86.16.166:8080/WebServiceClient/UpLoadPhotoServlet"; //头像保存路径
+    public static final String PHOTO_SAVE="http://110.86.16.166:8080/WebServiceClient/UpLoadPhotoServlet"; //头像保存deServlet
+    public static final String PHOTO_PATH="http://110.86.16.166/APPWebService/Image/";//图片在服务器的路径
 
     public static byte[] hexStr2Bytes(String src){
         int m=0,n=0;
