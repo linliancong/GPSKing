@@ -1,6 +1,7 @@
 package com.zxhl.gpsking;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,10 +17,12 @@ import android.widget.TextView;
 public class HomeSy extends Fragment implements View.OnClickListener {
 
     private View view;
+    private Context context;
     private String content;
     private int tag=0;
 
-    public HomeSy(){
+    public HomeSy(Context context){
+        this.context=context;
     }
 
     @Nullable

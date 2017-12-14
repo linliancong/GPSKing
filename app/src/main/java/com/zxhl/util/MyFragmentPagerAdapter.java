@@ -39,10 +39,10 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
         fmu3=new FragmentUtils("THREE",FragmentUtils.PAG_THREE);
         fmu4=new FragmentUtils("FOUR",FragmentUtils.PAG_FOUR);*/
 
-        homeSy=new HomeSy();
-        querySy=new QuerySy();
+        homeSy=new HomeSy(context);
+        querySy=new QuerySy(context);
         meSy=new MeSy(context);
-        settingSy=new SettingSy();
+        settingSy=new SettingSy(context);
 
     }
 

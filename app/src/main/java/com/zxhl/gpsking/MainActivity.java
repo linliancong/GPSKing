@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         img= (ImageView) findViewById(R.id.img);
-        int tag=scaleImage(this,img,R.drawable.login_bg);
+        int tag=scaleImage(this,img,R.drawable.gpsking_index_new);
 
         //判断网络状态
         ConnectivityManager cm = (ConnectivityManager) MainActivity.this

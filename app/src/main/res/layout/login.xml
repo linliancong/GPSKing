@@ -51,7 +51,7 @@
             app:met_floatingLabel="highlight"
             app:met_floatingLabelText="用户名"
             app:met_maxCharacters="12"
-            app:met_primaryColor="@color/colorAccent2"
+            app:met_primaryColor="@color/light_blue_500"
             />
 
         <com.rengwuxian.materialedittext.MaterialEditText
@@ -70,7 +70,7 @@
             app:met_floatingLabel="highlight"
             app:met_floatingLabelText="密码"
             app:met_maxCharacters="10"
-            app:met_primaryColor="@color/colorAccent2"
+            app:met_primaryColor="@color/light_blue_500"
             />
 
     </LinearLayout>

@@ -1,6 +1,7 @@
 package com.zxhl.gpsking;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,9 +18,12 @@ import android.widget.TextView;
 public class SettingSy extends Fragment implements View.OnClickListener {
 
     private View view;
+    private Context context;
     private int tag=0;
 
-    public SettingSy(){}
+    public SettingSy(Context conetxt){
+        this.context=context;
+    }
 
     @Nullable
     @Override
