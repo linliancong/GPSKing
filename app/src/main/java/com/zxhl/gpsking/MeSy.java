@@ -100,9 +100,9 @@ public class MeSy extends Fragment implements View.OnClickListener {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
-                case 0x001:
+                case 0x0010:
                     showAct= (ShowAct) getActivity();
-                    showAct.callBack(0x001);
+                    showAct.callBack(0x0010);
                             /*Toast.makeText(context,"登录超时，请重新登录",Toast.LENGTH_SHORT).show();
                             Intent it=new Intent(context,Login.class);
                             startActivity(it);
@@ -110,13 +110,13 @@ public class MeSy extends Fragment implements View.OnClickListener {
                             Process.killProcess(pid);*/
 
                     break;
-                case 0x002:
+                case 0x0020:
                     showAct= (ShowAct) getActivity();
-                    showAct.callBack(0x002);
+                    showAct.callBack(0x0020);
                     break;
                 default:
                     showAct= (ShowAct) getActivity();
-                    showAct.callBack(0x003);
+                    showAct.callBack(0x0030);
                     break;
             }
         }
@@ -221,7 +221,7 @@ public class MeSy extends Fragment implements View.OnClickListener {
                     map=parseSoap(result);
                     if(map.size()==0)
                     {
-                        handler.sendEmptyMessage(0x001);
+                        handler.sendEmptyMessage(0x0010);
                     }
                     me_txt_tx.setText(map.get("姓名"));
                     me_txt_tx2.setText(map.get("帐号"));

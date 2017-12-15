@@ -7,7 +7,6 @@
     android:background="@color/bg_white"
     >
 
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="48dp"
@@ -18,7 +17,7 @@
 
 
         <com.zxhl.util.ImgTxtLayout
-            android:id="@+id/me_imgtxt_update"
+            android:id="@+id/settinggy_imgtxt_gy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -28,23 +27,9 @@
             zxhl:iconDrawablePress="@mipmap/cs_ic_back_blue_press"
             zxhl:spacing="10dp"
             zxhl:style="iconLeft"
-            zxhl:text="更改"
+            zxhl:text="关于"
             zxhl:textSize="18"
             zxhl:textColor="@color/black"
-            />
-
-        <Button
-            android:id="@+id/me_btn_update"
-            android:layout_marginRight="15dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:layout_width="50dp"
-            android:layout_height="26dp"
-            android:background="@drawable/me_sy_btn"
-            android:text="保存"
-            android:textColor="@color/bg_white"
-            android:textSize="12sp"
-            android:enabled="false"
             />
 
         <View
@@ -54,15 +39,10 @@
             android:layout_alignParentBottom="true"
             />
     </RelativeLayout>
-    <EditText
-        android:id="@+id/me_txt_update"
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:background="@null"
-        android:drawableBottom="@drawable/line"
+        android:layout_height="match_parent"
+        android:src="@drawable/gpsking_index_ver"
         />
 
 </LinearLayout>

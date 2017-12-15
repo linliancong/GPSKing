@@ -24,7 +24,7 @@ import org.w3c.dom.Text;
  * Created by Administrator on 2017/11/24.
  */
 
-public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,ViewPager.OnPageChangeListener,MeSy.ShowAct{
+public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,ViewPager.OnPageChangeListener,MeSy.ShowAct,SettingSy.ShowAct{
 
     public static final int PAG_ONE=0;
     public static final int PAG_TWO=1;
@@ -190,18 +190,49 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
 
     @Override
     public void callBack(int result) {
-        if(result==0x001){
-            Toast.makeText(getApplicationContext(),"登录超时，请重新登录",Toast.LENGTH_SHORT).show();
-            Intent it=new Intent(getApplicationContext(),Login.class);
-            startActivity(it);
-            finish();
+        switch (result){
+            //首页
+            case 0x1000:
+                break;
+            case 0x2000:
+                break;
+            case 0x3000:
+                break;
+            //查询
+            case 0x0100:
+                break;
+            case 0x0200:
+                break;
+            case 0x0300:
+                break;
+            //我的
+            case 0x0010:
+                Toast.makeText(getApplicationContext(),"登录超时，请重新登录",Toast.LENGTH_SHORT).show();
+                Intent it=new Intent(getApplicationContext(),Login.class);
+                startActivity(it);
+                finish();
+                break;
+            case 0x0020:
+                break;
+            case 0x0030:
+                Toast.makeText(getApplicationContext(),"没有读取到数据",Toast.LENGTH_SHORT).show();
+                Intent it2=new Intent(getApplicationContext(),Login.class);
+                startActivity(it2);
+                finish();
+                break;
+            //设置
+            case 0x0001:
+                Intent it3=new Intent(getApplicationContext(),Login.class);
+                startActivity(it3);
+                finish();
+                break;
+            case 0x0002:
+                finish();
+                break;
+            case 0x0003:
+                break;
         }
-        if(result==0x003){
-            Toast.makeText(getApplicationContext(),"没有读取到数据",Toast.LENGTH_SHORT).show();
-            Intent it=new Intent(getApplicationContext(),Login.class);
-            startActivity(it);
-            finish();
-        }
+
     }
 }
 

@@ -12,9 +12,13 @@
         <attr name="textColorPress"/>
         <attr name="iconDrawable" format="reference" />
         <attr name="iconDrawablePress" format="reference" />
+        <attr name="iconWidth" format="dimension"/>
+        <attr name="iconHeight" format="dimension"/>
         <attr name="text" format="string" />
         <attr name="textSize" format="float" />
         <attr name="spacing" format="dimension" />
+        <attr name="clickable" format="boolean"/>
+        <attr name="focusable" format="boolean"/>
         <attr name="style">
             <enum name="iconLeft" value="0" />
             <enum name="iconRight" value="1" />

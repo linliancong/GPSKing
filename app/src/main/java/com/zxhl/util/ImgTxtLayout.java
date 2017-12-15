@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -64,6 +65,11 @@ public class ImgTxtLayout extends RelativeLayout{
      */
     private Drawable iconDrawablePress = null;
     /**
+     * icon的宽和高
+     */
+    private int iconWidth=0;
+    private int iconHeight=0;
+    /**
      * View文字的颜色
      */
     private ColorStateList textColor = null;
@@ -79,6 +85,11 @@ public class ImgTxtLayout extends RelativeLayout{
      * 两个控件的位置结构
      */
     private int mStyle = STYLE_ICON_LEFT;
+    /**
+     * 设置控件的获取焦点及点击事件
+    * */
+    private boolean focusable=true;
+    private boolean clickable=true;
     /**
      * 标示onTouch方法的返回值，用来解决onClick和onTouch冲突问题
      */
@@ -176,25 +187,48 @@ public class ImgTxtLayout extends RelativeLayout{
             }
             mStyle = a.getInt(R.styleable.ImgTxtLayout_style, 0);
             setIconStyle(mStyle);
+            //设置图片的宽、高
+            float width=a.getDimension(R.styleable.ImgTxtLayout_iconWidth,0);
+            float height=a.getDimension(R.styleable.ImgTxtLayout_iconHeight,0);
+            if(width!=0 && height!=0)
+            {
+                Float f1=new Float(width);
+                iconWidth=f1.intValue();
+                Float f2=new Float(height);
+                iconHeight=f2.intValue();
+                //LayoutParams lp= (LayoutParams) custom_img.getLayoutParams();
+                /*lp.width=iconWidth;
+                lp.height=iconHeight;*/
+                LayoutParams lp=new RelativeLayout.LayoutParams(iconWidth,iconHeight);
+                custom_img.setLayoutParams(lp);
+            }
+            focusable=a.getBoolean(R.styleable.ImgTxtLayout_focusable,true);
+            clickable=a.getBoolean(R.styleable.ImgTxtLayout_clickable,true);
             a.recycle();
         }
 
-        setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View arg0, MotionEvent event) {
-                //根据touch事件设置按下抬起的样式
-                return setTouchStyle(event.getAction());
-            }
-        });
-
-        setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onClickListener != null) {
-                    onClickListener.onClick(v);
+        if (focusable)
+        {
+            setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View arg0, MotionEvent event) {
+                    //根据touch事件设置按下抬起的样式
+                    return setTouchStyle(event.getAction());
                 }
-            }
-        });
+            });
+        }
+
+        if(clickable)
+        {
+            setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickListener != null) {
+                        onClickListener.onClick(v);
+                    }
+                }
+            });
+        }
     }
 
     /**
