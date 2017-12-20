@@ -1,24 +1,40 @@
 package com.zxhl.gpsking;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.Settings;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zxhl.util.ApkVersionUtils;
+import com.zxhl.util.DownloadService;
 import com.zxhl.util.FragmentUtils;
 import com.zxhl.util.MyFragmentPagerAdapter;
 import com.zxhl.util.NetWorkBroadcastReceiver;
+import com.zxhl.util.WebServiceUtils;
 
 
+import org.kobjects.pim.VCard;
+import org.ksoap2.serialization.SoapObject;
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/11/24.
@@ -49,14 +65,86 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
     private long mTime=0;
     NetWorkBroadcastReceiver net;
 
+
+    private Intent intent;
+
+    private int verCode_s=0;
+    private int verCode=0;
+    private AlertDialog alert;
+    private AlertDialog.Builder builder;
+    private LayoutInflater inflater;
+
+    private NotificationManager manager;
+
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 1:
+                    if(verCode_s!=0) {
+                        if(verCode_s!= verCode) {
+                            View view = getAlert(R.layout.ad_update);
+                            view.findViewById(R.id.ad_btn_update_cancel).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    alert.dismiss();
+                                }
+                            });
+
+                            view.findViewById(R.id.ad_btn_update_confirm).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //检查更新,当SDK大于等于21时即大于Android5.0时调用这个
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                        intent = new Intent(HomePage.this, DownloadService.class);
+                                        intent.setAction("com.zxhl.util.DOWNLOADSERVICE");
+                                        intent.putExtra("operator",0);
+                                        startService(intent);
+                                    } else {
+                                        intent = new Intent();
+                                        intent.setAction("com.zxhl.util.DOWNLOADSERVICE");
+                                        intent.putExtra("operator",0);
+                                        startService(intent);
+                                    }
+                                    alert.dismiss();
+                                }
+                            });
+
+                        }
+                    }
+                    break;
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homepage);
 
+        manager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
         mAdapter=new MyFragmentPagerAdapter(getSupportFragmentManager(),HomePage.this);
         bindView();
         rb_home.setChecked(true);
+
+        verCode= ApkVersionUtils.getVerCode(this);
+        HashMap<String,String> proper=new HashMap<String,String>();
+        WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetVerCode", proper, new WebServiceUtils.WebServiceCallBack() {
+            @Override
+            public void callBack(SoapObject result) {
+                if(result!=null) {
+                    List<String> list = new ArrayList<String>();
+                    Integer it=new Integer(result.getProperty(0).toString());
+                    verCode_s =it.intValue();
+                }
+                else
+                {
+                    verCode_s =0;
+                }
+                handler.sendEmptyMessage(1);
+            }
+        });
     }
 
     public void bindView() {
@@ -184,6 +272,9 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
 
     @Override
     protected void onDestroy() {
+        stopService(intent);
+        //manager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+       // manager.cancel(1);
         //unregisterReceiver(net);
         super.onDestroy();
     }
@@ -230,9 +321,39 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
                 finish();
                 break;
             case 0x0003:
+                Intent it4=new Intent(getApplicationContext(),SettingSyPWD.class);
+                startActivity(it4);
                 break;
         }
 
+    }
+
+   /* public class MyBroad extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)){
+                Toast.makeText(context,"安装完成",Toast.LENGTH_SHORT).show();
+                manager.cancel(1);
+            }else if(intent.getAction().equals(Intent.ACTION_PACKAGE_REPLACED)){
+                Toast.makeText(context,"替换完成",Toast.LENGTH_SHORT).show();
+                manager.cancel(1);
+            }
+        }
+    }*/
+
+    public View getAlert(int mLayout){
+        View ad_view;
+        //初始化Builder
+        builder=new AlertDialog.Builder(this);
+        //完成相关设置
+        inflater=getLayoutInflater();
+        ad_view=inflater.inflate(mLayout,null,false);
+        builder.setView(ad_view);
+        builder.setCancelable(true);
+        alert=builder.create();
+        alert.show();
+        return ad_view;
     }
 }
 

@@ -145,6 +145,7 @@ public class FileDownloadered {
                     }
                 }
                 //如果已下载的数据的线程数和现在设置的线程数相同时则计算所有现场已经下载的数据总长度
+                int m=this.threads.length;
                 if(this.data.size() == this.threads.length)
                 {
                     //遍历每条线程已下载的数据

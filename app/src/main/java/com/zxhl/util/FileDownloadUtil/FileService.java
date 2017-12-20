@@ -34,7 +34,7 @@ public class FileService {
         //建立一个哈希表用于存放每条线程已下载的文件长度
         Map<Integer,Integer> data = new HashMap<Integer, Integer>();
         //从第一条记录开始遍历Cursor对象
-        cursor.moveToFirst();
+        //cursor.moveToFirst();
         while(cursor.moveToNext())
         {
             //把线程id与该线程已下载的长度存放到data哈希表中
@@ -100,4 +100,5 @@ public class FileService {
         db.execSQL("delete from filedownlog where downpath=?", new Object[]{path});
         db.close();
     }
+
 }

@@ -1,23 +1,59 @@
 package com.zxhl.gpsking;
 
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
+import android.os.Parcel;
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Config;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.RemoteViews;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.zxhl.util.ApkVersionUtils;
 import com.zxhl.util.Constants;
+import com.zxhl.util.DownloadService;
+import com.zxhl.util.FileDownloadUtil.DownloadProgressListener;
+import com.zxhl.util.FileDownloadUtil.FileDownloadered;
 import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.WebServiceUtils;
+
+import org.apache.http.conn.BasicEofSensorWatcher;
+import org.ksoap2.serialization.SoapObject;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/12/1.
@@ -42,6 +78,12 @@ public class SettingSy extends Fragment implements View.OnClickListener {
 
     private ShowAct showAct;
 
+    private int verCode_s;
+    private int verCode;
+
+    //服务所需的变量
+    private Intent intent=null;
+
     public SettingSy(Context context){
         this.context=context;
     }
@@ -57,6 +99,44 @@ public class SettingSy extends Fragment implements View.OnClickListener {
                 case 0x0002:
                     showAct = (ShowAct) getActivity();
                     showAct.callBack(0x0002);
+                    break;
+                case 0x0003:
+                    showAct = (ShowAct) getActivity();
+                    showAct.callBack(0x0003);
+                    break;
+                case 0x0004:
+                    if(verCode_s!=0) {
+                        if (verCode == verCode_s) {
+                            Toast.makeText(context, "已是最新版本", Toast.LENGTH_SHORT).show();
+                        } else {
+                            View view = getAlert(R.layout.ad_update);
+                            view.findViewById(R.id.ad_btn_update_cancel).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    alert.dismiss();
+                                }
+                            });
+
+                            view.findViewById(R.id.ad_btn_update_confirm).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //检查更新,当SDK大于等于21时即大于Android5.0时调用这个
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                        intent = new Intent(context, DownloadService.class);
+                                        intent.setAction("com.zxhl.util.DOWNLOADSERVICE");
+                                        intent.putExtra("operator",0);
+                                        getActivity().startService(intent);
+                                    } else {
+                                        intent = new Intent();
+                                        intent.setAction("com.zxhl.util.DOWNLOADSERVICE");
+                                        intent.putExtra("operator",0);
+                                        getActivity().startService(intent);
+                                    }
+                                    alert.dismiss();
+                                }
+                            });
+                        }
+                    }
                     break;
             }
         }
@@ -75,6 +155,12 @@ public class SettingSy extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onDestroy() {
+        getActivity().stopService(intent);
+        super.onDestroy();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.setting_ly_gy:
@@ -82,8 +168,26 @@ public class SettingSy extends Fragment implements View.OnClickListener {
                 startActivity(it1);
                 break;
             case R.id.setting_ly_jcgx:
+                HashMap<String,String> proper=new HashMap<String,String>();
+                WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetVerCode", proper, new WebServiceUtils.WebServiceCallBack() {
+                    @Override
+                    public void callBack(SoapObject result) {
+                        if(result!=null) {
+                            List<String> list = new ArrayList<String>();
+                            Integer it=new Integer(result.getProperty(0).toString());
+                            verCode_s =it.intValue();
+                        }
+                        else
+                        {
+                            verCode_s =0;
+                        }
+                        handler.sendEmptyMessage(0x0004);
+                    }
+                });
                 break;
             case R.id.setting_ly_wtfk:
+                Intent it2=new Intent(context,SettingSyWtfk.class);
+                startActivity(it2);
                 break;
             case R.id.setting_ly_xgmm:
                 View ad_view2= getAlert(R.layout.ad_input_pass);
@@ -143,9 +247,9 @@ public class SettingSy extends Fragment implements View.OnClickListener {
 
     }
 
+    //初始化
     public void init(){
-
-
+        verCode=ApkVersionUtils.getVerCode(context);
         setting_ly_gy= (RelativeLayout) view.findViewById(R.id.setting_ly_gy);
         setting_ly_jcgx= (RelativeLayout) view.findViewById(R.id.setting_ly_jcgx);
         setting_ly_wtfk= (RelativeLayout) view.findViewById(R.id.setting_ly_wtfk);
@@ -182,4 +286,6 @@ public class SettingSy extends Fragment implements View.OnClickListener {
         alert.show();
         return ad_view;
     }
+
+
 }

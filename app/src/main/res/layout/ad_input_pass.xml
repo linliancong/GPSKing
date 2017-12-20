@@ -27,6 +27,7 @@
         android:layout_below="@+id/ad_txt_pass"
         android:background="@null"
         android:drawableBottom="@drawable/line"
+        android:inputType="textPassword"
         />
 
     <LinearLayout

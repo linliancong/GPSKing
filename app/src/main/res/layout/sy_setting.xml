@@ -105,7 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
-            android:text="问题反馈"
+            android:text="问题与建议"
             android:textSize="16sp"
             android:textColor="@color/black"
             />

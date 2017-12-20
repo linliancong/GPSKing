@@ -63,6 +63,7 @@
         android:layout_marginLeft="20dp"
         android:background="@null"
         android:drawableBottom="@drawable/line"
+        android:textSize="16sp"
         />
 
 </LinearLayout>

@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         img= (ImageView) findViewById(R.id.img);
-        int tag=scaleImage(this,img,R.drawable.gpsking_index_new);
+        //int tag=scaleImage(this,img,R.drawable.gpsking_index_new);
 
         //判断网络状态
         ConnectivityManager cm = (ConnectivityManager) MainActivity.this
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferenceUtils sp=new SharedPreferenceUtils(MainActivity.this,Constants.SAVE_USER);
         sp.setIsNetworkConnect(state);
         if(sp.getIsFirst()||!state) {
-            handler.sendEmptyMessageDelayed(tag, 3000);
+            handler.sendEmptyMessageDelayed(0x002, 3000);
         }
         else {
             handler.sendEmptyMessageDelayed(0x003,3000);
