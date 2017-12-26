@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zxhl.util.ApkVersionUtils;
+import com.zxhl.util.AppManager;
 import com.zxhl.util.DownloadService;
 import com.zxhl.util.FragmentUtils;
 import com.zxhl.util.MyFragmentPagerAdapter;
@@ -121,6 +122,8 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homepage);
+
+        AppManager.getAppManager().addActivity(HomePage.this);
 
         manager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -272,10 +275,13 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
 
     @Override
     protected void onDestroy() {
-        stopService(intent);
+        if(intent!=null) {
+            stopService(intent);
+        }
         //manager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
        // manager.cancel(1);
         //unregisterReceiver(net);
+        //AppManager.getAppManager().finishAllActivity();
         super.onDestroy();
     }
 
@@ -313,8 +319,9 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
                 break;
             //设置
             case 0x0001:
-                Intent it3=new Intent(getApplicationContext(),Login.class);
+                Intent it3=new Intent(HomePage.this,Login.class);
                 startActivity(it3);
+                //AppManager.getAppManager().finishActivity();
                 finish();
                 break;
             case 0x0002:

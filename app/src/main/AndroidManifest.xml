@@ -54,21 +54,28 @@
         </activity>
         <activity android:name=".SettingSyGy">
             <intent-filter>
-                <action android:name="android.intent.action.MESYUPDATE"/>
+                <action android:name="android.intent.action.SETTINGSYGY"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity android:name=".SettingSyPWD">
             <intent-filter>
-                <action android:name="android.intent.action.MESYUPDATE"/>
+                <action android:name="android.intent.action.SETTINGSYPWD"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity android:name=".SettingSyWtfk">
+        <intent-filter>
+            <action android:name="android.intent.action.SETTINGSYWTFK"/>
+
+            <category android:name="android.intent.category.DEFAULT"/>
+        </intent-filter>
+        </activity>
+        <activity android:name=".SettingSyWtfkJl">
             <intent-filter>
-                <action android:name="android.intent.action.MESYUPDATE"/>
+                <action android:name="android.intent.action.SETTINGSYWTFKJL"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
@@ -82,7 +89,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </receiver>
-        <!--监听程序安装-->
+        <!--监听程序安装的服务-->
         <receiver android:name="com.zxhl.util.MyBroad">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED"/>

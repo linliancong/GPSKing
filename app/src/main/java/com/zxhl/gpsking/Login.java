@@ -21,6 +21,7 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.zxhl.util.AppManager;
 import com.zxhl.util.Constants;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.WebServiceUtils;
@@ -50,6 +51,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Tex
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        //AppManager.getAppManager().addActivity(Login.this);
 
         initView();
     }
@@ -58,6 +60,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Tex
     @Override
     protected void onStart() {
         super.onStart();
+
         sp=new SharedPreferenceUtils(this,Constants.SAVE_USER);
         if(!sp.getIsFirst()) {
             user.setText(sp.getNickName());
@@ -217,4 +220,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Tex
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

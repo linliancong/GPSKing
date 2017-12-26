@@ -1,7 +1,10 @@
 package com.zxhl.gpsking;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,9 +16,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.zxhl.util.AppManager;
 import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.WebServiceUtils;
+
+import org.ksoap2.serialization.SoapObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/12/15.
@@ -38,6 +49,31 @@ public class SettingSyPWD extends AppCompatActivity implements TextWatcher{
     private View view;
 
     private TextView txt;
+
+    private long state;
+
+
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 0x001:
+                    if(state==1){
+                        //密码更改成功
+                        dialog.show();
+                        txt=(TextView) view.findViewById(R.id.ad_txt_erro2);
+                        txt.setText("密码修改成功，请返回重新登录。");
+                    }
+                    else{
+                        //更改密码失败
+                        dialog.show();
+                        txt=(TextView) view.findViewById(R.id.ad_txt_erro2);
+                        txt.setText("密码修改失败，请稍后再试。");
+                    }
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,7 +114,25 @@ public class SettingSyPWD extends AppCompatActivity implements TextWatcher{
                     }
                     //在这里做修改密码的操作
                     else{
-                        finish();
+                        HashMap<String,String> proper=new HashMap<String,String>();
+                        proper.put("OperatorID",sp.getOperatorID());
+                        proper.put("PWD",setting_edit_newpass_pwd.getText().toString());
+                        WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "ChangePassword", proper, new WebServiceUtils.WebServiceCallBack() {
+                            @Override
+                            public void callBack(SoapObject result) {
+                                if(result!=null) {
+                                    List<String> list = new ArrayList<String>();
+                                    Integer it=new Integer(result.getProperty(0).toString());
+                                    state =it.intValue();
+                                }
+                                else
+                                {
+                                    state =0;
+                                }
+                                handler.sendEmptyMessage(0x001);
+                            }
+                        });
+                        //finish();
                     }
                 }
                 else{
@@ -100,6 +154,12 @@ public class SettingSyPWD extends AppCompatActivity implements TextWatcher{
         view.findViewById(R.id.ad_btn_erro_confirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(state==1){
+                    Intent intent=new Intent(SettingSyPWD.this,Login.class);
+                    startActivity(intent);
+                    finish();
+                    AppManager.getAppManager().finishActivity();
+                }
                 dialog.dismiss();
             }
         });
@@ -124,4 +184,5 @@ public class SettingSyPWD extends AppCompatActivity implements TextWatcher{
         }
 
     }
+
 }

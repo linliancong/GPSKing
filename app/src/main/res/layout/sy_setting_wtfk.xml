@@ -59,14 +59,16 @@
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         >
-        <TextView
+        <com.zxhl.util.ImgTxtLayout
             android:id="@+id/setting_txt_wtfk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="问题描述或建议"
-            android:textSize="16sp"
-            android:textColor="@color/black"
+            zxhl:text="问题描述或建议"
+            zxhl:textSize="16"
+            zxhl:textColor="@color/black"
+            zxhl:iconDrawable="@mipmap/feedback_ic_red_start"
             />
+
         <TextView
             android:id="@+id/setting_txt_fkjl_wtfk"
             android:layout_width="wrap_content"
@@ -136,17 +138,19 @@
     </LinearLayout>
 
 
-    <TextView
+    <com.zxhl.util.ImgTxtLayout
         android:id="@+id/setting_txt3_wtfk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:text="联系方式"
-        android:textSize="16sp"
-        android:textColor="@color/black"
+        zxhl:text="联系方式"
+        zxhl:textSize="16"
+        zxhl:textColor="@color/black"
+        zxhl:iconDrawable="@mipmap/feedback_ic_red_start"
         />
+    
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

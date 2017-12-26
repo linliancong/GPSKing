@@ -1,6 +1,9 @@
 package com.zxhl.gpsking;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -14,9 +17,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
+import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.WebServiceUtils;
+
+import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -35,6 +44,26 @@ public class SettingSyWtfk extends AppCompatActivity implements TextWatcher{
     private ArrayAdapter<String> adapter=null;
     private int tag;
 
+    private SharedPreferenceUtils sp;
+    private int state=0;
+
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==0x001){
+                if(state==1){
+                    //success
+                    Toast.makeText(getApplicationContext(),"反馈成功",Toast.LENGTH_SHORT).show();
+                    //finish();
+                }
+                else {
+                    //faild
+                    Toast.makeText(getApplicationContext(),"反馈失败，请稍后再试",Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +74,7 @@ public class SettingSyWtfk extends AppCompatActivity implements TextWatcher{
     }
 
     private void init() {
+        sp=new SharedPreferenceUtils(SettingSyWtfk.this, Constants.SAVE_USER);
         setting_imgtxt_back_wtfk= (ImgTxtLayout) findViewById(R.id.setting_imgtxt_back_wtfk);
         setting_btn_send_wtfk= (Button) findViewById(R.id.setting_btn_send_wtfk);
         setting_edit_question_wtfk= (EditText) findViewById(R.id.setting_edit_question_wtfk);
@@ -86,10 +116,41 @@ public class SettingSyWtfk extends AppCompatActivity implements TextWatcher{
             }
         });
 
+        setting_txt_fkjl_wtfk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getApplicationContext(),"点击了反馈记录",Toast.LENGTH_SHORT).show();
+                Intent intent1=new Intent(SettingSyWtfk.this,SettingSyWtfkJl.class);
+                startActivity(intent1);
+            }
+        });
+
         //在这里处理提交
         setting_btn_send_wtfk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Integer it=new Integer(tag);
+                HashMap<String,String> proper=new HashMap<String,String>();
+                proper.put("OperatorID",sp.getOperatorID());
+                proper.put("NickName",sp.getNickName());
+                proper.put("Frequency",it.toString());
+                proper.put("Contact",setting_edit_lxfs_wtfk.getText().toString());
+                proper.put("Text",setting_edit_question_wtfk.getText().toString());
+                WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "SendQuestion", proper, new WebServiceUtils.WebServiceCallBack() {
+                    @Override
+                    public void callBack(SoapObject result) {
+                        if(result!=null) {
+                            List<String> list = new ArrayList<String>();
+                            Integer it=new Integer(result.getProperty(0).toString());
+                            state =it.intValue();
+                        }
+                        else
+                        {
+                            state =0;
+                        }
+                        handler.sendEmptyMessage(0x001);
+                    }
+                });
 
             }
         });

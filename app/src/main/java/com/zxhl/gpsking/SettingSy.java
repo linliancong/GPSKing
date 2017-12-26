@@ -156,7 +156,9 @@ public class SettingSy extends Fragment implements View.OnClickListener {
 
     @Override
     public void onDestroy() {
-        getActivity().stopService(intent);
+        if(intent!=null) {
+            getActivity().stopService(intent);
+        }
         super.onDestroy();
     }
 

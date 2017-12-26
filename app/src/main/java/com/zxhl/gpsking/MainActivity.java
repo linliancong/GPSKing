@@ -18,10 +18,18 @@ import android.widget.ImageView;
 
 import com.zxhl.util.Constants;
 import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.WebServiceUtils;
+
+import org.ksoap2.serialization.SoapObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ImageView img;
     private boolean state=false;
+    private int tag=0;
 
     private Handler handler=new Handler(){
         @Override
@@ -69,7 +77,31 @@ public class MainActivity extends AppCompatActivity {
             handler.sendEmptyMessageDelayed(0x002, 3000);
         }
         else {
-            handler.sendEmptyMessageDelayed(0x003,3000);
+            HashMap<String,String> proper=new HashMap<String,String>();
+            proper.put("NickName",sp.getNickName());
+            proper.put("PWD",sp.getPWD());
+            WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetPWDState", proper, new WebServiceUtils.WebServiceCallBack() {
+                @Override
+                public void callBack(SoapObject result) {
+                    if(result!=null) {
+                        List<String> list = new ArrayList<String>();
+                        Integer it=new Integer(result.getProperty(0).toString());
+                        tag =it.intValue();
+                    }
+                    else
+                    {
+                        tag =0;
+                    }
+
+                    if(tag==1) {
+                        handler.sendEmptyMessageDelayed(0x003, 3000);
+                    }
+                    else {
+                        handler.sendEmptyMessageDelayed(0x002, 3000);
+                    }
+                }
+            });
+
         }
 
     }
