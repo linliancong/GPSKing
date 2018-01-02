@@ -75,6 +75,8 @@
             zxhl:style="iconRight"
             zxhl:textSize="12"
             zxhl:textColor="@color/black_overlay"
+            zxhl:focusable="false"
+            zxhl:clickable="false"
             />
 
         <View
@@ -117,6 +119,8 @@
             zxhl:style="iconRight"
             zxhl:textSize="12"
             zxhl:textColor="@color/black_overlay"
+            zxhl:focusable="false"
+            zxhl:clickable="false"
             />
 
         <View
@@ -159,6 +163,8 @@
             zxhl:style="iconRight"
             zxhl:textSize="12"
             zxhl:textColor="@color/black_overlay"
+            zxhl:focusable="false"
+            zxhl:clickable="false"
             />
 
         <View
@@ -201,6 +207,8 @@
             zxhl:style="iconRight"
             zxhl:textSize="12"
             zxhl:textColor="@color/black_overlay"
+            zxhl:focusable="false"
+            zxhl:clickable="false"
             />
 
         <View
@@ -243,6 +251,8 @@
             zxhl:style="iconRight"
             zxhl:textSize="12"
             zxhl:textColor="@color/black_overlay"
+            zxhl:focusable="false"
+            zxhl:clickable="false"
             />
 
         <View
@@ -278,13 +288,15 @@
             android:id="@+id/me_imgtxt_jg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
             zxhl:iconDrawable="@mipmap/cs_arrow_right"
             zxhl:spacing="4dp"
             zxhl:style="iconRight"
             zxhl:textSize="12"
             zxhl:textColor="@color/black_overlay"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            zxhl:focusable="false"
+            zxhl:clickable="false"
             />
 
         <View
@@ -327,6 +339,8 @@
             zxhl:style="iconRight"
             zxhl:textSize="12"
             zxhl:textColor="@color/black_overlay"
+            zxhl:focusable="false"
+            zxhl:clickable="false"
             />
 
         <View
@@ -369,6 +383,8 @@
             zxhl:style="iconRight"
             zxhl:textSize="12"
             zxhl:textColor="@color/black_overlay"
+            zxhl:focusable="false"
+            zxhl:clickable="false"
             />
 
         <View
@@ -411,6 +427,8 @@
             zxhl:style="iconRight"
             zxhl:textSize="12"
             zxhl:textColor="@color/black_overlay"
+            zxhl:focusable="false"
+            zxhl:clickable="false"
             />
 
         <View

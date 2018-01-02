@@ -38,4 +38,6 @@ dependencies {
     compile files('libs/android-async-http-1.4.8.jar')
     compile files('libs/org.apache.http.legacy.jar')
     compile files('libs/okhttputils-2_6_2.jar')
+    compile 'com.contrarywind:Android-PickerView:3.2.7'
+
 }

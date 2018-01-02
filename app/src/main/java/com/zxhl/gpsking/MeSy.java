@@ -1,6 +1,10 @@
 package com.zxhl.gpsking;
 
 
+
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.support.v7.app.AppCompatActivity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -96,6 +100,11 @@ public class MeSy extends Fragment implements View.OnClickListener {
     private static final int REQUEST_CODE_CAPTURE_CAMEIA=2;
     private static final int CODE_RESULT_REQUEST=3;
 
+    String text;
+
+    public static boolean state=false;
+    public static boolean state2=false;
+
     Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -114,9 +123,26 @@ public class MeSy extends Fragment implements View.OnClickListener {
                     showAct= (ShowAct) getActivity();
                     showAct.callBack(0x0020);
                     break;
-                default:
+                case 0x0030:
                     showAct= (ShowAct) getActivity();
                     showAct.callBack(0x0030);
+                    break;
+                case 0x0040:
+                    if(state) {
+                        state=false;
+                        Intent it_gd = new Intent();
+                        it_gd.setClass(context, MeSyGd.class);
+                        Bundle bd = new Bundle();
+                        ArrayList bundlist = new ArrayList();
+                        list.add(map);
+                        bundlist.add(list);
+                        bd.putParcelableArrayList("list", bundlist);
+                        it_gd.putExtras(bd);
+                        startActivity(it_gd);
+                    }
+                    break;
+                case 0x0050:
+                    getUserInfo();
                     break;
             }
         }
@@ -126,15 +152,36 @@ public class MeSy extends Fragment implements View.OnClickListener {
         this.context=context;
     }
 
+    private MyBroadcastMeSy broad;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        if(view==null) {
+        if(view==null)
+        {
             view = inflater.inflate(R.layout.sy_me, container, false);
             sp = new SharedPreferenceUtils(context, Constants.SAVE_USER);
-            list = new ArrayList<Map<String, String>>();
             init();
+            broad=new MyBroadcastMeSy();
+            IntentFilter filter=new IntentFilter();
+            filter.addAction("com.zxhl.gpsking.MYBROADCASTMESY");
+            getActivity().registerReceiver(broad,filter);
+
+            new Thread(){
+                @Override
+                public void run() {
+                    while (true)
+                    {
+                        if(state2) {
+                            state2=false;
+                            handler.sendEmptyMessage(0x0050);
+                        }
+                    }
+                }
+            }.start();
         }
+
+        list = new ArrayList<Map<String, String>>();
         getUserInfo();
         return view;
     }
@@ -164,14 +211,9 @@ public class MeSy extends Fragment implements View.OnClickListener {
             case R.id.me_ly_fz:
                 break;
             case R.id.me_ly_gd:
-                Intent it_gd=new Intent();
-                it_gd.setClass(context,MeSyGd.class);
-                Bundle bd=new Bundle();
-                ArrayList bundlist=new ArrayList();
-                bundlist.add(list);
-                bd.putParcelableArrayList("list",bundlist);
-                it_gd.putExtras(bd);
-                startActivity(it_gd);
+                state=true;
+                list=new ArrayList<>();
+                getUserInfo();
                 break;
         }
 
@@ -229,7 +271,11 @@ public class MeSy extends Fragment implements View.OnClickListener {
                     me_imgtxt_xm.setText(map.get("姓名"));
                     me_imgtxt_lx.setText(map.get("类型"));
                     me_imgtxt_fz.setText(map.get("分组"));
+                    handler.sendEmptyMessage(0x0040);
                     list.add(map);
+
+
+
                 }
             }
         });
@@ -263,9 +309,6 @@ public class MeSy extends Fragment implements View.OnClickListener {
 
     }
 
-    public void call(ShowAct showAct){
-
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -439,4 +482,24 @@ public class MeSy extends Fragment implements View.OnClickListener {
 
     }
 
+    public static class MyBroadcastMeSy extends BroadcastReceiver {
+        public final String board="com.zxhl.gpsking.MYBROADCASTMESY";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(board)){
+                state2=true;
+                //Toast.makeText(context,"ces",Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(broad!=null){
+            getActivity().unregisterReceiver(broad);
+        }
+    }
 }

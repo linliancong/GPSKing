@@ -41,7 +41,6 @@
                 android:id="@+id/me_txt_tx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="众星互联"
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 />
@@ -49,7 +48,6 @@
                 android:id="@+id/me_txt_tx2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12345678"
                 android:textSize="12sp"
                 android:textColor="@color/black_overlay"
                 android:paddingTop="6dp"
@@ -73,54 +71,12 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/me_ly_zh"
-        android:layout_width="wrap_content"
-        android:layout_height="46dp"
-        android:paddingRight="15dp"
-        android:paddingLeft="15dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/sy_setting_layout_pressed"
-        android:clickable="true"
-        android:focusable="true"
-        >
-        <TextView
-            android:id="@+id/me_txt_zh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:text="账号"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            />
-
-        <com.zxhl.util.ImgTxtLayout
-            android:id="@+id/me_imgtxt_zh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            zxhl:iconDrawable="@mipmap/cs_arrow_right"
-            zxhl:style="iconRight"
-            zxhl:text="账号"
-            zxhl:textSize="12"
-            zxhl:textColor="@color/black_overlay"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/black_line"
-            android:layout_alignParentBottom="true"
-            />
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/me_ly_xm"
         android:layout_width="wrap_content"
         android:layout_height="46dp"
         android:paddingRight="15dp"
         android:paddingLeft="15dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/sy_setting_layout_pressed"
         android:clickable="true"
         android:focusable="true"
@@ -144,7 +100,47 @@
             android:layout_centerInParent="true"
             zxhl:iconDrawable="@mipmap/cs_arrow_right"
             zxhl:style="iconRight"
-            zxhl:text="姓名"
+            zxhl:textSize="12"
+            zxhl:textColor="@color/black_overlay"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/black_line"
+            android:layout_alignParentBottom="true"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/me_ly_zh"
+        android:layout_width="wrap_content"
+        android:layout_height="46dp"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:background="@drawable/sy_setting_layout_pressed"
+        android:clickable="true"
+        android:focusable="true"
+        >
+        <TextView
+            android:id="@+id/me_txt_zh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:text="账号"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            />
+
+        <com.zxhl.util.ImgTxtLayout
+            android:id="@+id/me_imgtxt_zh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+
+            zxhl:style="iconRight"
             zxhl:textSize="12"
             zxhl:textColor="@color/black_overlay"
             />
@@ -184,9 +180,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            zxhl:iconDrawable="@mipmap/cs_arrow_right"
+
             zxhl:style="iconRight"
-            zxhl:text="类型"
             zxhl:textSize="12"
             zxhl:textColor="@color/black_overlay"
             />
@@ -227,9 +222,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            zxhl:iconDrawable="@mipmap/cs_arrow_right"
+
             zxhl:style="iconRight"
-            zxhl:text="分组"
             zxhl:textSize="12"
             zxhl:textColor="@color/black_overlay"
             />

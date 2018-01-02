@@ -114,6 +114,7 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
                         }
                     }
                     break;
+
             }
         }
     };
@@ -122,6 +123,11 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homepage);
+
+       /* myBroadcastHP=new MyBroadcastHP();
+        IntentFilter filter=new IntentFilter();
+        filter.addAction("com.zxhl.gpsking.MYBROADCASTHP");
+        registerReceiver(myBroadcastHP,filter);*/
 
         AppManager.getAppManager().addActivity(HomePage.this);
 
@@ -148,6 +154,7 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
                 handler.sendEmptyMessage(1);
             }
         });
+
     }
 
     public void bindView() {
@@ -278,10 +285,6 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
         if(intent!=null) {
             stopService(intent);
         }
-        //manager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-       // manager.cancel(1);
-        //unregisterReceiver(net);
-        //AppManager.getAppManager().finishAllActivity();
         super.onDestroy();
     }
 
@@ -349,6 +352,7 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
         }
     }*/
 
+
     public View getAlert(int mLayout){
         View ad_view;
         //初始化Builder
@@ -362,6 +366,7 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
         alert.show();
         return ad_view;
     }
+
 }
 
 

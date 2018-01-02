@@ -2,15 +2,26 @@ package com.zxhl.gpsking;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
+import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.WebServiceUtils;
+
+import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +62,29 @@ public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
     List<Map<String,String>> listM=null;
 
     private Context context;
+    SharedPreferenceUtils sp;
+    private int tag=-1;
+    private MeSy meSy;
+
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 0x001:
+                    Toast.makeText(MeSyGd.this,"修改成功",Toast.LENGTH_SHORT).show();
+                   /* homePage=new HomePage();
+                    broadcastHP=homePage.new MyBroadcastHP();
+                    IntentFilter filter=new IntentFilter();
+                    filter.addAction("com.zxhl.gpsking.MYBROADCASTHP");
+                    registerReceiver(broadcastHP,filter);*/
+                    //sendBroadcast(new Intent("com.zxhl.gpsking.MYBROADCASTHP"));
+                    break;
+                case 0x002:
+                    Toast.makeText(MeSyGd.this,"修改失败",Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
 
 
     @Override
@@ -64,6 +98,7 @@ public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
     }
 
     public void init(){
+        sp=new SharedPreferenceUtils(MeSyGd.this, Constants.SAVE_USER);
         me_ly_gsmc= (RelativeLayout) findViewById(R.id.me_ly_gsmc);
         me_ly_lxdh= (RelativeLayout) findViewById(R.id.me_ly_lxdh);
         me_ly_qq= (RelativeLayout) findViewById(R.id.me_ly_qq);
@@ -97,6 +132,36 @@ public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
         me_imgtxt_title.setOnClickListener(new ImgTxtLayout.OnClickListener() {
             @Override
             public void onClick(View v) {
+                HashMap<String,String> proper=new HashMap<>();
+                proper.put("OperatorID",sp.getOperatorID());
+
+                proper.put("Unit",me_imgtxt_gsmc.getText().toString());
+                proper.put("ConnectTel",me_imgtxt_lxdh.getText().toString());
+                proper.put("QQ",me_imgtxt_qq.getText().toString());
+                proper.put("Email",me_imgtxt_email.getText().toString());
+                proper.put("IDCard",me_imgtxt_sfz.getText().toString());
+                proper.put("NativePlace",me_imgtxt_jg.getText().toString());
+                proper.put("HomeAddress",me_imgtxt_jtdz.getText().toString());
+                proper.put("HomePhone",me_imgtxt_jtdh.getText().toString());
+                proper.put("Remark",me_imgtxt_bz.getText().toString());
+                proper.put("State","1");
+
+                WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "SetOperatorInfo", proper, new WebServiceUtils.WebServiceCallBack() {
+                    @Override
+                    public void callBack(SoapObject result) {
+                        if(result!=null){
+                            Integer it=new Integer(result.getProperty(0).toString());
+                            tag=it.intValue();
+                        }
+
+                        if(tag==0){
+                            handler.sendEmptyMessage(0x001);
+                        }
+                        else
+                            handler.sendEmptyMessage(0x002);
+
+                    }
+                });
                 finish();
             }
         });
@@ -112,16 +177,16 @@ public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
                 bd_gsmc.putString("STR",map.get("公司名称"));
                 bd_gsmc.putInt("VALUE",2);
                 it_gsmc.putExtras(bd_gsmc);
-                startActivity(it_gsmc);
+                startActivityForResult(it_gsmc,0x002);
                 break;
             case R.id.me_ly_lxdh:
                 Intent it_lxdh=new Intent();
-                 it_lxdh.setClass(context,MeSyUpdate.class);
+                it_lxdh.setClass(context,MeSyUpdate.class);
                 Bundle bd_lxdh=new Bundle();
                 bd_lxdh.putString("STR",map.get("联系电话"));
                 bd_lxdh.putInt("VALUE",3);
-                 it_lxdh.putExtras(bd_lxdh);
-                startActivity( it_lxdh);
+                it_lxdh.putExtras(bd_lxdh);
+                startActivityForResult(it_lxdh,0x003);
                 break;
             case R.id.me_ly_qq:
                 Intent it_qq=new Intent();
@@ -130,7 +195,7 @@ public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
                 bd_qq.putString("STR",map.get("QQ"));
                 bd_qq.putInt("VALUE",4);
                 it_qq.putExtras(bd_qq);
-                startActivity(it_qq);
+                startActivityForResult(it_qq,0x004);
                 break;
             case R.id.me_ly_email:
                 Intent it_email=new Intent();
@@ -139,7 +204,7 @@ public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
                 bd_email.putString("STR",map.get("Email"));
                 bd_email.putInt("VALUE",5);
                 it_email.putExtras(bd_email);
-                startActivity(it_email);
+                startActivityForResult(it_email,0x005);
                 break;
             case R.id.me_ly_sfz:
                 Intent it_sfz=new Intent();
@@ -148,7 +213,7 @@ public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
                 bd_sfz.putString("STR",map.get("身份证号码"));
                 bd_sfz.putInt("VALUE",6);
                 it_sfz.putExtras(bd_sfz);
-                startActivity(it_sfz);
+                startActivityForResult(it_sfz,0x006);
                 break;
             case R.id.me_ly_jg:
                 Intent it_jg=new Intent();
@@ -157,7 +222,7 @@ public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
                 bd_jg.putString("STR",map.get("籍贯"));
                 bd_jg.putInt("VALUE",7);
                 it_jg.putExtras(bd_jg);
-                startActivity(it_jg);
+                startActivityForResult(it_jg,0x007);
                 break;
             case R.id.me_ly_jtdz:
                 Intent it_jtdz=new Intent();
@@ -166,7 +231,7 @@ public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
                 bd_jtdz.putString("STR",map.get("家庭地址"));
                 bd_jtdz.putInt("VALUE",8);
                 it_jtdz.putExtras(bd_jtdz);
-                startActivity(it_jtdz);
+                startActivityForResult(it_jtdz,0x008);
                 break;
             case R.id.me_ly_jtdh:
                 Intent it_jtdh=new Intent();
@@ -175,7 +240,7 @@ public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
                 bd_jtdh.putString("STR",map.get("家庭电话"));
                 bd_jtdh.putInt("VALUE",9);
                 it_jtdh.putExtras(bd_jtdh);
-                startActivity(it_jtdh);
+                startActivityForResult(it_jtdh,0x009);
                 break;
             case R.id.me_ly_bz:
                 Intent it_bz=new Intent();
@@ -184,7 +249,7 @@ public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
                 bd_bz.putString("STR",map.get("备注"));
                 bd_bz.putInt("VALUE",10);
                 it_bz.putExtras(bd_bz);
-                startActivity(it_bz);
+                startActivityForResult(it_bz,0x010);
                 break;
             default:break;
         }
@@ -208,4 +273,38 @@ public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
         me_imgtxt_jtdh.setText(map.get("家庭电话"));
         me_imgtxt_bz.setText(map.get("备注"));
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==0x002 && resultCode==0x002){
+            me_imgtxt_gsmc.setText(data.getExtras().getString("data"));
+        }
+        else if(requestCode==0x003 && resultCode==0x003){
+            me_imgtxt_lxdh.setText(data.getExtras().getString("data"));
+        }
+        else if(requestCode==0x004 && resultCode==0x004){
+            me_imgtxt_qq.setText(data.getExtras().getString("data"));
+        }
+        else if(requestCode==0x005 && resultCode==0x005){
+            me_imgtxt_email.setText(data.getExtras().getString("data"));
+        }
+        else if(requestCode==0x006 && resultCode==0x006){
+            me_imgtxt_sfz.setText(data.getExtras().getString("data"));
+        }
+        else if(requestCode==0x007 && resultCode==0x007){
+            me_imgtxt_jg.setText(data.getExtras().getString("data"));
+        }
+        else if(requestCode==0x008 && resultCode==0x008){
+            me_imgtxt_jtdz.setText(data.getExtras().getString("data"));
+        }
+        else if(requestCode==0x009 && resultCode==0x009){
+            me_imgtxt_jtdh.setText(data.getExtras().getString("data"));
+        }
+        else if(requestCode==0x010 && resultCode==0x010){
+            me_imgtxt_bz.setText(data.getExtras().getString("data"));
+        }
+
+    }
+
 }
