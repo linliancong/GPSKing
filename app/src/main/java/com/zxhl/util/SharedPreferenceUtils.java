@@ -16,7 +16,7 @@ public class SharedPreferenceUtils {
         editor=sp.edit();
     }
 
-    /*
+    /**
     *
     * 1、用户信息
     *
@@ -78,7 +78,7 @@ public class SharedPreferenceUtils {
 
 
 
-    /*
+    /**
     *
     * 2、登录信息
     *
@@ -152,6 +152,26 @@ public class SharedPreferenceUtils {
 
     public boolean getIsNetworkConnect(){
         return sp.getBoolean("IsNetworkConnect",false);
+    }
+
+    //绑定的机号
+    public void setVehicleLic(String VehicleLic){
+        editor.putString("VehicleLic",VehicleLic);
+        editor.commit();
+    }
+
+    public String getVehicleLic(){
+        return sp.getString("VehicleLic","");
+    }
+
+    //显示的天数
+    public void setDayCount(String DayCount){
+        editor.putString("DayCount",DayCount);
+        editor.commit();
+    }
+
+    public String getDayCount(){
+        return sp.getString("DayCount","7");
     }
 
 }

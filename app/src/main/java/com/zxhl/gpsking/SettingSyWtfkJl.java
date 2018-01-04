@@ -141,12 +141,22 @@ public class SettingSyWtfkJl extends AppCompatActivity{
         {
             str=hashMap.get(i).get("time");
             Date oldTime;
+            Date newTime=new Date();
             SimpleDateFormat sdf=new SimpleDateFormat("MM月dd日");
             SimpleDateFormat sdf2=new SimpleDateFormat("HH:mm");
             SimpleDateFormat sdf3=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            SimpleDateFormat sdf4=new SimpleDateFormat("yyyy年MM月dd日");
+            SimpleDateFormat sdf5=new SimpleDateFormat("yyyy");
             try {
                 oldTime=sdf3.parse(str);
-                date=sdf.format(oldTime);
+                String str1=sdf5.format(oldTime);
+                String str2=sdf5.format(newTime);
+                if(str1.equals(str2)) {
+                    date = sdf.format(oldTime);
+                }
+                else {
+                    date=sdf4.format(oldTime);
+                }
                 time=sdf2.format(oldTime);
                 if(getDateDiff(oldTime)==0){
                     time="昨天 "+time;

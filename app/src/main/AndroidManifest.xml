@@ -33,7 +33,10 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".HomePage">
+        <activity android:name=".HomePage"
+
+            >
+
             <intent-filter>
                 <action android:name="android.intent.action.HOMEPAGE"/>
 
@@ -82,6 +85,13 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".SettingSyVehicle">
+            <intent-filter>
+                <action android:name="android.intent.action.SETTINGSYVEHICLE"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
         <!--监听网络变化的广播-->
         <receiver android:name="com.zxhl.util.NetWorkBroadcastReceiver">
@@ -100,17 +110,18 @@
                 <data android:scheme="package"/>
             </intent-filter>
         </receiver>
-        <!--广播-->
-        <receiver android:name=".HomePage$MyBroadcastHP">
-            <intent-filter>
-                <action android:name="com.zxhl.gpsking.MYBROADCASTHP"/>
 
-            </intent-filter>
-        </receiver>
-        <!--广播-->
+        <!--我的更新广播-->
         <receiver android:name=".MeSy$MyBroadcastMeSy">
             <intent-filter>
                 <action android:name="com.zxhl.gpsking.MYBROADCASTMESY"/>
+
+            </intent-filter>
+        </receiver>
+        <!--首页设置广播-->
+        <receiver android:name=".HomeSy$MyBroadcastHomeSy">
+            <intent-filter>
+                <action android:name="com.zxhl.gpsking.MYBROADCASTHOMESY"/>
 
             </intent-filter>
         </receiver>

@@ -3,6 +3,9 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
+    // 取消掉系统对.9图片的检查
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
     defaultConfig {
         applicationId "com.zxhl.gpsking"
         minSdkVersion 17
@@ -39,5 +42,5 @@ dependencies {
     compile files('libs/org.apache.http.legacy.jar')
     compile files('libs/okhttputils-2_6_2.jar')
     compile 'com.contrarywind:Android-PickerView:3.2.7'
-
+    compile files('libs/hellocharts-library-1.5.8.jar')
 }

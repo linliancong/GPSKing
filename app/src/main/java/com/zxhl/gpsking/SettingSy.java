@@ -65,6 +65,7 @@ public class SettingSy extends Fragment implements View.OnClickListener {
     private Context context;
     private int tag=0;
 
+    private RelativeLayout setting_ly_vehicle;
     private RelativeLayout setting_ly_gy;
     private RelativeLayout setting_ly_jcgx;
     private RelativeLayout setting_ly_wtfk;
@@ -165,6 +166,10 @@ public class SettingSy extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.setting_ly_vehicle:
+                Intent it0=new Intent(context,SettingSyVehicle.class);
+                startActivity(it0);
+                break;
             case R.id.setting_ly_gy:
                 Intent it1=new Intent(context,SettingSyGy.class);
                 startActivity(it1);
@@ -252,12 +257,14 @@ public class SettingSy extends Fragment implements View.OnClickListener {
     //初始化
     public void init(){
         verCode=ApkVersionUtils.getVerCode(context);
+        setting_ly_vehicle=(RelativeLayout) view.findViewById(R.id.setting_ly_vehicle);
         setting_ly_gy= (RelativeLayout) view.findViewById(R.id.setting_ly_gy);
         setting_ly_jcgx= (RelativeLayout) view.findViewById(R.id.setting_ly_jcgx);
         setting_ly_wtfk= (RelativeLayout) view.findViewById(R.id.setting_ly_wtfk);
         setting_ly_xgmm= (RelativeLayout) view.findViewById(R.id.setting_ly_xgmm);
         setting_ly_tc= (RelativeLayout) view.findViewById(R.id.setting_ly_tc);
 
+        setting_ly_vehicle.setOnClickListener(this);
         setting_ly_gy.setOnClickListener(this);
         setting_ly_jcgx.setOnClickListener(this);
         setting_ly_wtfk.setOnClickListener(this);
