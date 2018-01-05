@@ -85,6 +85,8 @@ public class SettingSy extends Fragment implements View.OnClickListener {
     //服务所需的变量
     private Intent intent=null;
 
+    public SettingSy(){
+    }
     public SettingSy(Context context){
         this.context=context;
     }

@@ -83,6 +83,7 @@ public class SettingSyWtfkJl extends AppCompatActivity{
         img= (ImageView) findViewById(R.id.setting_wtfk_img_fkjl);
         txt= (TextView) findViewById(R.id.setting_wtfk_txt_fkjl);
         inflater=getLayoutInflater();
+        //inflater=LayoutInflater.from(SettingSyWtfkJl.this);
 
         sp=new SharedPreferenceUtils(getApplicationContext(), Constants.SAVE_USER);
         hashMap=new ArrayList<Map<String, String>>();
@@ -159,11 +160,11 @@ public class SettingSyWtfkJl extends AppCompatActivity{
                 }
                 time=sdf2.format(oldTime);
                 if(getDateDiff(oldTime)==0){
-                    time="昨天 "+time;
+                    time="昨天"+"\t"+time;
                 }
                 else if(getDateDiff(oldTime)==2)
                 {
-                    time=date+" "+time;
+                    time=date+"\t"+time;
                 }
                 map=new HashMap<String, String>();
                 map.put("type","0");
@@ -256,13 +257,17 @@ public class SettingSyWtfkJl extends AppCompatActivity{
                 if(convertView==null){
                     convertView=inflater.inflate(R.layout.setting_wtfk_fkjl_time,parent,false);
                     viewHolder=new ViewHolder();
-                    viewHolder.text= (TextView) convertView.findViewById(R.id.setting_wtfk_item_time);
+                    viewHolder.time= (TextView) convertView.findViewById(R.id.setting_wtfk_item_time);
                     convertView.setTag(viewHolder);
                 }
                 else{
                     viewHolder= (ViewHolder) convertView.getTag();
                 }
-                viewHolder.text.setText(map.get("time"));
+                if(viewHolder.time==null) {
+                    viewHolder.time= (TextView) convertView.findViewById(R.id.setting_wtfk_item_time);
+                }
+                viewHolder.time.setText(map.get("time"));
+
             }
             else
             {
@@ -276,6 +281,11 @@ public class SettingSyWtfkJl extends AppCompatActivity{
                 else{
                     viewHolder= (ViewHolder) convertView.getTag();
                 }
+
+               /* if(viewHolder.text==null || viewHolder.txt_time==null) {
+                    viewHolder.text= (TextView) convertView.findViewById(R.id.setting_wtfk_item_txt);
+                    viewHolder.txt_time= (TextView) convertView.findViewById(R.id.setting_wtfk_item_txt2);
+                }*/
                 viewHolder.text.setText(map.get("text"));
                 viewHolder.txt_time.setText(map.get("time"));
             }
@@ -283,6 +293,7 @@ public class SettingSyWtfkJl extends AppCompatActivity{
         }
 
         public final class ViewHolder{
+            TextView time;
             TextView text;
             TextView txt_time;
         }

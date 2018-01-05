@@ -128,7 +128,9 @@ public class HomeSy extends Fragment implements View.OnClickListener {
         }
     };
 
+    public HomeSy(){
 
+    }
     public HomeSy(Context context){
         this.context=context;
     }

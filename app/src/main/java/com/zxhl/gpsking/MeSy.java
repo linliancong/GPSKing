@@ -148,6 +148,9 @@ public class MeSy extends Fragment implements View.OnClickListener {
         }
     };
 
+    public MeSy(){
+
+    }
     public MeSy(Context context){
         this.context=context;
     }

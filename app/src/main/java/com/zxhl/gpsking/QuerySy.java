@@ -31,6 +31,8 @@ public class QuerySy extends Fragment implements View.OnClickListener {
     private ArrayList<Icon> mData=null;
     private int tag=0;
 
+    public QuerySy(){
+    }
     public QuerySy(Context context){
         this.context=context;
     }
