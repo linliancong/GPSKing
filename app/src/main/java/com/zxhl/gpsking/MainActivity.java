@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -57,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         img= (ImageView) findViewById(R.id.img);
-        //int tag=scaleImage(this,img,R.drawable.gpsking_index_new);
+        if(Build.VERSION.SDK_INT>=26 || Build.VERSION.SDK_INT==21||Build.VERSION.SDK_INT==22) {
+            scaleImage(this, img, R.mipmap.gpsking_index_new);
+        }
 
         //判断网络状态
         ConnectivityManager cm = (ConnectivityManager) MainActivity.this
@@ -156,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 // 设置图片显示
-                //view.setBackgroundDrawable(new BitmapDrawable(activity.getResources(), finallyBitmap));
+                view.setBackground(new BitmapDrawable(activity.getResources(), finallyBitmap));
                 return true;
             }
         });
