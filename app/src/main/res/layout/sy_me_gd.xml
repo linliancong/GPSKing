@@ -16,13 +16,12 @@
         android:focusable="true"
         >
 
-
         <com.zxhl.util.ImgTxtLayout
             android:id="@+id/me_imgtxt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
             android:paddingLeft="15dp"
             zxhl:iconDrawable="@mipmap/cs_ic_back_blue"
             zxhl:iconDrawablePress="@mipmap/cs_ic_back_blue_press"
@@ -293,8 +292,8 @@
             zxhl:style="iconRight"
             zxhl:textSize="12"
             zxhl:textColor="@color/black_overlay"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             zxhl:focusable="false"
             zxhl:clickable="false"
             />

@@ -7,11 +7,13 @@ import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -223,13 +225,14 @@ public class SettingSyWtfkJl extends AppCompatActivity{
 
     }
 
-    public class MyAdapter extends BaseAdapter{
+    public class MyAdapter extends ArrayAdapter{
         private List<Map<String,String>> list;
         private Context context;
         private int type;
         private ListView listView;
 
         public MyAdapter(Context context,List<Map<String,String>> list){
+            super(context,0);
             this.context=context;
             this.list=list;
         }
@@ -263,11 +266,14 @@ public class SettingSyWtfkJl extends AppCompatActivity{
                 else{
                     viewHolder= (ViewHolder) convertView.getTag();
                 }
-                if(viewHolder.time==null) {
+                //防止滑动过快convertView返回的是上一个
+                if(viewHolder.time==null){
+                    convertView=inflater.inflate(R.layout.setting_wtfk_fkjl_time,parent,false);
+                    viewHolder=new ViewHolder();
                     viewHolder.time= (TextView) convertView.findViewById(R.id.setting_wtfk_item_time);
+                    convertView.setTag(viewHolder);
                 }
                 viewHolder.time.setText(map.get("time"));
-
             }
             else
             {
@@ -281,14 +287,18 @@ public class SettingSyWtfkJl extends AppCompatActivity{
                 else{
                     viewHolder= (ViewHolder) convertView.getTag();
                 }
-
-               /* if(viewHolder.text==null || viewHolder.txt_time==null) {
+                //防止滑动过快convertView返回的是上一个
+                if(viewHolder.text==null || viewHolder.txt_time==null){
+                    convertView=inflater.inflate(R.layout.setting_wtfk_fkjl_item,parent,false);
+                    viewHolder=new ViewHolder();
                     viewHolder.text= (TextView) convertView.findViewById(R.id.setting_wtfk_item_txt);
                     viewHolder.txt_time= (TextView) convertView.findViewById(R.id.setting_wtfk_item_txt2);
-                }*/
+                    convertView.setTag(viewHolder);
+                }
                 viewHolder.text.setText(map.get("text"));
                 viewHolder.txt_time.setText(map.get("time"));
             }
+            Log.i("现在的索引是","-----------"+position+"-----------------");
             return convertView;
         }
 

@@ -6,6 +6,12 @@
     android:versionName="1.0.1-beta"
     >
 
+    <!--
+    关闭硬件加速
+    android:hardwareAccelerated="false"
+    获取需要的内存
+        android:largeHeap="true"
+    -->
     <application
         tools:replace="android:icon, android:theme"
         android:allowBackup="true"
@@ -57,7 +63,9 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".SettingSyGy">
+        <activity
+            android:name=".SettingSyGy"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.SETTINGSYGY"/>
 
