@@ -1,5 +1,6 @@
 package com.zxhl.gpsking;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,6 +32,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.zxhl.util.Constants;
+import com.zxhl.util.GPSNaviUtil;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.WebServiceUtils;
@@ -82,6 +84,15 @@ public class QuerySyNavi extends AppCompatActivity implements AMapLocationListen
     //定义地图图层
     private MarkerOptions markerOptions;
 
+    //获取到起点和终点的坐标
+    private double sLat=0;
+    private double sLng=0;
+    private double eLat=0;
+    private double eLng=0;
+
+    private int sTag=0;
+    private int eTag=0;
+
     Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -91,30 +102,31 @@ public class QuerySyNavi extends AppCompatActivity implements AMapLocationListen
                     vehicle.setAdapter(adapter);
                     break;
                 case 0x002:
-                    double lat=0,lng=0;
-                    Double dlat=new Double(locat.get(0));
-                    Double dlng=new Double(locat.get(1));
-                    lat=dlat.doubleValue();
-                    lng=dlng.doubleValue();
-                    markerOptions=new MarkerOptions();
-                    LatLng latLng=new LatLng(lat,lng);
-                    markerOptions.position(latLng);
-                    //点标记标题及内容
-                    markerOptions.title("详细位置").snippet(locat.get(2));
-                    //点标记是否可拖动
-                    markerOptions.draggable(true);
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.gps_point));
-                    //将Maeker设置为贴地显示，可以双指下拉地图查看效果
-                    markerOptions.setFlat(true);
-                    //添加标记
-                    aMap.addMarker(markerOptions);
-                    //将中心点移动到车辆点
-                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
-                    //Toast.makeText(getApplicationContext(),"获取成功",Toast.LENGTH_LONG).show();
+                    showVehicle();
+                    break;
+                case 0x003:
+                    if(msg.getData().getInt("endLatLng",0)==1){
+                        eTag=msg.getData().getInt("endLatLng");
+                    }
+                    if(msg.getData().getInt("startLatLng",0)==1){
+                        sTag=msg.getData().getInt("startLatLng");
+                    }
+                    if(sTag==1&&eTag==1) {
+                        Intent intent = new Intent(QuerySyNavi.this, GPSNaviUtil.class);
+                        Bundle bd = new Bundle();
+                        bd.putDouble("sLat", sLat);
+                        bd.putDouble("sLng", sLng);
+                        bd.putDouble("eLat", eLat);
+                        bd.putDouble("eLng", eLng);
+                        intent.putExtras(bd);
+                        startActivity(intent);
+                    }
+
                     break;
             }
         }
     };
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -313,9 +325,9 @@ public class QuerySyNavi extends AppCompatActivity implements AMapLocationListen
                 //获取定位来源
                 aMapLocation.getLocationType();
                 //获取纬度
-                aMapLocation.getLatitude();
+                sLat=aMapLocation.getLatitude();
                 //获取经度
-                aMapLocation.getLongitude();
+                sLng=aMapLocation.getLongitude();
                 //获取精度信息
                 aMapLocation.getAccuracy();
                 SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -333,8 +345,13 @@ public class QuerySyNavi extends AppCompatActivity implements AMapLocationListen
 
                     //设置标志位
                     isFirst=false;
+                    Message msg=new Message();
+                    msg.what=0x003;
+                    msg.getData().putInt("startLatLng",1);
+                    handler.sendMessage(msg);
 
                 }
+
             }
             else{
                 //显示错误信息
@@ -414,5 +431,34 @@ public class QuerySyNavi extends AppCompatActivity implements AMapLocationListen
             getVeh.setEnabled(true);
         }
 
+    }
+
+    //显示车辆点
+    private void showVehicle() {
+        //double lat=0,lng=0;
+        Double dlat=new Double(locat.get(0));
+        Double dlng=new Double(locat.get(1));
+        eLat=dlat.doubleValue();
+        eLng=dlng.doubleValue();
+        markerOptions=new MarkerOptions();
+        LatLng latLng=new LatLng(eLat,eLng);
+        markerOptions.position(latLng);
+        //点标记标题及内容
+        markerOptions.title("详细位置").snippet(locat.get(2));
+        //点标记是否可拖动
+        markerOptions.draggable(true);
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.gps_point));
+        //将Maeker设置为贴地显示，可以双指下拉地图查看效果
+        markerOptions.setFlat(true);
+        //添加标记
+        aMap.addMarker(markerOptions);
+        //将中心点移动到车辆点
+        aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
+        //Toast.makeText(getApplicationContext(),"获取成功",Toast.LENGTH_LONG).show();
+
+        Message msg=new Message();
+        msg.what=0x003;
+        msg.getData().putInt("endLatLng",1);
+        handler.sendMessage(msg);
     }
 }

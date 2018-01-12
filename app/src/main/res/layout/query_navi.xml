@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/query_imgtxt_title"
             android:layout_centerVertical="true"
-            android:text="查车导航"
+            android:text="实时定位"
             android:textSize="18sp"
             android:textColor="@color/black"
             />
@@ -55,7 +55,7 @@
             android:id="@+id/query_img_img"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@mipmap/search"
+            android:src="@mipmap/search_bar"
             android:layout_toRightOf="@+id/query_imgtxt_title"
             android:layout_centerVertical="true"
             android:visibility="gone"
@@ -74,13 +74,14 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:visibility="gone"
+            android:hint="请输入机号"
             />
 
         <ImageView
             android:id="@+id/query_img_serch"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@mipmap/search"
+            android:src="@mipmap/search_bar"
             android:layout_toLeftOf="@+id/query_btn_get"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
@@ -94,7 +95,7 @@
             android:layout_width="50dp"
             android:layout_height="26dp"
             android:background="@drawable/me_sy_btn"
-            android:text="查询"
+            android:text="导航"
             android:textColor="@color/bg_white"
             android:textSize="12sp"
             android:enabled="false"

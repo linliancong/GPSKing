@@ -123,16 +123,23 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".QuerySyTrackPlayback">
+        <activity android:name=".QuerySyNavi">
             <intent-filter>
-                    <action android:name="android.intent.action.QUERYSYTRACKPLAYBACK"/>
+                <action android:name="android.intent.action.QUERYSYNAVI"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".QuerySyNavi">
+        <activity android:name="com.zxhl.util.GPSNaviUtil">
             <intent-filter>
-                <action android:name="android.intent.action.QUERYSYNAVI"/>
+                <action android:name="android.intent.action.QUERYSYGPSNAVIUTIL"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".QuerySyTrackPlayback">
+            <intent-filter>
+                    <action android:name="android.intent.action.QUERYSYTRACKPLAYBACK"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
