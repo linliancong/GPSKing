@@ -2,6 +2,7 @@ package com.zxhl.gpsking;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -83,7 +84,56 @@ public class QuerySy extends Fragment implements View.OnClickListener {
         grid_icon.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(context,"你点击了~"+position,Toast.LENGTH_SHORT).show();
+                switch(position){
+                    case 0:
+                        //实时定位
+                        Intent it0=new Intent(context,QuerySyLocation.class);
+                        startActivity(it0);
+                        break;
+                    case 1:
+                        //查车导航
+                        Intent it1=new Intent(context,QuerySyNavi.class);
+                        startActivity(it1);
+                        break;
+                    case 2:
+                        //轨迹回放
+                        Intent it2=new Intent(context,QuerySyTrackPlayback.class);
+                        startActivity(it2);
+                        break;
+                    case 3:
+                        //工况信息
+                        Toast.makeText(context,"工况信息功能还没有开放",Toast.LENGTH_SHORT).show();
+                        break;
+                    case 4:
+                        //报表统计
+                        Toast.makeText(context,"报表统计功能还没有开放",Toast.LENGTH_SHORT).show();
+                        break;
+                    case 5:
+                        //样机车辆
+                        Toast.makeText(context,"样机车辆功能还没有开放",Toast.LENGTH_SHORT).show();
+                        break;
+                    case 6:
+                        //报警信息
+                        Toast.makeText(context,"报警信息功能还没有开放",Toast.LENGTH_SHORT).show();
+                        break;
+                    case 7:
+                        //锁车信息
+                        Toast.makeText(context,"锁车信息功能还没有开放",Toast.LENGTH_SHORT).show();
+                        break;
+                    case 8:
+                        //保养提醒
+                        Toast.makeText(context,"保养提醒功能还没有开放",Toast.LENGTH_SHORT).show();
+                        break;
+                    case 9:
+                        //设备信息
+                        Toast.makeText(context,"设备信息功能还没有开放",Toast.LENGTH_SHORT).show();
+                        break;
+                    case 10:
+                        //预约车辆
+                        Toast.makeText(context,"预约车辆功能还没有开放",Toast.LENGTH_SHORT).show();
+                        break;
+                }
+
             }
         });
 

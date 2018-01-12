@@ -20,6 +20,22 @@
         android:roundIcon="@drawable/gpsking_logo"
         android:supportsRtl="true"
         android:theme="@style/NoActionBar">
+
+        <!--高德地图配置-->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="69c00f72da4a0cce23a1b98ace1ac2af" />
+
+        <!--
+         在android4.0以上系统中的 Activity加上下面这句，可以支持地图横竖屏切换
+         android:configChanges="orientation|keyboardHidden|screenSize"
+                               例如：
+         <activity
+            android:name=".basic.BasicMapActivity"
+            android:label="@string/basic_map"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
+        -->
         <!--页面配置-->
         <activity
             android:name=".MainActivity"
@@ -100,6 +116,27 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".QuerySyLocation">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYLOCATION"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".QuerySyTrackPlayback">
+            <intent-filter>
+                    <action android:name="android.intent.action.QUERYSYTRACKPLAYBACK"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".QuerySyNavi">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYNAVI"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
         <!--监听网络变化的广播-->
         <receiver android:name="com.zxhl.util.NetWorkBroadcastReceiver">
@@ -141,6 +178,10 @@
             </intent-filter>
         </service>
 
+        <!-- 定位需要的服务 使用2.0的定位需要加上这个 -->
+        <service android:name="com.amap.api.location.APSService" >
+        </service>
+
     </application>
 
     <!--权限配置-->
@@ -152,6 +193,23 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <!-- 创建与删除文件权限 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+
+
+    //地图包、搜索包需要的基础权限
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    //定位包、导航包需要的额外权限（注：基础权限也需要）
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <!--<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
 
 
 </manifest>
