@@ -81,13 +81,13 @@ public class GPSNaviUtil extends AppCompatActivity implements AMapNaviListener,A
     //算路起点坐标
     private NaviLatLng startLatlng;
     //算路终点坐标集合
-    private List<NaviLatLng> endList;
+    private List<NaviLatLng> endList=new ArrayList<>();
     //算路起点坐标集合
-    private List<NaviLatLng> startList;
+    private List<NaviLatLng> startList=new ArrayList<>();
     private double slat=0;
     private double elng=0;
 
-    private List<NaviLatLng> mWayPointList;
+    private List<NaviLatLng> mWayPointList=new ArrayList<>();
 
 
 
@@ -108,10 +108,17 @@ public class GPSNaviUtil extends AppCompatActivity implements AMapNaviListener,A
         //获取导航地图控件
         aMapNaviView=findViewById(R.id.query_mao_navi);
         //获取AmapNavi实例
-        aMapNavi=AMapNavi.getInstance(getApplicationContext());
+        aMapNavi = AMapNavi.getInstance(GPSNaviUtil.this);
         //设置导航监听
         aMapNavi.addAMapNaviListener(this);
         aMapNaviView.setAMapNaviViewListener(this);
+        //设置模拟导航的行车速度
+        aMapNavi.setEmulatorNaviSpeed(75);
+
+        //设置终点和起点
+        startList.add(startLatlng);
+        endList.add(endLatlng);
+
         aMapNaviView.onCreate(savedInstanceState);
 
         back.setOnClickListener(new ImgTxtLayout.OnClickListener() {
@@ -150,6 +157,7 @@ public class GPSNaviUtil extends AppCompatActivity implements AMapNaviListener,A
     * */
     @Override
     public void onInitNaviFailure() {
+        Log.i("MapNavi:","初始化失败");
 
     }
 
@@ -169,12 +177,12 @@ public class GPSNaviUtil extends AppCompatActivity implements AMapNaviListener,A
          *  注意: 不走高速与高速优先不能同时为true 高速优先与避免收费不能同时为true
          */
         //重置起点、终点
-        startList.clear();
+        /*startList.clear();
         startLatlng=new NaviLatLng();
         startList.add(startLatlng);
         endList.clear();
         endLatlng=new NaviLatLng();
-        endList.add(endLatlng);
+        endList.add(endLatlng);*/
         int strategy=0;
         try{
             //最后一个参数为true时代表多路径，否者为单路径
@@ -183,6 +191,7 @@ public class GPSNaviUtil extends AppCompatActivity implements AMapNaviListener,A
             e.printStackTrace();
         }
         aMapNavi.calculateDriveRoute(startList,endList,mWayPointList,strategy);
+
     }
 
     //开始导航回调
@@ -229,7 +238,7 @@ public class GPSNaviUtil extends AppCompatActivity implements AMapNaviListener,A
     //路线计算失败
     @Override
     public void onCalculateRouteFailure(int i) {
-
+        Log.i("MapNavi:","路线规划失败");
     }
 
     //偏航后重新计算路线回调
@@ -316,7 +325,7 @@ public class GPSNaviUtil extends AppCompatActivity implements AMapNaviListener,A
     @Override
     public void onCalculateRouteSuccess(int[] ints) {
 
-        aMapNavi.startNavi(NaviType.GPS);
+        aMapNavi.startNavi(NaviType.EMULATOR);
     }
 
     @Override

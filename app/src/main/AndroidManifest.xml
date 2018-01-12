@@ -24,7 +24,7 @@
         <!--高德地图配置-->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="69c00f72da4a0cce23a1b98ace1ac2af" />
+            android:value="11eec7fe73b71ed5b8e7408863b7f1b8" />
 
         <!--
          在android4.0以上系统中的 Activity加上下面这句，可以支持地图横竖屏切换
