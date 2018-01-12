@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -85,6 +86,10 @@ public class HomeSy extends Fragment implements View.OnClickListener {
     private EditText BeginTime;
     private EditText EndTime;
 
+    private RelativeLayout home_ly_sche;
+    private ImageView home_img_sche;
+    private AnimationDrawable anima;
+
     //自动完成框的相关变量
     private List<String> autoVehLic;
     private ArrayAdapter<String> adapter;
@@ -113,6 +118,8 @@ public class HomeSy extends Fragment implements View.OnClickListener {
                     getAxisXLables();
                     getAxisPoints();
                     initLineChart();
+                    home_ly_sche.setVisibility(View.GONE);
+                    anima.stop();
                     break;
                 case 0x003:
                     Yesterday.setText(WorkHoursTotal.get(0));
@@ -142,6 +149,8 @@ public class HomeSy extends Fragment implements View.OnClickListener {
             view = inflater.inflate(R.layout.sy_home, container, false);
             init();
             //getVehicleLic();
+            home_ly_sche.setVisibility(View.VISIBLE);
+            anima.start();
             GetWorkHourTotal();
             GetWorkHour();
 
@@ -210,6 +219,10 @@ public class HomeSy extends Fragment implements View.OnClickListener {
         rl_setting_visible= (RelativeLayout) view.findViewById(R.id.sy_home_visible);
         txt_setting= (TextView) view.findViewById(R.id.sy_home_setting);
         img_cancel= (ImageView) view.findViewById(R.id.sy_home_cancel);
+
+        home_ly_sche=view.findViewById(R.id.home_ly_sche);
+        home_img_sche=view.findViewById(R.id.home_img_sche);
+        anima= (AnimationDrawable) home_img_sche.getDrawable();
 
         BeginTime.setOnClickListener(this);
         EndTime.setOnClickListener(this);

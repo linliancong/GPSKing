@@ -1,6 +1,7 @@
 package com.zxhl.gpsking;
 
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -76,6 +78,10 @@ public class QuerySyTrackPlayback extends AppCompatActivity implements View.OnCl
     private SeekBar seekBar;
     private TextView num;
     private ImgTxtLayout hind;
+
+    private AnimationDrawable anima;
+    private ImageView query_img_sche;
+    private RelativeLayout query_ly_sche;
 
     private Thread thread;
     private Thread synNotify;
@@ -177,6 +183,11 @@ public class QuerySyTrackPlayback extends AppCompatActivity implements View.OnCl
         seekBar =findViewById(R.id.query_pro_play);
         num=findViewById(R.id.query_txt_num);
         hind=findViewById(R.id.query_imgtxt_bottom_tra);
+
+        query_img_sche=findViewById(R.id.query_img_sche);
+        query_ly_sche=findViewById(R.id.query_ly_sche);
+        anima= (AnimationDrawable) query_img_sche.getDrawable();
+
         //获取地图控件引用
         map=(MapView)findViewById(R.id.query_map_loction_tra);
         markerOptions=new MarkerOptions();
@@ -325,6 +336,8 @@ public class QuerySyTrackPlayback extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.query_btn_get_tra:
+                query_ly_sche.setVisibility(View.VISIBLE);
+                anima.start();
                 isWait=true;
                 threadForTag=false;
                 getTrackPlay();
@@ -444,6 +457,8 @@ public class QuerySyTrackPlayback extends AppCompatActivity implements View.OnCl
         if(!synSeekBar.isAlive()) {
             synSeekBar.start();
         }
+        query_ly_sche.setVisibility(View.GONE);
+        anima.stop();
     }
 
     private class PlayBack implements Runnable{

@@ -4,6 +4,7 @@ package com.zxhl.gpsking;
 
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.content.ContentUris;
 import android.content.Context;
@@ -94,6 +95,10 @@ public class MeSy extends Fragment implements View.OnClickListener {
     private ImgTxtLayout me_imgtxt_lx;
     private ImgTxtLayout me_imgtxt_fz;
 
+    private RelativeLayout me_ly_sche;
+    private ImageView me_img_sche;
+    private AnimationDrawable anima;
+
     private ShowAct showAct;
 
     private static final int REQUEST_CODE_PICK_IMAGE=1;
@@ -128,6 +133,8 @@ public class MeSy extends Fragment implements View.OnClickListener {
                     showAct.callBack(0x0030);
                     break;
                 case 0x0040:
+                    me_ly_sche.setVisibility(View.GONE);
+                    anima.stop();
                     if(state) {
                         state=false;
                         Intent it_gd = new Intent();
@@ -185,6 +192,8 @@ public class MeSy extends Fragment implements View.OnClickListener {
         }
 
         list = new ArrayList<Map<String, String>>();
+        me_ly_sche.setVisibility(View.VISIBLE);
+        anima.start();
         getUserInfo();
         return view;
     }
@@ -239,6 +248,10 @@ public class MeSy extends Fragment implements View.OnClickListener {
             me_imgtxt_xm= (ImgTxtLayout) view.findViewById(R.id.me_imgtxt_xm);
             me_imgtxt_lx= (ImgTxtLayout) view.findViewById(R.id.me_imgtxt_lx);
             me_imgtxt_fz= (ImgTxtLayout) view.findViewById(R.id.me_imgtxt_fz);
+
+            me_ly_sche=view.findViewById(R.id.me_ly_sche);
+            me_img_sche=view.findViewById(R.id.me_img_sche);
+            anima= (AnimationDrawable) me_img_sche.getDrawable();
 
             me_ly_tx.setOnClickListener(this);
             me_ly_zh.setOnClickListener(this);

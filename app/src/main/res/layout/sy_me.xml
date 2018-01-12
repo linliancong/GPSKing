@@ -7,6 +7,22 @@
     android:orientation="vertical"
     android:background="@color/black_bg"
     >
+    <RelativeLayout
+        android:id="@+id/me_ly_sche"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_pressed"
+        android:visibility="gone"
+        >
+        <ImageView
+            android:id="@+id/me_img_sche"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/anima_sche"
+            />
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/me_ly_tx"
