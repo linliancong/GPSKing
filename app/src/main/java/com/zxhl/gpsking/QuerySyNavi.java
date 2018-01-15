@@ -1,7 +1,10 @@
 package com.zxhl.gpsking;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -39,6 +42,7 @@ import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
 
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -93,6 +97,11 @@ public class QuerySyNavi extends AppCompatActivity implements AMapLocationListen
     private int sTag=0;
     private int eTag=0;
 
+    //判断用户手机是否安装高德地图
+    private boolean isInstalled=false;
+    //判断用户手机是否安装百度地图
+    private boolean isInstalled2=false;
+
     Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -112,14 +121,58 @@ public class QuerySyNavi extends AppCompatActivity implements AMapLocationListen
                         sTag=msg.getData().getInt("startLatLng");
                     }
                     if(sTag==1&&eTag==1) {
-                        Intent intent = new Intent(QuerySyNavi.this, GPSNaviUtil.class);
-                        Bundle bd = new Bundle();
-                        bd.putDouble("sLat", sLat);
-                        bd.putDouble("sLng", sLng);
-                        bd.putDouble("eLat", eLat);
-                        bd.putDouble("eLng", eLng);
-                        intent.putExtras(bd);
-                        startActivity(intent);
+                        if(isInstalled){
+                            StringBuilder str=new StringBuilder();
+                            str.append("androidamap://navi?");
+                            try{
+                                //填写应用名称
+                                str.append("sourceApplication="+ URLEncoder.encode(vehicle.getText().toString(),"UTF-8"));
+                                //导航目的地
+                                str.append("&poiname="+URLEncoder.encode(locat.get(2),"UTF-8"));
+                                //目的地经纬度
+                                str.append("&lat="+eLat);
+                                str.append("&lon="+eLng);
+                                str.append("&dev=1&style=2");
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                            //调用高德地图APP
+                            Intent intent=new Intent();
+                            intent.setPackage("com.autonavi.minimap");
+                            intent.addCategory(Intent.CATEGORY_DEFAULT);
+                            intent.setAction(Intent.ACTION_VIEW);
+                            //传递组装的数据
+                            intent.setData(Uri.parse(str.toString()));
+                            startActivity(intent);
+                        }else if(!isInstalled&&isInstalled2){
+                            StringBuilder baidu=new StringBuilder();
+                            baidu.append("baidumap://map/marker?");
+                            baidu.append("location="+eLat+","+eLng);
+                            try {
+                                baidu.append("&title=" + URLEncoder.encode(vehicle.getText().toString(), "UTF-8"));
+                                baidu.append("&content=" + URLEncoder.encode(locat.get(2), "UTF-8"));
+                                baidu.append("&traffic=on");
+
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                            //调用百度地图APP
+                            Intent intent=new Intent();
+                            intent.setPackage("com.baidu.BaiduMap");
+                            intent.addCategory(Intent.CATEGORY_DEFAULT);
+                            intent.setAction(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse(baidu.toString()));
+                            startActivity(intent);
+                        }else{
+                            Intent intent = new Intent(QuerySyNavi.this, GPSNaviUtil.class);
+                            Bundle bd = new Bundle();
+                            bd.putDouble("sLat", sLat);
+                            bd.putDouble("sLng", sLng);
+                            bd.putDouble("eLat", eLat);
+                            bd.putDouble("eLng", eLng);
+                            intent.putExtras(bd);
+                            startActivity(intent);
+                        }
                     }
 
                     break;
@@ -152,6 +205,10 @@ public class QuerySyNavi extends AppCompatActivity implements AMapLocationListen
             initMapStyle();
             initLocation();
         }
+
+        isInstalled=isPkgInstalled("com.autonavi.minimap",QuerySyNavi.this);
+        isInstalled2=isPkgInstalled("com.baidu.BaiduMap",QuerySyNavi.this);
+
 
         search.setOnClickListener(this);
         getVeh.setOnClickListener(this);
@@ -250,6 +307,17 @@ public class QuerySyNavi extends AppCompatActivity implements AMapLocationListen
         aMap.moveCamera(CameraUpdateFactory.zoomBy(6));
         /*aMap.showIndoorMap(true);
         aMap.setMapType(AMap.MAP_TYPE_NAVI);*/
+    }
+
+    private static boolean isPkgInstalled(String packgename, Context context){
+        PackageManager pm=context.getPackageManager();
+        try{
+            pm.getPackageInfo(packgename,PackageManager.GET_ACTIVITIES);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

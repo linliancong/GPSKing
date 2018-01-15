@@ -156,7 +156,7 @@ public class QuerySyTrackPlayback extends AppCompatActivity implements View.OnCl
             aMap=map.getMap();
             aMap.getUiSettings().setZoomControlsEnabled(false);
             //设置地图的缩放级别
-            aMap.moveCamera(CameraUpdateFactory.zoomBy(6));
+            aMap.moveCamera(CameraUpdateFactory.zoomBy(3));
         }
 
         getVehicleLic();
@@ -459,6 +459,7 @@ public class QuerySyTrackPlayback extends AppCompatActivity implements View.OnCl
         }
         query_ly_sche.setVisibility(View.GONE);
         anima.stop();
+        aMap.moveCamera(CameraUpdateFactory.zoomBy(4));
     }
 
     private class PlayBack implements Runnable{
