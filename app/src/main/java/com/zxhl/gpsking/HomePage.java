@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.zxhl.util.ApkVersionUtils;
 import com.zxhl.util.AppManager;
+import com.zxhl.util.CheckPermissionsActivity;
 import com.zxhl.util.DownloadService;
 import com.zxhl.util.FragmentUtils;
 import com.zxhl.util.MyFragmentPagerAdapter;
@@ -41,7 +42,7 @@ import java.util.List;
  * Created by Administrator on 2017/11/24.
  */
 
-public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,ViewPager.OnPageChangeListener,MeSy.ShowAct,SettingSy.ShowAct{
+public class HomePage extends CheckPermissionsActivity implements RadioGroup.OnCheckedChangeListener,ViewPager.OnPageChangeListener,MeSy.ShowAct,SettingSy.ShowAct{
 
     public static final int PAG_ONE=0;
     public static final int PAG_TWO=1;
