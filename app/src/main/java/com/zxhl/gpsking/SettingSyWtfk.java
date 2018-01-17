@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.ShowKeyboard;
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -54,7 +55,7 @@ public class SettingSyWtfk extends AppCompatActivity implements TextWatcher{
                 if(state==1){
                     //success
                     Toast.makeText(getApplicationContext(),"反馈成功",Toast.LENGTH_SHORT).show();
-                    //finish();
+                    finish();
                 }
                 else {
                     //faild
@@ -129,6 +130,8 @@ public class SettingSyWtfk extends AppCompatActivity implements TextWatcher{
         setting_btn_send_wtfk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ShowKeyboard.hideKeyboard(setting_edit_question_wtfk);
+                ShowKeyboard.hideKeyboard(setting_edit_lxfs_wtfk);
                 Integer it=new Integer(tag);
                 HashMap<String,String> proper=new HashMap<String,String>();
                 proper.put("OperatorID",sp.getOperatorID());

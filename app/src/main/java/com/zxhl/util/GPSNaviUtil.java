@@ -464,4 +464,26 @@ public class GPSNaviUtil extends AppCompatActivity implements AMapNaviListener,A
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        new AlertDialog.Builder(this)
+                .setTitle("提示")
+                .setMessage("确定退出导航?")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                    }
+                })
+                .show();
+
+
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

@@ -39,6 +39,7 @@ import com.amap.api.navi.AmapPageType;
 import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.ShowKeyboard;
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -394,6 +395,7 @@ public class QuerySyLocation extends AppCompatActivity implements AMapLocationLi
                 vehicle.setVisibility(View.VISIBLE);
                 break;
             case R.id.query_btn_get:
+                ShowKeyboard.hideKeyboard(vehicle);
                 getPoi();
                 title.setVisibility(View.VISIBLE);
                 search.setVisibility(View.VISIBLE);
