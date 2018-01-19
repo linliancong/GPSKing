@@ -266,7 +266,7 @@ public class HomeSy extends Fragment implements View.OnClickListener {
     * */
     public void initLineChart(){
         //折线的颜色
-        Line line=new Line(mPointValue).setColor(Color.RED);
+        Line line=new Line(mPointValue).setColor(Color.parseColor("#e74c3c"));
         List<Line> lines=new ArrayList<>();
         //设置显示小数点
         LineChartValueFormatter formatter=new SimpleLineChartValueFormatter(2);
@@ -275,9 +275,9 @@ public class HomeSy extends Fragment implements View.OnClickListener {
         //有三种 ：ValueShape.SQUARE（矩形） ValueShape.DIAMOND（菱形）ValueShape.CIRCLE
         line.setShape(ValueShape.CIRCLE);
         //曲线是否平滑，即是曲线还是折线
-        line.setCubic(false);
+        line.setCubic(true);
         //线条的粗细，默认是3
-        line.setStrokeWidth(1);
+        line.setStrokeWidth(2);
         //是否填充曲线的面积
         line.setFilled(false);
         //曲线的数据坐标是否加上备注
@@ -289,7 +289,7 @@ public class HomeSy extends Fragment implements View.OnClickListener {
         //是否显示圆点，如果为false 则没有圆点显示只有点显示（每个数据点都是大的圆点）
         line.setHasPoints(true);
         // 设置节点颜色
-        line.setPointColor(Color.parseColor("#00BCD4"));
+        line.setPointColor(Color.parseColor("#ffc773"));
         // 设置节点半径
         line.setPointRadius(2);
         //添加到线的集合中

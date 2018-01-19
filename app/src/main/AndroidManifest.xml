@@ -166,14 +166,21 @@
         </activity>
         <activity android:name=".QuerySyYjcl">
             <intent-filter>
-                <action android:name="android.intent.action.QUERYSYyjcl"/>
+                <action android:name="android.intent.action.QUERYSYYJCL"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity android:name=".QuerySyYycl">
             <intent-filter>
-                <action android:name="android.intent.action.QUERYSYyycl"/>
+                <action android:name="android.intent.action.QUERYSYYYCL"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".QuerySySbxx">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYSBXX"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>

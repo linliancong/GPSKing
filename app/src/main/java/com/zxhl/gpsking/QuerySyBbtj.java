@@ -192,7 +192,7 @@ public class QuerySyBbtj extends AppCompatActivity implements View.OnClickListen
      * */
     public void initLineChart(){
         //折线的颜色
-        Line line=new Line(mPointValue).setColor(Color.parseColor("#1abc9c"));
+        Line line=new Line(mPointValue).setColor(Color.parseColor("#ff8c31"));
         List<Line> lines=new ArrayList<>();
         //设置显示小数点
         LineChartValueFormatter formatter=new SimpleLineChartValueFormatter(2);
@@ -201,9 +201,9 @@ public class QuerySyBbtj extends AppCompatActivity implements View.OnClickListen
         //有三种 ：ValueShape.SQUARE（矩形） ValueShape.DIAMOND（菱形）ValueShape.CIRCLE
         line.setShape(ValueShape.CIRCLE);
         //曲线是否平滑，即是曲线还是折线
-        line.setCubic(false);
+        line.setCubic(true);
         //线条的粗细，默认是3
-        line.setStrokeWidth(1);
+        line.setStrokeWidth(3);
         //是否填充曲线的面积
         line.setFilled(false);
         //曲线的数据坐标是否加上备注
@@ -215,7 +215,7 @@ public class QuerySyBbtj extends AppCompatActivity implements View.OnClickListen
         //是否显示圆点，如果为false 则没有圆点显示只有点显示（每个数据点都是大的圆点）
         line.setHasPoints(true);
         // 设置节点颜色
-        line.setPointColor(Color.parseColor("#e67e22"));
+        line.setPointColor(Color.parseColor("#fff143"));
         // 设置节点半径
         line.setPointRadius(2);
         //添加到线的集合中
