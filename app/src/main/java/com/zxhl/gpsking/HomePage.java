@@ -13,6 +13,7 @@ import android.provider.Settings;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
@@ -255,6 +256,21 @@ public class HomePage extends CheckPermissionsActivity implements RadioGroup.OnC
 
         }
 
+    }
+
+    //解决onBackPressed不被执行的问题
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        //拦截返回键
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK){
+            //判断触摸UP事件才会进行返回事件处理
+            if (event.getAction() == KeyEvent.ACTION_UP) {
+                onBackPressed();
+            }
+            //只要是返回事件，直接返回true，表示消费掉
+            return true;
+        }
+        return super.dispatchKeyEvent(event);
     }
 
     @Override

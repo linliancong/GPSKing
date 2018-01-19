@@ -164,6 +164,20 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".QuerySyYjcl">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYyjcl"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".QuerySyYycl">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYyycl"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
         <!--监听网络变化的广播-->
         <receiver android:name="com.zxhl.util.NetWorkBroadcastReceiver">
