@@ -21,10 +21,16 @@
         android:supportsRtl="true"
         android:theme="@style/NoActionBar">
 
-        <!--高德地图配置-->
+        <!--高德地图配置Demo2-->
+        <!--<meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="11eec7fe73b71ed5b8e7408863b7f1b8" />-->
+
+        <!--高德地图配置Demo1-->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="11eec7fe73b71ed5b8e7408863b7f1b8" />
+            android:value="69c00f72da4a0cce23a1b98ace1ac2af"
+            />
 
         <!--
          在android4.0以上系统中的 Activity加上下面这句，可以支持地图横竖屏切换
@@ -140,6 +146,41 @@
         <activity android:name=".QuerySyTrackPlayback">
             <intent-filter>
                     <action android:name="android.intent.action.QUERYSYTRACKPLAYBACK"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".QuerySyGkxx">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYGKXX"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".QuerySyBbtj">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYBBTJ"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".QuerySyYjcl">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYYJCL"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".QuerySyYycl">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYYYCL"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".QuerySySbxx">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYSBXX"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>

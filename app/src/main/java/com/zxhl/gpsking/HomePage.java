@@ -13,6 +13,7 @@ import android.provider.Settings;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.zxhl.util.ApkVersionUtils;
 import com.zxhl.util.AppManager;
+import com.zxhl.util.CheckPermissionsActivity;
 import com.zxhl.util.DownloadService;
 import com.zxhl.util.FragmentUtils;
 import com.zxhl.util.MyFragmentPagerAdapter;
@@ -41,7 +43,7 @@ import java.util.List;
  * Created by Administrator on 2017/11/24.
  */
 
-public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,ViewPager.OnPageChangeListener,MeSy.ShowAct,SettingSy.ShowAct{
+public class HomePage extends CheckPermissionsActivity implements RadioGroup.OnCheckedChangeListener,ViewPager.OnPageChangeListener,MeSy.ShowAct,SettingSy.ShowAct{
 
     public static final int PAG_ONE=0;
     public static final int PAG_TWO=1;
@@ -254,6 +256,21 @@ public class HomePage extends AppCompatActivity implements RadioGroup.OnCheckedC
 
         }
 
+    }
+
+    //解决onBackPressed不被执行的问题
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        //拦截返回键
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK){
+            //判断触摸UP事件才会进行返回事件处理
+            if (event.getAction() == KeyEvent.ACTION_UP) {
+                onBackPressed();
+            }
+            //只要是返回事件，直接返回true，表示消费掉
+            return true;
+        }
+        return super.dispatchKeyEvent(event);
     }
 
     @Override

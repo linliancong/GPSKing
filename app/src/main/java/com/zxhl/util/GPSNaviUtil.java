@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -86,8 +87,12 @@ public class GPSNaviUtil extends AppCompatActivity implements AMapNaviListener,A
     private List<NaviLatLng> startList=new ArrayList<>();
     private double slat=0;
     private double elng=0;
+    //语音引擎
+    private TTSController mTTSManage;
 
     private List<NaviLatLng> mWayPointList=new ArrayList<>();
+
+    private long mTime=0;
 
 
 
@@ -97,6 +102,9 @@ public class GPSNaviUtil extends AppCompatActivity implements AMapNaviListener,A
         setContentView(R.layout.query_gpsnavi);
 
         back=(ImgTxtLayout)findViewById(R.id.query_imgtxt_title1);
+        //实例化语音引擎
+        mTTSManage=TTSController.getInstance(GPSNaviUtil.this);
+        mTTSManage.init();
 
         //开始获取开始和结束的点坐标
         Intent intent=getIntent();
@@ -112,8 +120,9 @@ public class GPSNaviUtil extends AppCompatActivity implements AMapNaviListener,A
         //设置导航监听
         aMapNavi.addAMapNaviListener(this);
         aMapNaviView.setAMapNaviViewListener(this);
+        aMapNavi.addAMapNaviListener(mTTSManage);
         //设置模拟导航的行车速度
-        aMapNavi.setEmulatorNaviSpeed(75);
+        //aMapNavi.setEmulatorNaviSpeed(75);
 
         //设置终点和起点
         startList.add(startLatlng);
@@ -150,6 +159,34 @@ public class GPSNaviUtil extends AppCompatActivity implements AMapNaviListener,A
     protected void onDestroy() {
         super.onDestroy();
         aMapNaviView.onDestroy();
+        mTTSManage.destroy();
+        aMapNavi.destroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        aMapNaviView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        aMapNaviView.onPause();
+        //仅仅是停止当前再说的话，到新路口还是会说
+        mTTSManage.stopSpeaking();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(System.currentTimeMillis()-mTime>2000)
+        {
+            Toast.makeText(getApplicationContext(),"再按一次退出导航",Toast.LENGTH_SHORT).show();
+            mTime=System.currentTimeMillis();
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 
     /**
@@ -324,8 +361,9 @@ public class GPSNaviUtil extends AppCompatActivity implements AMapNaviListener,A
     //算路成功，开始导航
     @Override
     public void onCalculateRouteSuccess(int[] ints) {
-
-        aMapNavi.startNavi(NaviType.EMULATOR);
+        //设置模拟导航
+        //aMapNavi.startNavi(NaviType.EMULATOR);
+        aMapNavi.startNavi(NaviType.GPS);
     }
 
     @Override
@@ -426,10 +464,9 @@ public class GPSNaviUtil extends AppCompatActivity implements AMapNaviListener,A
 
     }
 
-
-    //先使用着
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
         new AlertDialog.Builder(this)
                 .setTitle("提示")
                 .setMessage("确定退出导航?")
@@ -444,6 +481,9 @@ public class GPSNaviUtil extends AppCompatActivity implements AMapNaviListener,A
                     }
                 })
                 .show();
+
+
         return super.onKeyDown(keyCode, event);
     }
+
 }

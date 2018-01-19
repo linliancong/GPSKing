@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/query_imgtxt_title"
             android:layout_centerVertical="true"
-            android:text="实时定位"
+            android:text="查车导航"
             android:textSize="18sp"
             android:textColor="@color/black"
             />

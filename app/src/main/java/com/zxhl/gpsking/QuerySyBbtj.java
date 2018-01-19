@@ -1,49 +1,38 @@
 package com.zxhl.gpsking;
 
-
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Adapter;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bigkoo.pickerview.TimePickerView;
 import com.zxhl.util.Constants;
+import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.ShowKeyboard;
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.xml.transform.sax.SAXSource;
 
 import lecho.lib.hellocharts.formatter.LineChartValueFormatter;
 import lecho.lib.hellocharts.formatter.SimpleLineChartValueFormatter;
@@ -59,187 +48,124 @@ import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
 
 /**
- * Created by Administrator on 2017/12/4.
+ * Created by Administrator on 2018/1/16.
  */
 
-public class HomeSy extends Fragment implements View.OnClickListener {
+public class QuerySyBbtj extends AppCompatActivity implements View.OnClickListener,TextWatcher{
 
-    private View view;
-    private Context context;
-    private int tag=0;
+    //控件
+    private AutoCompleteTextView VehicleLic;
+    private EditText BeginTime;
+    private EditText EndTime;
+    private Button query;
+    private LineChartView lineChart;
+    private ImgTxtLayout gkxx_imgtxt_title;
+
+    //自动完成框的相关变量
+    private List<String> autoVehLic;
+    private ArrayAdapter<String> adapter;
 
     //折线图相关设置
-    private LineChartView lineChart;
     private List<String> data=null;
     private List<String> score=null;
     private List<PointValue> mPointValue=new ArrayList<>();
     private List<AxisValue> mAxisXValue=new ArrayList<>();
     private List<AxisValue> mAxisYValue=new ArrayList<>();
 
-    //控件
-    private TextView Yesterday;
-    private TextView MonthTotal;
-    private TextView YearTotal;
-    private List<String> WorkHoursTotal;
-
-    private AutoCompleteTextView VehicleLic;
-    private EditText BeginTime;
-    private EditText EndTime;
-
-    private RelativeLayout home_ly_sche;
-    private ImageView home_img_sche;
-    private AnimationDrawable anima;
-
-    //自动完成框的相关变量
-    private List<String> autoVehLic;
-    private ArrayAdapter<String> adapter;
-
     private SharedPreferenceUtils sp;
 
-    //提示设置默认显示机号
-    private RelativeLayout rl_setting_visible;
-    private TextView txt_setting;
-    private ImageView img_cancel;
+    //查询相关
+    private RelativeLayout bbtj_ly_sche;
+    private ImageView bbtj_img_sche;
+    private AnimationDrawable anima;
 
-    //广播
-    private static boolean state=false;
-    private static boolean state2=true;
-    private MyBroadcastHomeSy broad;
 
     Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 0x001:
-                    adapter=new ArrayAdapter<String>(context,R.layout.simple_autoedit_dropdown_item,R.id.tv_spinner,autoVehLic);
+                    adapter=new ArrayAdapter<String>(QuerySyBbtj.this,R.layout.simple_autoedit_dropdown_item,R.id.tv_spinner,autoVehLic);
                     VehicleLic.setAdapter(adapter);
                     break;
                 case 0x002:
                     getAxisXLables();
                     getAxisPoints();
                     initLineChart();
-                    home_ly_sche.setVisibility(View.GONE);
                     anima.stop();
-                    break;
-                case 0x003:
-                    Yesterday.setText(WorkHoursTotal.get(0));
-                    MonthTotal.setText(WorkHoursTotal.get(1));
-                    YearTotal.setText(WorkHoursTotal.get(2));
-                    break;
-                case 0x004:
-                    GetWorkHourTotal();
-                    GetWorkHour();
-                    rl_setting_visible.setVisibility(View.GONE);
+                    bbtj_ly_sche.setVisibility(View.GONE);
                     break;
             }
         }
     };
 
-    public HomeSy(){
-
-    }
-    public HomeSy(Context context){
-        this.context=context;
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        if(view==null) {
-            view = inflater.inflate(R.layout.sy_home, container, false);
-            init();
-            //getVehicleLic();
-            home_ly_sche.setVisibility(View.VISIBLE);
-            anima.start();
-            GetWorkHourTotal();
-            GetWorkHour();
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.query_bbtj);
 
-        }
-        if(sp.getVehicleLic().equals("")){
-            rl_setting_visible.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            rl_setting_visible.setVisibility(View.GONE);
-        }
+        init();
+        getVehicleLic();
+    }
 
-        new Thread(){
+    public void init(){
+        sp=new SharedPreferenceUtils(QuerySyBbtj.this, Constants.SAVE_USER);
+
+        VehicleLic=findViewById(R.id.bbtj_auto_vehiclelic);
+        BeginTime=findViewById(R.id.bbtj_edit_BeginTime);
+        EndTime=findViewById(R.id.bbtj_edit_EndTime);
+        query=findViewById(R.id.bbtj_btn_get);
+        lineChart=findViewById(R.id.bbtj_chart);
+        gkxx_imgtxt_title=findViewById(R.id.gkxx_imgtxt_title);
+
+        bbtj_ly_sche=findViewById(R.id.bbtj_ly_sche);
+        bbtj_img_sche=findViewById(R.id.bbtj_img_sche);
+        anima= (AnimationDrawable) bbtj_img_sche.getDrawable();
+
+        BeginTime.setOnClickListener(this);
+        EndTime.setOnClickListener(this);
+        query.setOnClickListener(this);
+        VehicleLic.addTextChangedListener(this);
+        BeginTime.addTextChangedListener(this);
+        EndTime.addTextChangedListener(this);
+
+        gkxx_imgtxt_title.setOnClickListener(new ImgTxtLayout.OnClickListener() {
             @Override
-            public void run() {
-                while (true){
-                    if(state){
-                        state=false;
-                        handler.sendEmptyMessage(0x004);
-                    }
-                }
+            public void onClick(View v) {
+                finish();
             }
-        }.start();
-        return view;
+        });
+
+
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.sy_home_BeginTime:
+        switch (v.getId()) {
+            case R.id.bbtj_btn_get:
+                ShowKeyboard.hideKeyboard(VehicleLic);
+                lineChart.setVisibility(View.VISIBLE);
+                anima.start();
+                bbtj_ly_sche.setVisibility(View.VISIBLE);
+                GetWorkHour();
+                break;
+            case R.id.bbtj_edit_BeginTime:
+                ShowKeyboard.hideKeyboard(VehicleLic);
                 TimePicker(1);
                 break;
-            case R.id.sy_home_EndTime:
+            case R.id.bbtj_edit_EndTime:
+                ShowKeyboard.hideKeyboard(VehicleLic);
                 TimePicker(2);
-                break;
-            case R.id.sy_home_setting:
-                Intent it0=new Intent(context,SettingSyVehicle.class);
-                startActivity(it0);
-                break;
-            case R.id.sy_home_cancel:
-                rl_setting_visible.setVisibility(View.GONE);
-                break;
-            case R.id.sy_home_VehicleLic:
-                VehicleLic.setFocusable(true);
                 break;
         }
 
     }
 
-    public void init(){
 
-        sp=new SharedPreferenceUtils(context, Constants.SAVE_USER);
-        autoVehLic=new ArrayList<>();
-        WorkHoursTotal=new ArrayList<>();
-        broad=new MyBroadcastHomeSy();
-        IntentFilter filter=new IntentFilter();
-        filter.addAction("com.zxhl.gpsking.MYBROADCASTHOMESY");
-        getActivity().registerReceiver(broad,filter);
-
-        Yesterday= (TextView) view.findViewById(R.id.sy_home_Yesterday);
-        MonthTotal=(TextView) view.findViewById(R.id.sy_home_MonthTotal);
-        YearTotal=(TextView) view.findViewById(R.id.sy_home_YearTotal);
-        VehicleLic= (AutoCompleteTextView) view.findViewById(R.id.sy_home_VehicleLic);
-        BeginTime= (EditText) view.findViewById(R.id.sy_home_BeginTime);
-        EndTime= (EditText) view.findViewById(R.id.sy_home_EndTime);
-        rl_setting_visible= (RelativeLayout) view.findViewById(R.id.sy_home_visible);
-        txt_setting= (TextView) view.findViewById(R.id.sy_home_setting);
-        img_cancel= (ImageView) view.findViewById(R.id.sy_home_cancel);
-
-        home_ly_sche=view.findViewById(R.id.home_ly_sche);
-        home_img_sche=view.findViewById(R.id.home_img_sche);
-        anima= (AnimationDrawable) home_img_sche.getDrawable();
-
-        BeginTime.setOnClickListener(this);
-        EndTime.setOnClickListener(this);
-        img_cancel.setOnClickListener(this);
-        txt_setting.setOnClickListener(this);
-        VehicleLic.setOnClickListener(this);
-
-        lineChart= (LineChartView) view.findViewById(R.id.sy_home_chart);
-        /*data=new String[]{"10-22","11-22","12-22","1-22","6-22","5-23","5-22","6-22","5-23","5-22"};//X轴的标注
-        score= new int[]{50,42,90,33,10,74,22,18,79,20};//图表的数据点*/
-
-
-    }
 
     /**
-    *设置X轴的显示
-    * */
+     *设置X轴的显示
+     * */
     public void getAxisXLables(){
         mAxisXValue=new ArrayList<>();
         for (int i=0;i<data.size();i++){
@@ -263,10 +189,10 @@ public class HomeSy extends Fragment implements View.OnClickListener {
 
     /**
      * 对图标进行设置
-    * */
+     * */
     public void initLineChart(){
         //折线的颜色
-        Line line=new Line(mPointValue).setColor(Color.parseColor("#e74c3c"));
+        Line line=new Line(mPointValue).setColor(Color.parseColor("#ff8c31"));
         List<Line> lines=new ArrayList<>();
         //设置显示小数点
         LineChartValueFormatter formatter=new SimpleLineChartValueFormatter(2);
@@ -277,7 +203,7 @@ public class HomeSy extends Fragment implements View.OnClickListener {
         //曲线是否平滑，即是曲线还是折线
         line.setCubic(true);
         //线条的粗细，默认是3
-        line.setStrokeWidth(2);
+        line.setStrokeWidth(3);
         //是否填充曲线的面积
         line.setFilled(false);
         //曲线的数据坐标是否加上备注
@@ -289,7 +215,7 @@ public class HomeSy extends Fragment implements View.OnClickListener {
         //是否显示圆点，如果为false 则没有圆点显示只有点显示（每个数据点都是大的圆点）
         line.setHasPoints(true);
         // 设置节点颜色
-        line.setPointColor(Color.parseColor("#ffc773"));
+        line.setPointColor(Color.parseColor("#fff143"));
         // 设置节点半径
         line.setPointRadius(2);
         //添加到线的集合中
@@ -379,7 +305,7 @@ public class HomeSy extends Fragment implements View.OnClickListener {
     }
 
     public void TimePicker(final int state){
-        TimePickerView time=new TimePickerView.Builder(context, new TimePickerView.OnTimeSelectListener() {
+        TimePickerView time=new TimePickerView.Builder(QuerySyBbtj.this, new TimePickerView.OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
                 if(state==1) {
@@ -427,23 +353,10 @@ public class HomeSy extends Fragment implements View.OnClickListener {
 
     //查询工作时间曲线
     private void GetWorkHour(){
-
-        String count=sp.getDayCount();
-        int counts=7;
-        if(!count.equals("")){
-            Integer it=new Integer(count);
-            counts=it.intValue();
-        }
-        SimpleDateFormat simple=new SimpleDateFormat("yyyyMMdd");
-        Date d=new Date();
         HashMap<String,String> proper=new HashMap<>();
         proper.put("VehicleLic",sp.getVehicleLic());
-        proper.put("BeginTime",simple.format(new Date(d.getTime()-counts*24*60*60*1000)));
-        proper.put("EndTime",simple.format(new Date(d.getTime()-1*24*60*60*1000)));
-       /* //测试数据
-        proper.put("VehicleLic","XH000181");
-        proper.put("BeginTime","20171225");
-        proper.put("EndTime","20180103");*/
+        proper.put("BeginTime",BeginTime.getText().toString());
+        proper.put("EndTime",EndTime.getText().toString());
 
         WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetWorkHour", proper, new WebServiceUtils.WebServiceCallBack() {
             @Override
@@ -455,30 +368,6 @@ public class HomeSy extends Fragment implements View.OnClickListener {
                         data=lists.get(0);
                         score=lists.get(1);
                         handler.sendEmptyMessage(0x002);
-                    }
-                }
-            }
-        });
-    }
-
-    //查询工作时间统计
-    private void GetWorkHourTotal(){
-        HashMap<String,String> proper=new HashMap<>();
-        proper.put("VehicleLic",sp.getVehicleLic());
-        /*//测试数据
-        proper.put("VehicleLic","XH000181");
-        proper.put("DateDay","20171231");*/
-
-
-        WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetWorkHourTotal", proper, new WebServiceUtils.WebServiceCallBack() {
-            @Override
-            public void callBack(SoapObject result) {
-                if(result!=null){
-                    List<String> list=new ArrayList<String>();
-                    list=parase(result);
-                    if(list!=null){
-                        WorkHoursTotal=list;
-                        handler.sendEmptyMessage(0x003);
                     }
                 }
             }
@@ -514,24 +403,21 @@ public class HomeSy extends Fragment implements View.OnClickListener {
         return lists;
     }
 
-
-    public static class MyBroadcastHomeSy extends BroadcastReceiver {
-        public final String board="com.zxhl.gpsking.MYBROADCASTHOMESY";
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(board)){
-                state=true;
-                //Toast.makeText(context,"ces",Toast.LENGTH_SHORT).show();
-
-            }
-        }
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        query.setEnabled(false);
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(broad!=null){
-            getActivity().unregisterReceiver(broad);
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if(VehicleLic.getText().length()!=0&&BeginTime.getText().length()!=0&&EndTime.getText().length()!=0){
+            query.setEnabled(true);
         }
+
     }
 }

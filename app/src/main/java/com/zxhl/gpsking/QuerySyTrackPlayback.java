@@ -36,6 +36,7 @@ import com.bigkoo.pickerview.TimePickerView;
 import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.ShowKeyboard;
 import com.zxhl.util.WebServiceUtils;
 
 import org.apache.http.conn.BasicEofSensorWatcher;
@@ -156,7 +157,7 @@ public class QuerySyTrackPlayback extends AppCompatActivity implements View.OnCl
             aMap=map.getMap();
             aMap.getUiSettings().setZoomControlsEnabled(false);
             //设置地图的缩放级别
-            aMap.moveCamera(CameraUpdateFactory.zoomBy(6));
+            aMap.moveCamera(CameraUpdateFactory.zoomBy(3));
         }
 
         getVehicleLic();
@@ -336,6 +337,7 @@ public class QuerySyTrackPlayback extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.query_btn_get_tra:
+                ShowKeyboard.hideKeyboard(vehicle);
                 query_ly_sche.setVisibility(View.VISIBLE);
                 anima.start();
                 isWait=true;
@@ -390,9 +392,11 @@ public class QuerySyTrackPlayback extends AppCompatActivity implements View.OnCl
                 }
                 break;
             case R.id.query_edit_BeginTime:
+                ShowKeyboard.hideKeyboard(vehicle);
                 TimePicker(1);
                 break;
             case R.id.query_edit_EndTime:
+                ShowKeyboard.hideKeyboard(vehicle);
                 TimePicker(0);
                 break;
 
@@ -459,6 +463,7 @@ public class QuerySyTrackPlayback extends AppCompatActivity implements View.OnCl
         }
         query_ly_sche.setVisibility(View.GONE);
         anima.stop();
+        aMap.moveCamera(CameraUpdateFactory.zoomBy(4));
     }
 
     private class PlayBack implements Runnable{
