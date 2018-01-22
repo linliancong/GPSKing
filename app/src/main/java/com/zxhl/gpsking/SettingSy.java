@@ -1,6 +1,7 @@
 package com.zxhl.gpsking;
 
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -87,6 +88,7 @@ public class SettingSy extends Fragment implements View.OnClickListener {
 
     public SettingSy(){
     }
+    @SuppressLint("ValidFragment")
     public SettingSy(Context context){
         this.context=context;
     }

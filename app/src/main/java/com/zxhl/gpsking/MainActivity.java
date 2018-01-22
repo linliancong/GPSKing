@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -22,6 +23,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.zxhl.util.Constants;
 import com.zxhl.util.SharedPreferenceUtils;
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView img;
     private boolean state=false;
     private int tag=0;
+
+    private TextView banq;
 
     private Handler handler=new Handler(){
         @Override
@@ -64,9 +68,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         img= (ImageView) findViewById(R.id.img);
-        if(Build.VERSION.SDK_INT>=26 || Build.VERSION.SDK_INT==21||Build.VERSION.SDK_INT==22) {
+        /*if(Build.VERSION.SDK_INT>=26 || Build.VERSION.SDK_INT==21||Build.VERSION.SDK_INT==22) {
             scaleImage(this, img, R.mipmap.gpsking_index_new);
-        }
+        }*/
+
+        banq=findViewById(R.id.txt_bq);
+        Typeface type=Typeface.createFromAsset(getAssets(),"fonts/标准仿宋体简.ttf");
+        banq.setTypeface(type);
 
 
         //判断网络状态

@@ -1,6 +1,7 @@
 package com.zxhl.gpsking;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class QuerySy extends Fragment implements View.OnClickListener {
 
     public QuerySy(){
     }
+    @SuppressLint("ValidFragment")
     public QuerySy(Context context){
         this.context=context;
     }

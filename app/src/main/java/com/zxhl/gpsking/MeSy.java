@@ -2,6 +2,7 @@ package com.zxhl.gpsking;
 
 
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
@@ -158,6 +159,7 @@ public class MeSy extends Fragment implements View.OnClickListener {
     public MeSy(){
 
     }
+    @SuppressLint("ValidFragment")
     public MeSy(Context context){
         this.context=context;
     }
