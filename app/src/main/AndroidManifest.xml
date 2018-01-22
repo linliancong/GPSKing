@@ -185,6 +185,27 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".QuerySyScxx">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYSCXX"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".QuerySyBjxx">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYBJXX"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".QuerySyBytx">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYBYTX"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
         <!--监听网络变化的广播-->
         <receiver android:name="com.zxhl.util.NetWorkBroadcastReceiver">

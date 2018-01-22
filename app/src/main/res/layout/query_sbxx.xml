@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/sbxx_imgtxt_title"
                 android:layout_centerVertical="true"
-                android:text="工况信息"
+                android:text="设备信息"
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 />

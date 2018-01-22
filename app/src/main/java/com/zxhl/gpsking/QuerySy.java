@@ -117,15 +117,18 @@ public class QuerySy extends Fragment implements View.OnClickListener {
                         break;
                     case 6:
                         //报警信息
-                        Toast.makeText(context,"报警信息功能还没有开放",Toast.LENGTH_SHORT).show();
+                        Intent it6=new Intent(context,QuerySyBjxx.class);
+                        startActivity(it6);
                         break;
                     case 7:
                         //锁车信息
-                        Toast.makeText(context,"锁车信息功能还没有开放",Toast.LENGTH_SHORT).show();
+                        Intent it7=new Intent(context,QuerySyScxx.class);
+                        startActivity(it7);
                         break;
                     case 8:
                         //保养提醒
-                        Toast.makeText(context,"保养提醒功能还没有开放",Toast.LENGTH_SHORT).show();
+                        Intent it8=new Intent(context,QuerySyBytx.class);
+                        startActivity(it8);
                         break;
                     case 9:
                         //设备信息

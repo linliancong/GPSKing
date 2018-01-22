@@ -366,7 +366,7 @@ public class QuerySyYycl extends AppCompatActivity implements View.OnClickListen
             if(i==info.size()){
                 break;
             }else {
-                carInfos.add(new CarInfo(info.get(i).get(0), info.get(i).get(1), info.get(i).get(2), "剩余天数：", "最后位置："));
+                carInfos.add(new CarInfo(info.get(i).get(0), info.get(i).get(1), info.get(i).get(2), "剩余天数：", "最后位置：","车牌号："));
             }
         }
 
@@ -377,6 +377,7 @@ public class QuerySyYycl extends AppCompatActivity implements View.OnClickListen
             adapterUtil=new AdapterUtil<CarInfo>(carInfos,R.layout.query_clxx_item){
                 @Override
                 public void bindView(ViewHolder holder, CarInfo obj) {
+                    holder.setText(R.id.clxx_item_vehicle_title,obj.getVehicle_title());
                     holder.setText(R.id.clxx_item_vehicle,obj.getVehicle());
                     holder.setText(R.id.clxx_item_time_title,obj.getTime_title());
                     holder.setText(R.id.clxx_item_time,obj.getTime());

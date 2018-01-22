@@ -5,18 +5,24 @@ package com.zxhl.entity;
  */
 
 public class CarInfo {
+    private String vehicle_title;
     private String vehicle;
     private String time_title;
     private String time;
     private String info_title;
     private String info;
 
-    public CarInfo(String vehicle,String info,String time,String time_title,String info_title){
+    public CarInfo(String vehicle,String info,String time,String time_title,String info_title,String vehicle_title){
+        this.vehicle_title=vehicle_title;
         this.vehicle=vehicle;
         this.time_title=time_title;
         this.time=time;
         this.info_title=info_title;
         this.info=info;
+    }
+
+    public void setVehicle_title(String vehicle_title) {
+        this.vehicle_title = vehicle_title;
     }
 
     public void setVehicle(String vehicle) {
@@ -37,6 +43,10 @@ public class CarInfo {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public String getVehicle_title() {
+        return vehicle_title;
     }
 
     public String getVehicle() {
