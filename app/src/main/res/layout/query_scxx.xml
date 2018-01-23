@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/yjcl_ly_title"
+        android:id="@+id/scxx_ly_title"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:background="@color/bg_white"
@@ -15,7 +15,7 @@
         >
 
         <com.zxhl.util.ImgTxtLayout
-            android:id="@+id/yjcl_imgtxt_title"
+            android:id="@+id/scxx_imgtxt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -28,23 +28,23 @@
             />
 
         <TextView
-            android:id="@+id/yjcl_txt_title"
+            android:id="@+id/scxx_txt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/yjcl_imgtxt_title"
+            android:layout_toRightOf="@+id/scxx_imgtxt_title"
             android:layout_centerVertical="true"
-            android:text="样机车辆"
+            android:text="锁车信息"
             android:textSize="18sp"
             android:textColor="@color/black"
             />
 
         <EditText
-            android:id="@+id/yjcl_edit_img"
+            android:id="@+id/scxx_edit_img"
             android:layout_width="25dp"
             android:layout_height="wrap_content"
             android:background="@null"
             android:drawableBottom="@drawable/line"
-            android:layout_toRightOf="@+id/yjcl_imgtxt_title"
+            android:layout_toRightOf="@+id/scxx_imgtxt_title"
             android:layout_centerVertical="true"
             android:focusable="false"
             android:clickable="false"
@@ -52,25 +52,25 @@
             />
 
         <ImageView
-            android:id="@+id/yjcl_img_img"
+            android:id="@+id/scxx_img_img"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@mipmap/search_bar"
-            android:layout_toRightOf="@+id/yjcl_imgtxt_title"
+            android:layout_toRightOf="@+id/scxx_imgtxt_title"
             android:layout_centerVertical="true"
             android:visibility="gone"
             />
 
         <AutoCompleteTextView
-            android:id="@+id/yjcl_auto_vehiclelic"
+            android:id="@+id/scxx_auto_vehiclelic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
             android:drawableBottom="@drawable/line"
             android:dropDownVerticalOffset="10dp"
             android:dropDownHeight="200dp"
-            android:layout_toRightOf="@+id/yjcl_edit_img"
-            android:layout_toLeftOf="@+id/yjcl_btn_get"
+            android:layout_toRightOf="@+id/scxx_edit_img"
+            android:layout_toLeftOf="@+id/scxx_btn_get"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:visibility="gone"
@@ -78,17 +78,17 @@
             />
 
         <ImageView
-            android:id="@+id/yjcl_img_serch"
+            android:id="@+id/scxx_img_serch"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@mipmap/search_bar"
-            android:layout_toLeftOf="@+id/yjcl_btn_get"
+            android:layout_toLeftOf="@+id/scxx_btn_get"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
             />
 
         <Button
-            android:id="@+id/yjcl_btn_get"
+            android:id="@+id/scxx_btn_get"
             android:layout_marginRight="15dp"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
@@ -110,15 +110,14 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/yjcl_ly_sche"
+        android:id="@+id/scxx_ly_sche"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/yjcl_ly_title"
         android:background="@color/black_pressed"
         android:visibility="gone"
         >
         <ImageView
-            android:id="@+id/yjcl_img_sche"
+            android:id="@+id/scxx_img_sche"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerInParent="true"
@@ -129,20 +128,20 @@
             android:layout_height="wrap_content"
             android:text="查询中，请稍后..."
             android:textSize="10sp"
-            android:layout_below="@+id/yjcl_img_sche"
+            android:layout_below="@+id/scxx_img_sche"
             android:layout_centerInParent="true"
             />
 
     </RelativeLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/yjcl_refresh"
+    <RelativeLayout
+        android:id="@+id/scxx_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/yjcl_ly_title"
+        android:layout_below="@+id/scxx_ly_title"
         >
         <ListView
-            android:id="@+id/yjcl_list"
+            android:id="@+id/scxx_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="#00000000"
@@ -155,27 +154,28 @@
             android:visibility="visible"
             />
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </RelativeLayout>
+
 
     <ImageView
-        android:id="@+id/yjcl_img"
+        android:id="@+id/scxx_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="120dp"
         android:layout_centerHorizontal="true"
         android:src="@mipmap/feedback_f_icon_bill"
-        android:visibility="gone"
+        android:visibility="visible"
         />
     <TextView
-        android:id="@+id/yjcl_text"
+        android:id="@+id/scxx_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="没有车辆记录"
-        android:layout_below="@+id/yjcl_img"
+        android:text="没有锁车记录"
+        android:layout_below="@+id/scxx_img"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:textSize="10sp"
-        android:visibility="gone"
+        android:visibility="visible"
         />
 
 </RelativeLayout>

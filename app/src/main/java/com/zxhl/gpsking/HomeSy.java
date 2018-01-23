@@ -1,6 +1,7 @@
 package com.zxhl.gpsking;
 
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -138,6 +139,7 @@ public class HomeSy extends Fragment implements View.OnClickListener {
     public HomeSy(){
 
     }
+    @SuppressLint("ValidFragment")
     public HomeSy(Context context){
         this.context=context;
     }

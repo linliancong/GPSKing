@@ -14,7 +14,7 @@ public class Constants {
     public static final String DATABASE="TXServer";         //连接的数据库名称
     public static final String PHOTO_SAVE="http://110.86.16.166:8080/WebServiceClient/UpLoadPhotoServlet"; //头像保存deServlet
     public static final String PHOTO_PATH="http://110.86.16.166/APPWebService/Image/";//图片在服务器的路径
-    public static final String APK_PATH="http://110.86.16.166/APPWebService/GPSKing.apk";//APP在服务器的路径
+    public static final String APK_PATH="http://110.86.16.166/APPWebService/GPSKing_App/APK/GPSKing.apk";//APP在服务器的路径
 
     public static byte[] hexStr2Bytes(String src){
         int m=0,n=0;

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.StatusBarUtil;
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -33,7 +34,7 @@ import java.util.Objects;
  * Created by Administrator on 2017/12/4.
  */
 
-public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
+public class MeSyGd extends StatusBarUtil implements View.OnClickListener{
 
     private RelativeLayout me_ly_gsmc;
     private RelativeLayout me_ly_lxdh;
@@ -90,11 +91,16 @@ public class MeSyGd extends AppCompatActivity implements View.OnClickListener{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sy_me_gd);
+        //setContentView(R.layout.sy_me_gd);
         context=getApplicationContext();
 
         init();
         getIntents();
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.sy_me_gd;
     }
 
     public void init(){

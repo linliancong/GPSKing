@@ -28,6 +28,10 @@ import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.ShowKeyboard;
+<<<<<<< HEAD
+=======
+import com.zxhl.util.StatusBarUtil;
+>>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 import com.zxhl.util.SwipeRefreshView;
 import com.zxhl.util.WebServiceUtils;
 
@@ -42,7 +46,11 @@ import java.util.List;
  * Created by Administrator on 2018/1/17.
  */
 
+<<<<<<< HEAD
 public class QuerySyYycl extends AppCompatActivity implements View.OnClickListener,TextWatcher{
+=======
+public class QuerySyYycl extends StatusBarUtil implements View.OnClickListener,TextWatcher{
+>>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 
     //控件
     private ListView list;
@@ -135,7 +143,11 @@ public class QuerySyYycl extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
         setContentView(R.layout.query_yycl);
+=======
+        //setContentView(R.layout.query_yycl);
+>>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 
         context=QuerySyYycl.this;
 
@@ -146,6 +158,14 @@ public class QuerySyYycl extends AppCompatActivity implements View.OnClickListen
         getVehicleLic();
     }
 
+<<<<<<< HEAD
+=======
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.query_yycl;
+    }
+
+>>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
     public void init(){
         sp=new SharedPreferenceUtils(context, Constants.SAVE_USER);
         back=findViewById(R.id.yycl_imgtxt_title);
@@ -366,7 +386,11 @@ public class QuerySyYycl extends AppCompatActivity implements View.OnClickListen
             if(i==info.size()){
                 break;
             }else {
+<<<<<<< HEAD
                 carInfos.add(new CarInfo(info.get(i).get(0), info.get(i).get(1), info.get(i).get(2), "剩余天数：", "最后位置："));
+=======
+                carInfos.add(new CarInfo(info.get(i).get(0), info.get(i).get(1), info.get(i).get(2), "剩余天数：", "最后位置：","车牌号："));
+>>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
             }
         }
 
@@ -377,6 +401,10 @@ public class QuerySyYycl extends AppCompatActivity implements View.OnClickListen
             adapterUtil=new AdapterUtil<CarInfo>(carInfos,R.layout.query_clxx_item){
                 @Override
                 public void bindView(ViewHolder holder, CarInfo obj) {
+<<<<<<< HEAD
+=======
+                    holder.setText(R.id.clxx_item_vehicle_title,obj.getVehicle_title());
+>>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
                     holder.setText(R.id.clxx_item_vehicle,obj.getVehicle());
                     holder.setText(R.id.clxx_item_time_title,obj.getTime_title());
                     holder.setText(R.id.clxx_item_time,obj.getTime());

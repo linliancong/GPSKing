@@ -1,5 +1,6 @@
 package com.zxhl.util;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
@@ -262,18 +264,52 @@ public class DownloadService extends Service{
     }
 
     //定义Notification
-    public void getNotification(){
-        manager= (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        Bitmap bt= BitmapFactory.decodeResource(getResources(), R.drawable.gpsking_logo);
-        bd = new NotificationCompat.Builder(this)
-                .setTicker("开始下载")
-                .setContentTitle("正在下载")
-                .setContentText("下载")
-                .setWhen(System.currentTimeMillis())
-                .setProgress(100,0,false)
-                .setLargeIcon(bt)
-                .setAutoCancel(true)
-                .setSmallIcon(R.drawable.gpsking_logo);
+    public void getNotification() {
+        manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        Bitmap bt = BitmapFactory.decodeResource(getResources(), R.drawable.gpsking_logo);
+        //检查更新,当SDK大于等于Android6.0时必须添加在来源渠道
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // 通知渠道的id
+            String CHANNEL_ID = "my_channel_01";
+            // 用户可以看到的通知渠道的名字.
+            CharSequence name = "测试";
+            // 用户可以看到的通知渠道的描述
+            String description = "test";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            // 配置通知渠道的属性
+            mChannel.setDescription(description);
+            // 设置通知出现时的闪灯（如果 android 设备支持的话）
+            mChannel.enableLights(true);
+            mChannel.setLightColor(Color.BLUE);
+            // 设置通知出现时的震动（如果 android 设备支持的话）
+            mChannel.enableVibration(false);
+            mChannel.setVibrationPattern(new long[]{0l});
+            //最后在notificationmanager中创建该通知渠道
+            manager.createNotificationChannel(mChannel);
+
+            bd = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setTicker("开始下载")
+                    .setContentTitle("正在下载")
+                    .setContentText("下载")
+                    .setWhen(System.currentTimeMillis())
+                    .setProgress(100, 0, false)
+                    .setLargeIcon(bt)
+                    .setAutoCancel(true)
+                    .setSmallIcon(R.drawable.gpsking_logo);
+        }
+        else
+        {
+            bd = new NotificationCompat.Builder(this)
+                    .setTicker("开始下载")
+                    .setContentTitle("正在下载")
+                    .setContentText("下载")
+                    .setWhen(System.currentTimeMillis())
+                    .setProgress(100, 0, false)
+                    .setLargeIcon(bt)
+                    .setAutoCancel(true)
+                    .setSmallIcon(R.drawable.gpsking_logo);
+        }
     }
 
 

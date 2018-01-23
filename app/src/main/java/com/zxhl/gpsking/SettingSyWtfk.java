@@ -21,6 +21,10 @@ import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.ShowKeyboard;
+<<<<<<< HEAD
+=======
+import com.zxhl.util.StatusBarUtil;
+>>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -33,7 +37,7 @@ import java.util.List;
  * Created by Administrator on 2017/12/15.
  */
 
-public class SettingSyWtfk extends AppCompatActivity implements TextWatcher{
+public class SettingSyWtfk extends StatusBarUtil implements TextWatcher{
 
     private ImgTxtLayout setting_imgtxt_back_wtfk;
     private Button setting_btn_send_wtfk;
@@ -68,10 +72,15 @@ public class SettingSyWtfk extends AppCompatActivity implements TextWatcher{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sy_setting_wtfk);
+        //setContentView(R.layout.sy_setting_wtfk);
 
         init();
 
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.sy_setting_wtfk;
     }
 
     private void init() {

@@ -37,6 +37,10 @@ import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.ShowKeyboard;
+<<<<<<< HEAD
+=======
+import com.zxhl.util.StatusBarUtil;
+>>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 import com.zxhl.util.WebServiceUtils;
 
 import org.apache.http.conn.BasicEofSensorWatcher;
@@ -52,7 +56,7 @@ import java.util.List;
  * Created by Administrator on 2018/1/8.
  */
 
-public class QuerySyTrackPlayback extends AppCompatActivity implements View.OnClickListener,TextWatcher{
+public class QuerySyTrackPlayback extends StatusBarUtil implements View.OnClickListener,TextWatcher{
 
     private MapView map;
     private ImgTxtLayout back;
@@ -147,7 +151,7 @@ public class QuerySyTrackPlayback extends AppCompatActivity implements View.OnCl
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.query_track);
+        //setContentView(R.layout.query_track);
 
         init();
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，实现地图生命周期管理
@@ -163,6 +167,11 @@ public class QuerySyTrackPlayback extends AppCompatActivity implements View.OnCl
         getVehicleLic();
 
 
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.query_track;
     }
 
     private void init() {

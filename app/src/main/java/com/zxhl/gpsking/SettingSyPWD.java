@@ -20,6 +20,7 @@ import com.zxhl.util.AppManager;
 import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.StatusBarUtil;
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -32,7 +33,7 @@ import java.util.List;
  * Created by Administrator on 2017/12/15.
  */
 
-public class SettingSyPWD extends AppCompatActivity implements TextWatcher{
+public class SettingSyPWD extends StatusBarUtil implements TextWatcher{
 
     private ImgTxtLayout setting_imgtxt_update_pwd;
     private Button setting_btn_update_pwd;
@@ -78,7 +79,7 @@ public class SettingSyPWD extends AppCompatActivity implements TextWatcher{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sy_setting_passwd);
+        //setContentView(R.layout.sy_setting_passwd);
 
         mContext=SettingSyPWD.this;
         sp=new SharedPreferenceUtils(mContext, Constants.SAVE_USER);
@@ -165,6 +166,11 @@ public class SettingSyPWD extends AppCompatActivity implements TextWatcher{
         });
 
 
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.sy_setting_passwd;
     }
 
     @Override

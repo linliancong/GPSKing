@@ -1,5 +1,6 @@
 package com.zxhl.util;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -69,6 +70,7 @@ public class FragmentUtils extends Fragment implements View.OnClickListener{
     private int tag4=0;
 
     public FragmentUtils(){}
+    @SuppressLint("ValidFragment")
     public FragmentUtils(String content,int tag) {
         this.content = content;
         this.tag=tag;

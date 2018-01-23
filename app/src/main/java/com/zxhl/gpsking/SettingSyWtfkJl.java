@@ -25,6 +25,7 @@ import com.zxhl.util.AdapterUtil;
 import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.StatusBarUtil;
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -41,7 +42,7 @@ import java.util.TimeZone;
  * Created by Administrator on 2017/12/21.
  */
 
-public class SettingSyWtfkJl extends AppCompatActivity{
+public class SettingSyWtfkJl extends StatusBarUtil{
 
     private ListView list;
     private ImgTxtLayout setting_imgtxt_back_wtfkjl;
@@ -78,7 +79,7 @@ public class SettingSyWtfkJl extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.setting_wtfk_fkjl);
+        //setContentView(R.layout.setting_wtfk_fkjl);
 
         setting_imgtxt_back_wtfkjl= (ImgTxtLayout) findViewById(R.id.setting_imgtxt_back_wtfkjl);
         list= (ListView) findViewById(R.id.setting_wtfk_list_fkjl);
@@ -131,6 +132,11 @@ public class SettingSyWtfkJl extends AppCompatActivity{
         });
 
 
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.setting_wtfk_fkjl;
     }
 
     private void showQuestion() {

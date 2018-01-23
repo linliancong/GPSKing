@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.StatusBarUtil;
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -31,7 +32,7 @@ import java.util.List;
  * Created by Administrator on 2018/1/4.
  */
 
-public class SettingSyVehicle extends AppCompatActivity implements TextWatcher{
+public class SettingSyVehicle extends StatusBarUtil implements TextWatcher{
 
     private ImgTxtLayout back;
     private AutoCompleteTextView vehicle;
@@ -64,10 +65,15 @@ public class SettingSyVehicle extends AppCompatActivity implements TextWatcher{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sy_setting_vehicle);
+        //setContentView(R.layout.sy_setting_vehicle);
 
         init();
         getVehicleLic();
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.sy_setting_vehicle;
     }
 
     private void init() {

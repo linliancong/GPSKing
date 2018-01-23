@@ -4,36 +4,48 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.zxhl.util.ApkVersionUtils;
 import com.zxhl.util.ImgTxtLayout;
+import com.zxhl.util.StatusBarUtil;
 
 /**
  * Created by Administrator on 2017/12/14.
  */
 
-public class SettingSyGy extends AppCompatActivity {
+public class SettingSyGy extends StatusBarUtil {
     private ImgTxtLayout imgTxtLayout;
     private ImageView img;
+
+    private TextView banq;
+    private TextView ver;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sy_setting_gy);
+        //setContentView(R.layout.sy_setting_gy);
 
         imgTxtLayout= (ImgTxtLayout) findViewById(R.id.settinggy_imgtxt_gy);
         img=(ImageView)findViewById(R.id.img_gy);
-        if(Build.VERSION.SDK_INT>=26 || Build.VERSION.SDK_INT==21||Build.VERSION.SDK_INT==22) {
+        /*if(Build.VERSION.SDK_INT>=26 || Build.VERSION.SDK_INT==21||Build.VERSION.SDK_INT==22) {
             scaleImage(this, img, R.mipmap.gpsking_index_ver);
-        }
+        }*/
+
+        banq=findViewById(R.id.setting_txt_banq);
+        ver =findViewById(R.id.setting_txt_version);
+        Typeface type=Typeface.createFromAsset(getAssets(),"fonts/标准仿宋体简.ttf");
+        banq.setTypeface(type);
+        ver.setTypeface(type);
+        ver.setText("版本 "+ApkVersionUtils.getVerName(SettingSyGy.this));
         imgTxtLayout.setOnClickListener(new ImgTxtLayout.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,6 +53,11 @@ public class SettingSyGy extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.sy_setting_gy;
     }
 
     public static int scaleImage(final Activity activity, final View view, int drawableResId) {

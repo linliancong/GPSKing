@@ -26,6 +26,7 @@ import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.LoadingAddressChUtils;
 import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.StatusBarUtil;
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -36,7 +37,7 @@ import java.util.HashMap;
  * Created by Administrator on 2017/12/7.
  */
 
-public class MeSyUpdate extends AppCompatActivity implements TextWatcher,View.OnClickListener {
+public class MeSyUpdate extends StatusBarUtil implements TextWatcher,View.OnClickListener {
 
     private ImgTxtLayout me_imgtxt_update;
     private Button me_btn_update;
@@ -73,11 +74,16 @@ public class MeSyUpdate extends AppCompatActivity implements TextWatcher,View.On
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sy_me_info);
+        //setContentView(R.layout.sy_me_info);
         //AppManager.getAppManager().addActivity(MeSyUpdate.this);
         init();
 
 
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.sy_me_info;
     }
 
     public void init() {

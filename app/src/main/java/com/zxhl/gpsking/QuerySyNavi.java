@@ -39,6 +39,10 @@ import com.zxhl.util.GPSNaviUtil;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.ShowKeyboard;
+<<<<<<< HEAD
+=======
+import com.zxhl.util.StatusBarUtil;
+>>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -54,7 +58,7 @@ import java.util.List;
  * Created by Administrator on 2018/1/8.
  */
 
-public class QuerySyNavi extends AppCompatActivity implements AMapLocationListener,LocationSource,View.OnClickListener,TextWatcher{
+public class QuerySyNavi extends StatusBarUtil implements AMapLocationListener,LocationSource,View.OnClickListener,TextWatcher{
 
     private MapView map;
     private ImgTxtLayout back;
@@ -185,7 +189,7 @@ public class QuerySyNavi extends AppCompatActivity implements AMapLocationListen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.query_navi);
+        //setContentView(R.layout.query_navi);
 
         sp=new SharedPreferenceUtils(this, Constants.SAVE_USER);
         back=(ImgTxtLayout)findViewById(R.id.query_imgtxt_title);
@@ -224,6 +228,11 @@ public class QuerySyNavi extends AppCompatActivity implements AMapLocationListen
         getVehicleLic();
 
 
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.query_navi;
     }
 
     private void initLocation() {

@@ -14,7 +14,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+<<<<<<< HEAD
 import android.provider.Settings;
+=======
+import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.Nullable;
+>>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -25,7 +31,11 @@ import com.zxhl.gpsking.R;
  * 继承了Activity，实现Android6.0的运行时权限检测
  * 需要进行运行时权限检测的Activity可以继承这个类
  */
+<<<<<<< HEAD
 public class CheckPermissionsActivity extends AppCompatActivity {
+=======
+public abstract class CheckPermissionsActivity extends AppCompatActivity {
+>>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 	/**
 	 * 需要进行检测的权限数组
 	 */
@@ -43,7 +53,11 @@ public class CheckPermissionsActivity extends AppCompatActivity {
 	 * 判断是否需要检测，防止不停的弹框
 	 */
 	private boolean isNeedCheck = true;
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 	@Override
 	protected void onResume() {
 		super.onResume();
