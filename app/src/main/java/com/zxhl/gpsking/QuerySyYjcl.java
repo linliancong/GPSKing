@@ -28,10 +28,7 @@ import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.ShowKeyboard;
-<<<<<<< HEAD
-=======
 import com.zxhl.util.StatusBarUtil;
->>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -45,11 +42,7 @@ import java.util.List;
  * Created by Administrator on 2018/1/17.
  */
 
-<<<<<<< HEAD
-public class QuerySyYjcl extends AppCompatActivity implements View.OnClickListener,TextWatcher{
-=======
 public class QuerySyYjcl extends StatusBarUtil implements View.OnClickListener,TextWatcher{
->>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 
     //控件
     private ListView list;
@@ -151,11 +144,7 @@ public class QuerySyYjcl extends StatusBarUtil implements View.OnClickListener,T
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
-        setContentView(R.layout.query_yjcl);
-=======
         //setContentView(R.layout.query_yjcl);
->>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 
         context=QuerySyYjcl.this;
 
@@ -166,14 +155,11 @@ public class QuerySyYjcl extends StatusBarUtil implements View.OnClickListener,T
         getVehicleLic();
     }
 
-<<<<<<< HEAD
-=======
     @Override
     protected int getLayoutResId() {
         return R.layout.query_yjcl;
     }
 
->>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
     public void init(){
         sp=new SharedPreferenceUtils(context, Constants.SAVE_USER);
         list=findViewById(R.id.yjcl_list);
@@ -355,11 +341,7 @@ public class QuerySyYjcl extends StatusBarUtil implements View.OnClickListener,T
             if(i==info.size()){
                 break;
             }else {
-<<<<<<< HEAD
-                carInfos.add(new CarInfo(info.get(i).get(0), info.get(i).get(1), info.get(i).get(2), "样机工作时间：", "所属分组："));
-=======
                 carInfos.add(new CarInfo(info.get(i).get(0), info.get(i).get(1), info.get(i).get(2), "样机工作时间：", "所属分组：","车牌号："));
->>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
             }
         }
         Collections.reverse(carInfos);
@@ -369,10 +351,7 @@ public class QuerySyYjcl extends StatusBarUtil implements View.OnClickListener,T
             adapterUtil=new AdapterUtil<CarInfo>(carInfos,R.layout.query_clxx_item){
                 @Override
                 public void bindView(ViewHolder holder, CarInfo obj) {
-<<<<<<< HEAD
-=======
                     holder.setText(R.id.clxx_item_vehicle_title,obj.getVehicle_title());
->>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
                     holder.setText(R.id.clxx_item_vehicle,obj.getVehicle());
                     holder.setText(R.id.clxx_item_time_title,obj.getTime_title());
                     holder.setText(R.id.clxx_item_time,obj.getTime());

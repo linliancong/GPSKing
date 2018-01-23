@@ -24,10 +24,7 @@ import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.ShowKeyboard;
-<<<<<<< HEAD
-=======
 import com.zxhl.util.StatusBarUtil;
->>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -55,11 +52,7 @@ import lecho.lib.hellocharts.view.LineChartView;
  * Created by Administrator on 2018/1/16.
  */
 
-<<<<<<< HEAD
-public class QuerySyBbtj extends AppCompatActivity implements View.OnClickListener,TextWatcher{
-=======
 public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,TextWatcher{
->>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 
     //控件
     private AutoCompleteTextView VehicleLic;
@@ -110,24 +103,17 @@ public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,T
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
-        setContentView(R.layout.query_bbtj);
-=======
         //setContentView(R.layout.query_bbtj);
->>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 
         init();
         getVehicleLic();
     }
 
-<<<<<<< HEAD
-=======
     @Override
     protected int getLayoutResId() {
         return R.layout.query_bbtj;
     }
 
->>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
     public void init(){
         sp=new SharedPreferenceUtils(QuerySyBbtj.this, Constants.SAVE_USER);
 

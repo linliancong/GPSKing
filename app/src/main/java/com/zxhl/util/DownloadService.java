@@ -17,9 +17,11 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.StrictMode;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.FileProvider;
 import android.widget.Toast;
 
 import com.zxhl.gpsking.R;
@@ -113,6 +115,10 @@ public class DownloadService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+        }
         getNotification();
         dl=new DownloadService();
         //download();
@@ -214,7 +220,18 @@ public class DownloadService extends Service{
         bd.setContentText("点击安装");
         bd.setContentTitle("下载完成");
         Intent intent=new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(new File(file,"GPSKing.apk")),"application/vnd.android.package-archive");
+        /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            String filePath = getApplicationContext().getFilesDir()+"";
+            Uri uri= FileProvider.getUriForFile(this,"com.zxhl.gpsking",new File(filePath,"GPSKing.apk"));
+            intent.setDataAndType(uri,"application/vnd.android.package-archive");
+            //这一步很重要。给目标应用一个临时的授权。
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        else {*/
+            intent.setDataAndType(Uri.fromFile(new File(file, "GPSKing.apk")), "application/vnd.android.package-archive");
+        //}
         PendingIntent pendingIntent=PendingIntent.getActivity(getApplicationContext(),0,intent,0);
         bd.setContentIntent(pendingIntent);
         bd.setProgress(0,0,false);

@@ -78,7 +78,6 @@ public class MainActivity extends StatusBarUtil {
         banq.setTypeface(type);
 
 
-
         //判断网络状态
         ConnectivityManager cm = (ConnectivityManager) MainActivity.this
                 .getSystemService(Context.CONNECTIVITY_SERVICE);

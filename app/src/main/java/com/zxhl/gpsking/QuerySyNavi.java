@@ -39,10 +39,7 @@ import com.zxhl.util.GPSNaviUtil;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.ShowKeyboard;
-<<<<<<< HEAD
-=======
 import com.zxhl.util.StatusBarUtil;
->>>>>>> e688b9f5c58f008c610046dcb089e12ac2c1eb2c
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
