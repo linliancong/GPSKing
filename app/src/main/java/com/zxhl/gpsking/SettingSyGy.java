@@ -16,12 +16,13 @@ import android.widget.TextView;
 
 import com.zxhl.util.ApkVersionUtils;
 import com.zxhl.util.ImgTxtLayout;
+import com.zxhl.util.StatusBarUtil;
 
 /**
  * Created by Administrator on 2017/12/14.
  */
 
-public class SettingSyGy extends AppCompatActivity {
+public class SettingSyGy extends StatusBarUtil {
     private ImgTxtLayout imgTxtLayout;
     private ImageView img;
 
@@ -31,7 +32,7 @@ public class SettingSyGy extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sy_setting_gy);
+        //setContentView(R.layout.sy_setting_gy);
 
         imgTxtLayout= (ImgTxtLayout) findViewById(R.id.settinggy_imgtxt_gy);
         img=(ImageView)findViewById(R.id.img_gy);
@@ -52,6 +53,11 @@ public class SettingSyGy extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.sy_setting_gy;
     }
 
     public static int scaleImage(final Activity activity, final View view, int drawableResId) {

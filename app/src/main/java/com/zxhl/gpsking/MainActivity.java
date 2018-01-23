@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.zxhl.util.Constants;
 import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.StatusBarUtil;
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends StatusBarUtil {
     private ImageView img;
     private boolean state=false;
     private int tag=0;
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
         img= (ImageView) findViewById(R.id.img);
         /*if(Build.VERSION.SDK_INT>=26 || Build.VERSION.SDK_INT==21||Build.VERSION.SDK_INT==22) {
             scaleImage(this, img, R.mipmap.gpsking_index_new);
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferenceUtils sp=new SharedPreferenceUtils(MainActivity.this,Constants.SAVE_USER);
         sp.setIsNetworkConnect(state);
         if(sp.getIsFirst()||!state) {
-            handler.sendEmptyMessageDelayed(0x002, 3000);
+            handler.sendEmptyMessageDelayed(0x002, 1000);
         }
         else {
             HashMap<String,String> proper=new HashMap<String,String>();
@@ -112,16 +113,21 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     if(tag==1) {
-                        handler.sendEmptyMessageDelayed(0x003, 3000);
+                        handler.sendEmptyMessageDelayed(0x003, 1000);
                     }
                     else {
-                        handler.sendEmptyMessageDelayed(0x002, 3000);
+                        handler.sendEmptyMessageDelayed(0x002, 1000);
                     }
                 }
             });
 
         }
 
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_main;
     }
 
     public static int scaleImage(final Activity activity, final View view, int drawableResId) {

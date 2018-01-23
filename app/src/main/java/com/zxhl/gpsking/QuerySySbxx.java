@@ -25,6 +25,7 @@ import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.ShowKeyboard;
+import com.zxhl.util.StatusBarUtil;
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -38,7 +39,7 @@ import java.util.Map;
  * Created by Administrator on 2018/1/15.
  */
 
-public class QuerySySbxx extends AppCompatActivity implements View.OnClickListener,TextWatcher{
+public class QuerySySbxx extends StatusBarUtil implements View.OnClickListener,TextWatcher{
 
     //顶部操作框
     private ImgTxtLayout back;
@@ -185,10 +186,15 @@ public class QuerySySbxx extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.query_sbxx);
+        //setContentView(R.layout.query_sbxx);
 
         init();
         getVehicleLic();
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.query_sbxx;
     }
 
     private void init(){

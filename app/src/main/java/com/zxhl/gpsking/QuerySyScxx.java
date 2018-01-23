@@ -27,6 +27,7 @@ import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.ShowKeyboard;
+import com.zxhl.util.StatusBarUtil;
 import com.zxhl.util.SwipeRefreshView;
 import com.zxhl.util.WebServiceUtils;
 
@@ -42,7 +43,7 @@ import java.util.concurrent.locks.Lock;
  * Created by Administrator on 2018/1/17.
  */
 
-public class QuerySyScxx extends AppCompatActivity implements View.OnClickListener,TextWatcher{
+public class QuerySyScxx extends StatusBarUtil implements View.OnClickListener,TextWatcher{
 
     //控件
     private ListView list;
@@ -107,13 +108,18 @@ public class QuerySyScxx extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.query_scxx);
+        //setContentView(R.layout.query_scxx);
 
         context=QuerySyScxx.this;
 
         init();
 
         getVehicleLic();
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.query_scxx;
     }
 
     public void init(){

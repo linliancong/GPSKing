@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -125,6 +129,8 @@ public class HomePage extends CheckPermissionsActivity implements RadioGroup.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homepage);
+
+        initStatusBar();
 
        /* myBroadcastHP=new MyBroadcastHP();
         IntentFilter filter=new IntentFilter();
@@ -382,6 +388,24 @@ public class HomePage extends CheckPermissionsActivity implements RadioGroup.OnC
         alert=builder.create();
         alert.show();
         return ad_view;
+    }
+
+    private void initStatusBar() {
+        Window win = getWindow();
+        ViewGroup contentFrameLayout = findViewById(Window.ID_ANDROID_CONTENT);
+        View parentView = contentFrameLayout.getChildAt(0);
+        //KITKAT也能满足，只是SYSTEM_UI_FLAG_LIGHT_STATUS_BAR（状态栏字体颜色反转）只有在6.0才有效
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            parentView.setFitsSystemWindows(true);
+            win.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//透明状态栏
+            // 状态栏字体设置为深色，SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 为SDK23增加
+            win.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
+            // 部分机型的statusbar会有半透明的黑色背景
+            win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            win.setStatusBarColor(Color.WHITE);// SDK21
+        }
     }
 
 }

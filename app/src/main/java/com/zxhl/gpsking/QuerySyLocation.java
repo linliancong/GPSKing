@@ -40,6 +40,7 @@ import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.ShowKeyboard;
+import com.zxhl.util.StatusBarUtil;
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -54,7 +55,7 @@ import java.util.List;
  * Created by Administrator on 2018/1/8.
  */
 
-public class QuerySyLocation extends AppCompatActivity implements AMapLocationListener,LocationSource,View.OnClickListener,TextWatcher{
+public class QuerySyLocation extends StatusBarUtil implements AMapLocationListener,LocationSource,View.OnClickListener,TextWatcher{
 
     private MapView map;
     private ImgTxtLayout back;
@@ -126,7 +127,7 @@ public class QuerySyLocation extends AppCompatActivity implements AMapLocationLi
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.query_location);
+        //setContentView(R.layout.query_location);
 
         sp=new SharedPreferenceUtils(this, Constants.SAVE_USER);
         back=(ImgTxtLayout)findViewById(R.id.query_imgtxt_title);
@@ -161,6 +162,11 @@ public class QuerySyLocation extends AppCompatActivity implements AMapLocationLi
         getVehicleLic();
 
 
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.query_location;
     }
 
     private void initLocation() {

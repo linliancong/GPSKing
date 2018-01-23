@@ -24,6 +24,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import com.zxhl.util.AppManager;
 import com.zxhl.util.Constants;
 import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.StatusBarUtil;
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -38,7 +39,7 @@ import java.util.logging.StreamHandler;
  * Created by Administrator on 2017/11/23.
  */
 
-public class Login extends AppCompatActivity implements View.OnClickListener,TextWatcher{
+public class Login extends StatusBarUtil implements View.OnClickListener,TextWatcher{
 
     private Button btn_login;
     private MaterialEditText user;
@@ -50,10 +51,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Tex
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        //setContentView(R.layout.login);
         //AppManager.getAppManager().addActivity(Login.this);
 
         initView();
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.login;
     }
 
     //登录就获取保存的账号密码

@@ -24,6 +24,7 @@ import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.ShowKeyboard;
+import com.zxhl.util.StatusBarUtil;
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
@@ -51,7 +52,7 @@ import lecho.lib.hellocharts.view.LineChartView;
  * Created by Administrator on 2018/1/16.
  */
 
-public class QuerySyBbtj extends AppCompatActivity implements View.OnClickListener,TextWatcher{
+public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,TextWatcher{
 
     //控件
     private AutoCompleteTextView VehicleLic;
@@ -102,10 +103,15 @@ public class QuerySyBbtj extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.query_bbtj);
+        //setContentView(R.layout.query_bbtj);
 
         init();
         getVehicleLic();
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.query_bbtj;
     }
 
     public void init(){
