@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
@@ -51,6 +53,8 @@ public class DownloadService extends Service{
     private NotificationCompat.Builder bd=null;
 
     private Intent intent;
+
+    private AudioManager mAudio;
 
     private Handler handler=new Handler(){
         @Override
@@ -117,11 +121,12 @@ public class DownloadService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
-        //以下语句的设置是为了解决在Android7.0以后安装apk的问题
+        mAudio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        /*//以下语句的设置是为了解决在Android7.0以后安装apk的问题
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(builder.build());
-        }
+        }*/
         getNotification();
         dl=new DownloadService();
         //download();
@@ -139,6 +144,11 @@ public class DownloadService extends Service{
     //start调用的时候开启
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            //当前Android O版本不能控制声音，故而先用系统的方法，将声音关闭
+            mAudio.setStreamVolume(AudioManager.STREAM_NOTIFICATION,0,AudioManager.FLAG_PLAY_SOUND);
+        }
         if (intent.getIntExtra("operator",-1)==0)
         {
             download();
@@ -186,6 +196,9 @@ public class DownloadService extends Service{
         super.onDestroy();
         this.quit=true;
         exit();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mAudio.setStreamVolume(AudioManager.STREAM_NOTIFICATION, mAudio.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION), AudioManager.FLAG_PLAY_SOUND);
+        }
         manager.cancel(1);
     }
 
@@ -223,12 +236,19 @@ public class DownloadService extends Service{
         bd.setContentText("点击安装");
         bd.setContentTitle("下载完成");
         Intent intent=new Intent(Intent.ACTION_VIEW);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
+            mAudio.setStreamVolume(AudioManager.STREAM_NOTIFICATION,mAudio.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION),AudioManager.FLAG_PLAY_SOUND);
             // 由于没有在Activity环境下启动Activity,设置下面的标签；给目标应用一个临时的授权。
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Uri uri= FileProvider.getUriForFile(this,"com.zxhl.gpsking",new File(file,"GPSKing.apk"));
             intent.setData(uri);
+        }
+        else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            // 由于没有在Activity环境下启动Activity,设置下面的标签；给目标应用一个临时的授权。
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri uri= FileProvider.getUriForFile(this,"com.zxhl.gpsking",new File(file,"GPSKing.apk"));
+            intent.setDataAndType(uri,"application/vnd.android.package-archive");
         }
         else {
             intent.setDataAndType(Uri.fromFile(new File(file, "GPSKing.apk")), "application/vnd.android.package-archive");
@@ -303,9 +323,19 @@ public class DownloadService extends Service{
             // 设置通知出现时的震动（如果 android 设备支持的话）
             mChannel.enableVibration(false);
             mChannel.setVibrationPattern(new long[]{0l});
-            //mChannel.setSound(null,null);
+
+           //当前Android O版本不能控制声音，故而先用系统的方法，将声音关闭
+            mAudio.setStreamVolume(AudioManager.STREAM_NOTIFICATION,0,AudioManager.FLAG_PLAY_SOUND);
+            /*AudioAttributes.Builder audioAttributesBuilder = new AudioAttributes.Builder();
+            audioAttributesBuilder.setLegacyStreamType(AudioManager.STREAM_MUSIC);
+            AudioAttributes audio = audioAttributesBuilder.build();
+            Uri path = Uri.parse("android.resource://com.zxhl.gpsking/" + R.raw.kong);
+            mChannel.setSound(null,null);*/
             //最后在notificationmanager中创建该通知渠道
             manager.createNotificationChannel(mChannel);
+
+           /* Log.i("SOUND:",mChannel.getSound().toString());
+            Log.i("SOUND:",mChannel.getAudioAttributes().toString());*/
 
             bd = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setTicker("开始下载")
@@ -315,8 +345,7 @@ public class DownloadService extends Service{
                     .setProgress(100, 0, false)
                     .setLargeIcon(bt)
                     .setAutoCancel(true)
-                    .setSmallIcon(R.drawable.gpsking_logo)
-                    .setDefaults(NotificationCompat.FLAG_ONLY_ALERT_ONCE);
+                    .setSmallIcon(R.drawable.gpsking_logo);
         }
         else
         {
