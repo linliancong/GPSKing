@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -65,7 +63,7 @@ public class SettingSyVehicle extends StatusBarUtil implements TextWatcher{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.sy_setting_vehicle);
+        //setContentView(R.layout.setting_vehicle);
 
         init();
         getVehicleLic();
@@ -73,7 +71,7 @@ public class SettingSyVehicle extends StatusBarUtil implements TextWatcher{
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.sy_setting_vehicle;
+        return R.layout.setting_vehicle;
     }
 
     private void init() {

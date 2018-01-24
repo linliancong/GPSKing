@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -79,7 +78,7 @@ public class SettingSyPWD extends StatusBarUtil implements TextWatcher{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.sy_setting_passwd);
+        //setContentView(R.layout.setting_passwd);
 
         mContext=SettingSyPWD.this;
         sp=new SharedPreferenceUtils(mContext, Constants.SAVE_USER);
@@ -170,7 +169,7 @@ public class SettingSyPWD extends StatusBarUtil implements TextWatcher{
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.sy_setting_passwd;
+        return R.layout.setting_passwd;
     }
 
     @Override

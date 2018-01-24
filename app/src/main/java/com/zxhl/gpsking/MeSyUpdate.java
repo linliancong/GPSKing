@@ -3,14 +3,10 @@ package com.zxhl.gpsking;
 
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -21,7 +17,6 @@ import android.widget.Toast;
 
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.zxhl.entity.AddressCh;
-import com.zxhl.util.AppManager;
 import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.LoadingAddressChUtils;
@@ -74,7 +69,7 @@ public class MeSyUpdate extends StatusBarUtil implements TextWatcher,View.OnClic
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.sy_me_info);
+        //setContentView(R.layout.me_info);
         //AppManager.getAppManager().addActivity(MeSyUpdate.this);
         init();
 
@@ -83,7 +78,7 @@ public class MeSyUpdate extends StatusBarUtil implements TextWatcher,View.OnClic
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.sy_me_info;
+        return R.layout.me_info;
     }
 
     public void init() {

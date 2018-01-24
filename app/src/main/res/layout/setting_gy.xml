@@ -34,6 +34,16 @@
             zxhl:textColor="@color/black"
             />
 
+        <Button
+            android:id="@+id/setting_btn_share_gy"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/share"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:layout_centerVertical="true"
+            />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2px"

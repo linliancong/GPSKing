@@ -2,18 +2,12 @@ package com.zxhl.gpsking;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zxhl.util.Constants;
@@ -28,7 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by Administrator on 2017/12/4.
@@ -91,7 +84,7 @@ public class MeSyGd extends StatusBarUtil implements View.OnClickListener{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.sy_me_gd);
+        //setContentView(R.layout.me_gd);
         context=getApplicationContext();
 
         init();
@@ -100,7 +93,7 @@ public class MeSyGd extends StatusBarUtil implements View.OnClickListener{
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.sy_me_gd;
+        return R.layout.me_gd;
     }
 
     public void init(){

@@ -22,6 +22,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.zxhl.gpsking.R;
@@ -30,6 +31,7 @@ import com.zxhl.util.FileDownloadUtil.DownloadProgressListener;
 import com.zxhl.util.FileDownloadUtil.FileDownloadered;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Administrator on 2017/12/19.
@@ -115,6 +117,7 @@ public class DownloadService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
+        //以下语句的设置是为了解决在Android7.0以后安装apk的问题
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(builder.build());
@@ -220,18 +223,16 @@ public class DownloadService extends Service{
         bd.setContentText("点击安装");
         bd.setContentTitle("下载完成");
         Intent intent=new Intent(Intent.ACTION_VIEW);
-        /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
         {
-            String filePath = getApplicationContext().getFilesDir()+"";
-            Uri uri= FileProvider.getUriForFile(this,"com.zxhl.gpsking",new File(filePath,"GPSKing.apk"));
-            intent.setDataAndType(uri,"application/vnd.android.package-archive");
-            //这一步很重要。给目标应用一个临时的授权。
-            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            // 由于没有在Activity环境下启动Activity,设置下面的标签；给目标应用一个临时的授权。
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri uri= FileProvider.getUriForFile(this,"com.zxhl.gpsking",new File(file,"GPSKing.apk"));
+            intent.setData(uri);
         }
-        else {*/
+        else {
             intent.setDataAndType(Uri.fromFile(new File(file, "GPSKing.apk")), "application/vnd.android.package-archive");
-        //}
+        }
         PendingIntent pendingIntent=PendingIntent.getActivity(getApplicationContext(),0,intent,0);
         bd.setContentIntent(pendingIntent);
         bd.setProgress(0,0,false);
@@ -302,6 +303,7 @@ public class DownloadService extends Service{
             // 设置通知出现时的震动（如果 android 设备支持的话）
             mChannel.enableVibration(false);
             mChannel.setVibrationPattern(new long[]{0l});
+            //mChannel.setSound(null,null);
             //最后在notificationmanager中创建该通知渠道
             manager.createNotificationChannel(mChannel);
 
@@ -313,7 +315,8 @@ public class DownloadService extends Service{
                     .setProgress(100, 0, false)
                     .setLargeIcon(bt)
                     .setAutoCancel(true)
-                    .setSmallIcon(R.drawable.gpsking_logo);
+                    .setSmallIcon(R.drawable.gpsking_logo)
+                    .setDefaults(NotificationCompat.FLAG_ONLY_ALERT_ONCE);
         }
         else
         {
