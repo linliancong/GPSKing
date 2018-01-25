@@ -18,6 +18,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.util.Hashtable;
+import java.util.Random;
 
 /**
  * @ClassName: QRCodeUtil
@@ -37,7 +38,7 @@ public class QRCodeUtil {
      */
     @Nullable
     public static Bitmap createQRCodeBitmap(@Nullable String content, int size){
-        return createQRCodeBitmap(content, size, "UTF-8", "H", "4", Color.BLACK, Color.WHITE, null, null, 0F);
+        return createQRCodeBitmap(content, size, "UTF-8", "H", "4", Color.BLACK,Color.BLACK,Color.BLACK,Color.BLACK, Color.WHITE, null, null, 0F);
     }
 
     /**
@@ -45,13 +46,19 @@ public class QRCodeUtil {
      *
      * @param content 字符串内容
      * @param size 位图宽&高(单位:px)
-     * @param color_black 黑色色块的自定义颜色值
+     * @param color_black1 黑色色块的自定义颜色值
+     * @param color_black2 左下色块的自定义颜色值
+     * @param color_black3 右下色块的自定义颜色值
+     * @param color_black4 右上色块的自定义颜色值
      * @param color_white 白色色块的自定义颜色值
      * @return
      */
     @Nullable
-    public static Bitmap createQRCodeBitmap(@Nullable String content, int size, @ColorInt int color_black, @ColorInt int color_white){
-        return createQRCodeBitmap(content, size, "UTF-8", "H", "4", color_black, color_white, null, null, 0F);
+    public static Bitmap createQRCodeBitmap(@Nullable String content, int size,
+                                            @ColorInt int color_black1,@ColorInt int color_black2,
+                                            @ColorInt int color_black3, @ColorInt int color_black4,
+                                            @ColorInt int color_white){
+        return createQRCodeBitmap(content, size, "UTF-8", "H", "4", color_black1,color_black2,color_black3,color_black4, color_white, null, null, 0F);
     }
 
     /**
@@ -65,7 +72,7 @@ public class QRCodeUtil {
      */
     @Nullable
     public static Bitmap createQRCodeBitmap(String content, int size, @Nullable Bitmap logoBitmap, float logoPercent){
-        return createQRCodeBitmap(content, size, "UTF-8", "H", "4", Color.BLACK, Color.WHITE, null, logoBitmap, logoPercent);
+        return createQRCodeBitmap(content, size, "UTF-8", "H", "4", Color.BLACK,Color.BLACK,Color.BLACK,Color.BLACK, Color.WHITE, null, logoBitmap, logoPercent);
     }
 
     /**
@@ -78,7 +85,7 @@ public class QRCodeUtil {
      */
     @Nullable
     public static Bitmap createQRCodeBitmap(String content, int size, Bitmap targetBitmap){
-        return createQRCodeBitmap(content, size, "UTF-8", "H", "4", Color.BLACK, Color.WHITE, targetBitmap, null, 0F);
+        return createQRCodeBitmap(content, size, "UTF-8", "H", "4", Color.BLACK, Color.BLACK,Color.BLACK,Color.BLACK,Color.WHITE, targetBitmap, null, 0F);
     }
 
     /**
@@ -89,7 +96,10 @@ public class QRCodeUtil {
      * @param character_set 字符集/字符转码格式 (支持格式:{@link  })。传null时,zxing源码默认使用 "ISO-8859-1"
      * @param error_correction 容错级别 (支持级别:{@link  })。传null时,zxing源码默认使用 "L"
      * @param margin 空白边距 (可修改,要求:整型且>=0), 传null时,zxing源码默认使用"4"。
-     * @param color_black 黑色色块的自定义颜色值
+     * @param color_black1 左上色块的自定义颜色值
+     * @param color_black2 左下色块的自定义颜色值
+     * @param color_black3 右下色块的自定义颜色值
+     * @param color_black4 右上色块的自定义颜色值
      * @param color_white 白色色块的自定义颜色值
      * @param targetBitmap 目标图片 (如果targetBitmap != null, 黑色色块将会被该图片像素色值替代)
      * @param logoBitmap logo小图片
@@ -99,7 +109,8 @@ public class QRCodeUtil {
     @Nullable
     public static Bitmap createQRCodeBitmap(@Nullable String content, int size,
                                             @Nullable String character_set, @Nullable String error_correction, @Nullable String margin,
-                                            @ColorInt int color_black, @ColorInt int color_white, @Nullable Bitmap targetBitmap,
+                                            @ColorInt int color_black1,@ColorInt int color_black2,@ColorInt int color_black3,@ColorInt int color_black4,
+                                            @ColorInt int color_white, @Nullable Bitmap targetBitmap,
                                             @Nullable Bitmap logoBitmap, float logoPercent){
 
         /** 1.参数合法性判断 */
@@ -139,7 +150,17 @@ public class QRCodeUtil {
                         if(targetBitmap != null) {
                             pixels[y * size + x] = targetBitmap.getPixel(x, y);
                         } else {
-                            pixels[y * size + x] = color_black;
+                            //pixels[y * size + x] = color_black;
+                            if (x < size / 2 && y < size / 2) {
+                                pixels[y * size + x] = color_black1;// 左上
+                                Integer.toHexString(new Random().nextInt());
+                            } else if (x < size / 2 && y > size / 2) {
+                                pixels[y * size + x] = color_black2;// 左下
+                            } else if (x > size / 2 && y > size / 2) {
+                                pixels[y * size + x] = color_black3;// 右下
+                            } else {
+                                pixels[y * size + x] = color_black4;// 右上
+                            }
                         }
                     } else { // 白色色块像素设置
                         pixels[y * size + x] = color_white;

@@ -55,6 +55,7 @@ public class DownloadService extends Service{
     private Intent intent;
 
     private AudioManager mAudio;
+    private int status=-1;
 
     private Handler handler=new Handler(){
         @Override
@@ -121,7 +122,22 @@ public class DownloadService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
-        mAudio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        //只有当Android版本为O之后才需要控制系统声音
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mAudio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            status = mAudio.getRingerMode();
+            switch (status){
+                case AudioManager.RINGER_MODE_NORMAL:
+                    //普通模式
+                    break;
+                case AudioManager.RINGER_MODE_VIBRATE:
+                    //振动模式
+                    break;
+                case AudioManager.RINGER_MODE_SILENT:
+                    //静音模式
+                    break;
+            }
+        }
         /*//以下语句的设置是为了解决在Android7.0以后安装apk的问题
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
@@ -146,8 +162,10 @@ public class DownloadService extends Service{
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
-            //当前Android O版本不能控制声音，故而先用系统的方法，将声音关闭
-            mAudio.setStreamVolume(AudioManager.STREAM_NOTIFICATION,0,AudioManager.FLAG_PLAY_SOUND);
+            //当前Android O版本不能控制声音，故而先用系统的方法，将声音调成振动
+            if(status==AudioManager.RINGER_MODE_NORMAL) {
+                mAudio.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+            }
         }
         if (intent.getIntExtra("operator",-1)==0)
         {
@@ -197,7 +215,8 @@ public class DownloadService extends Service{
         this.quit=true;
         exit();
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mAudio.setStreamVolume(AudioManager.STREAM_NOTIFICATION, mAudio.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION), AudioManager.FLAG_PLAY_SOUND);
+            //退出恢复用户的铃声模式
+            mAudio.setRingerMode(status);
         }
         manager.cancel(1);
     }
@@ -238,7 +257,8 @@ public class DownloadService extends Service{
         Intent intent=new Intent(Intent.ACTION_VIEW);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
-            mAudio.setStreamVolume(AudioManager.STREAM_NOTIFICATION,mAudio.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION),AudioManager.FLAG_PLAY_SOUND);
+            //当前Android O版本不能控制声音，下载完成将声音恢复
+            mAudio.setRingerMode(status);
             // 由于没有在Activity环境下启动Activity,设置下面的标签；给目标应用一个临时的授权。
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Uri uri= FileProvider.getUriForFile(this,"com.zxhl.gpsking",new File(file,"GPSKing.apk"));
@@ -324,8 +344,12 @@ public class DownloadService extends Service{
             mChannel.enableVibration(false);
             mChannel.setVibrationPattern(new long[]{0l});
 
-           //当前Android O版本不能控制声音，故而先用系统的方法，将声音关闭
-            mAudio.setStreamVolume(AudioManager.STREAM_NOTIFICATION,0,AudioManager.FLAG_PLAY_SOUND);
+            //当前Android O版本不能控制声音，故而先用系统的方法，将声音调成振动
+            if(status==AudioManager.RINGER_MODE_NORMAL) {
+                mAudio.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+            }
+            //当前Android O版本不能控制声音，故而先用系统的方法，将声音关闭
+            //mAudio.setStreamVolume(AudioManager.STREAM_NOTIFICATION,0,AudioManager.FLAG_PLAY_SOUND);
             /*AudioAttributes.Builder audioAttributesBuilder = new AudioAttributes.Builder();
             audioAttributesBuilder.setLegacyStreamType(AudioManager.STREAM_MUSIC);
             AudioAttributes audio = audioAttributesBuilder.build();

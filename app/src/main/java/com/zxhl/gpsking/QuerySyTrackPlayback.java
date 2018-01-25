@@ -369,6 +369,10 @@ public class QuerySyTrackPlayback extends StatusBarUtil implements View.OnClickL
                 break;
 
             case R.id.query_btn_start:
+                if(markerOptions!=null) {
+                    polylineOptions=new PolylineOptions();
+                    aMap.clear();
+                }
                 if(!thread.isAlive()) {
                     thread.start();
                 }
