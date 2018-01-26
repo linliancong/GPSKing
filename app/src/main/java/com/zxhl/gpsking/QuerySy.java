@@ -59,7 +59,7 @@ public class QuerySy extends Fragment implements View.OnClickListener {
         grid_icon= (GridView) view.findViewById(R.id.grid_icon);
 
         mData=new ArrayList<Icon>();
-        mData.add(new Icon(R.drawable.ssdw,"实时定位"));
+        mData.add(new Icon(R.drawable.clwz,"车辆位置"));
         mData.add(new Icon(R.drawable.ccdh,"查车导航"));
         mData.add(new Icon(R.drawable.gjhf,"轨迹回放"));
         mData.add(new Icon(R.drawable.gkxx,"工况信息"));
@@ -70,7 +70,7 @@ public class QuerySy extends Fragment implements View.OnClickListener {
         mData.add(new Icon(R.drawable.bytx,"保养提醒"));
         mData.add(new Icon(R.drawable.sbxx,"设备信息"));
         mData.add(new Icon(R.drawable.yycl,"预约车辆"));
-        mData.add(new Icon(0,null));
+        mData.add(new Icon(R.drawable.yyzx,"运营中心"));
 
         adapter=new AdapterUtil<Icon>(mData,R.layout.item_grid_icon) {
             @Override
@@ -88,7 +88,7 @@ public class QuerySy extends Fragment implements View.OnClickListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch(position){
                     case 0:
-                        //实时定位
+                        //车辆位置
                         Intent it0=new Intent(context,QuerySyLocation.class);
                         startActivity(it0);
                         break;
@@ -141,6 +141,11 @@ public class QuerySy extends Fragment implements View.OnClickListener {
                         //预约车辆
                         Intent it10=new Intent(context,QuerySyYycl.class);
                         startActivity(it10);
+                        break;
+                    case 11:
+                        //运营中心
+                        Intent it11=new Intent(context,OperatingCenter.class);
+                        startActivity(it11);
                         break;
                 }
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/query_ly_title"
+        android:id="@+id/opc_ly_title"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:background="@color/bg_white"
@@ -15,7 +15,7 @@
         >
 
         <com.zxhl.util.ImgTxtLayout
-            android:id="@+id/query_imgtxt_title"
+            android:id="@+id/opc_imgtxt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -28,23 +28,23 @@
             />
 
         <TextView
-            android:id="@+id/query_txt_title"
+            android:id="@+id/opc_txt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/query_imgtxt_title"
+            android:layout_toRightOf="@+id/opc_imgtxt_title"
             android:layout_centerVertical="true"
-            android:text="车辆位置"
+            android:text="实时定位"
             android:textSize="18sp"
             android:textColor="@color/black"
             />
 
         <EditText
-            android:id="@+id/query_edit_img"
+            android:id="@+id/opc_edit_img"
             android:layout_width="25dp"
             android:layout_height="wrap_content"
             android:background="@null"
             android:drawableBottom="@drawable/line"
-            android:layout_toRightOf="@+id/query_imgtxt_title"
+            android:layout_toRightOf="@+id/opc_imgtxt_title"
             android:layout_centerVertical="true"
             android:focusable="false"
             android:clickable="false"
@@ -52,25 +52,25 @@
             />
 
         <ImageView
-            android:id="@+id/query_img_img"
+            android:id="@+id/opc_img_img"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@mipmap/search_bar"
-            android:layout_toRightOf="@+id/query_imgtxt_title"
+            android:layout_toRightOf="@+id/opc_imgtxt_title"
             android:layout_centerVertical="true"
             android:visibility="gone"
             />
 
         <AutoCompleteTextView
-            android:id="@+id/query_auto_vehiclelic"
+            android:id="@+id/opc_auto_vehiclelic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
             android:drawableBottom="@drawable/line"
             android:dropDownVerticalOffset="10dp"
             android:dropDownHeight="200dp"
-            android:layout_toRightOf="@+id/query_edit_img"
-            android:layout_toLeftOf="@+id/query_btn_get"
+            android:layout_toRightOf="@+id/opc_edit_img"
+            android:layout_toLeftOf="@+id/opc_btn_get"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:visibility="gone"
@@ -78,17 +78,17 @@
             />
 
         <ImageView
-            android:id="@+id/query_img_serch"
+            android:id="@+id/opc_img_serch"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@mipmap/search_bar"
-            android:layout_toLeftOf="@+id/query_btn_get"
+            android:layout_toLeftOf="@+id/opc_btn_get"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
             />
 
         <Button
-            android:id="@+id/query_btn_get"
+            android:id="@+id/opc_btn_get"
             android:layout_marginRight="15dp"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
@@ -109,11 +109,29 @@
             />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/opc_ly_sche"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_pressed"
+        android:visibility="gone"
+        android:layout_below="@+id/opc_ly_title"
+        >
+        <ImageView
+            android:id="@+id/opc_img_sche"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/anima_sche"
+            />
+
+    </RelativeLayout>
+
 
     <com.amap.api.maps.MapView
-        android:id="@+id/query_map_loction"
+        android:id="@+id/opc_map_loction"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_below="@+id/query_ly_title"
+        android:layout_below="@+id/opc_ly_title"
         />
 </RelativeLayout>

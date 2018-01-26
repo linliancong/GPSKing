@@ -89,7 +89,7 @@ public class HomePage extends CheckPermissionsActivity implements RadioGroup.OnC
             switch (msg.what){
                 case 1:
                     if(verCode_s!=0) {
-                        if(verCode_s!= verCode) {
+                        if(verCode_s > verCode) {
                             View view = getAlert(R.layout.ad_update);
                             view.findViewById(R.id.ad_btn_update_cancel).setOnClickListener(new View.OnClickListener() {
                                 @Override

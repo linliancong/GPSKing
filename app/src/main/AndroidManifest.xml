@@ -213,6 +213,20 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".OperatingCenter">
+            <intent-filter>
+                <action android:name="android.intent.action.OPERATINGCENTER"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".OpcLocation">
+            <intent-filter>
+                <action android:name="android.intent.action.OPCLOCATION"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

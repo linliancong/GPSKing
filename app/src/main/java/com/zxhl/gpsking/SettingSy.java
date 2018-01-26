@@ -111,7 +111,7 @@ public class SettingSy extends Fragment implements View.OnClickListener {
                     break;
                 case 0x0004:
                     if(verCode_s!=0) {
-                        if (verCode == verCode_s) {
+                        if (verCode >= verCode_s) {
                             Toast.makeText(context, "已是最新版本", Toast.LENGTH_SHORT).show();
                         } else {
                             View view = getAlert(R.layout.ad_update);
