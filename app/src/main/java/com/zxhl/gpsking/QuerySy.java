@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.zxhl.entity.Icon;
 import com.zxhl.util.AdapterUtil;
+import com.zxhl.util.Constants;
 import com.zxhl.util.SharedPreferenceUtils;
 
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class QuerySy extends Fragment implements View.OnClickListener {
 
     public void init(){
         grid_icon= (GridView) view.findViewById(R.id.grid_icon);
+        sp=new SharedPreferenceUtils(context, Constants.SAVE_USER);
 
         mData=new ArrayList<Icon>();
         mData.add(new Icon(R.drawable.clwz,"车辆位置"));
@@ -73,7 +75,12 @@ public class QuerySy extends Fragment implements View.OnClickListener {
         mData.add(new Icon(R.drawable.bytx,"保养提醒"));
         mData.add(new Icon(R.drawable.sbxx,"设备信息"));
         mData.add(new Icon(R.drawable.yycl,"预约车辆"));
-        mData.add(new Icon(R.drawable.yyzx,"运营中心"));
+        if(sp.getRoleID().equals("1")) {
+            mData.add(new Icon(R.drawable.yyzx, "运营中心"));
+        }
+        else {
+            mData.add(new Icon(0, ""));
+        }
 
         adapter=new AdapterUtil<Icon>(mData,R.layout.item_grid_icon) {
             @Override
@@ -147,8 +154,12 @@ public class QuerySy extends Fragment implements View.OnClickListener {
                         break;
                     case 11:
                         //运营中心
-                        Intent it11=new Intent(context,OperatingCenter.class);
-                        startActivity(it11);
+                        if(sp.getRoleID().equals("1")) {
+                            Intent it11=new Intent(context,OperatingCenter.class);
+                            startActivity(it11);
+                        }
+                        else {}
+
                         break;
                 }
 
