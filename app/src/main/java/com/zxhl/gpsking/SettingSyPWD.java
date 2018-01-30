@@ -50,7 +50,7 @@ public class SettingSyPWD extends StatusBarUtil implements TextWatcher{
 
     private TextView txt;
 
-    private long state;
+    private long state=0;
 
 
     Handler handler=new Handler(){

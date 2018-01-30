@@ -111,6 +111,12 @@ public class HomeSy extends Fragment implements View.OnClickListener {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
+                case 0x403:
+                    Toast.makeText(context,"没有查询到数据，请稍后重试",Toast.LENGTH_SHORT).show();
+                    break;
+                case 0x404:
+                    Toast.makeText(context,"服务器有点问题，我们正在全力修复！",Toast.LENGTH_SHORT).show();
+                    break;
                 case 0x001:
                     adapter=new ArrayAdapter<String>(context,R.layout.simple_autoedit_dropdown_item,R.id.tv_spinner,autoVehLic);
                     VehicleLic.setAdapter(adapter);
@@ -453,11 +459,17 @@ public class HomeSy extends Fragment implements View.OnClickListener {
                 if(result!=null){
                     List<List<String>> lists=new ArrayList<>();
                     lists=paraseGetWork(result);
-                    if(lists!=null){
+                    if(lists.size()!=0){
                         data=lists.get(0);
                         score=lists.get(1);
                         handler.sendEmptyMessage(0x002);
+                    }else
+                    {
+                        handler.sendEmptyMessage(0x403);
                     }
+                }
+                else{
+                    handler.sendEmptyMessage(0x404);
                 }
             }
         });
@@ -478,10 +490,16 @@ public class HomeSy extends Fragment implements View.OnClickListener {
                 if(result!=null){
                     List<String> list=new ArrayList<String>();
                     list=parase(result);
-                    if(list!=null){
+                    if(list.size()!=0){
                         WorkHoursTotal=list;
                         handler.sendEmptyMessage(0x003);
+                    }else
+                    {
+                        handler.sendEmptyMessage(0x403);
                     }
+                }
+                else{
+                    handler.sendEmptyMessage(0x404);
                 }
             }
         });

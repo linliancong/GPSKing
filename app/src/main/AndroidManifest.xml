@@ -227,6 +227,34 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".OpcLock">
+            <intent-filter>
+                <action android:name="android.intent.action.OPCLOCK"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".OpcUnLock">
+            <intent-filter>
+                <action android:name="android.intent.action.OPCUNLOCK"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".OpcMonitor">
+            <intent-filter>
+                <action android:name="android.intent.action.OPCMONITOR"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".OpcOilEleControl">
+            <intent-filter>
+                <action android:name="android.intent.action.OPCOILELECONTROL"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

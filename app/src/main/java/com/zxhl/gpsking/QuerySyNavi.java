@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,7 +20,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -104,15 +107,34 @@ public class QuerySyNavi extends StatusBarUtil implements AMapLocationListener,L
     //判断用户手机是否安装百度地图
     private boolean isInstalled2=false;
 
+    private RelativeLayout ly_sche;
+    private ImageView img_sche;
+    private AnimationDrawable anima;
+
     Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
+                case 0x403:
+                    ly_sche.setVisibility(View.GONE);
+                    map.setVisibility(View.VISIBLE);
+                    anima.stop();
+                    Toast.makeText(QuerySyNavi.this,"没有查询到位置信息，请稍后重试",Toast.LENGTH_SHORT).show();
+                    break;
+                case 0x404:
+                    ly_sche.setVisibility(View.GONE);
+                    map.setVisibility(View.VISIBLE);
+                    anima.stop();
+                    Toast.makeText(QuerySyNavi.this,"服务器有点问题，我们正在全力修复！",Toast.LENGTH_SHORT).show();
+                    break;
                 case 0x001:
                     adapter=new ArrayAdapter<String>(QuerySyNavi.this,R.layout.simple_autoedit_dropdown_item,R.id.tv_spinner,autoVehLic);
                     vehicle.setAdapter(adapter);
                     break;
                 case 0x002:
+                    ly_sche.setVisibility(View.GONE);
+                    map.setVisibility(View.VISIBLE);
+                    anima.stop();
                     showVehicle();
                     break;
                 case 0x003:
@@ -197,6 +219,10 @@ public class QuerySyNavi extends StatusBarUtil implements AMapLocationListener,L
         vehicle=findViewById(R.id.query_auto_vehiclelic);
         search=findViewById(R.id.query_img_serch);
         getVeh=findViewById(R.id.query_btn_get);
+
+        ly_sche=findViewById(R.id.navi_ly_sche);
+        img_sche=findViewById(R.id.navi_img_sche);
+        anima= (AnimationDrawable) img_sche.getDrawable();
         //获取地图控件引用
         map=(MapView)findViewById(R.id.query_map_loction);
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，实现地图生命周期管理
@@ -370,10 +396,17 @@ public class QuerySyNavi extends StatusBarUtil implements AMapLocationListener,L
                 if(result!=null){
                     List<String> list=new ArrayList<String>();
                     list=parase(result);
-                    if(list!=null){
+                    if(list.size()!=0){
                         locat=list;
                         handler.sendEmptyMessage(0x002);
                     }
+                    else
+                    {
+                        handler.sendEmptyMessage(0x403);
+                    }
+                }
+                else{
+                    handler.sendEmptyMessage(0x404);
                 }
             }
         });
@@ -481,12 +514,28 @@ public class QuerySyNavi extends StatusBarUtil implements AMapLocationListener,L
                 break;
             case R.id.query_btn_get:
                 ShowKeyboard.hideKeyboard(vehicle);
-                getPoi();
-                title.setVisibility(View.VISIBLE);
-                search.setVisibility(View.VISIBLE);
-                img1.setVisibility(View.GONE);
-                img2.setVisibility(View.GONE);
-                vehicle.setVisibility(View.GONE);
+                int permiss=0;
+                for(int i=0;i<autoVehLic.size();i++)
+                {
+                    if(vehicle.getText().toString().equalsIgnoreCase(autoVehLic.get(i))){
+                        permiss=1;
+                        break;
+                    }
+                }
+                if(permiss==1){
+                    ly_sche.setVisibility(View.VISIBLE);
+                    map.setVisibility(View.GONE);
+                    anima.start();
+                    getPoi();
+                    title.setVisibility(View.VISIBLE);
+                    search.setVisibility(View.VISIBLE);
+                    img1.setVisibility(View.GONE);
+                    img2.setVisibility(View.GONE);
+                    vehicle.setVisibility(View.GONE);
+                }
+                else{
+                    Toast.makeText(QuerySyNavi.this,"机号输入有误或者您没有权限操作",Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

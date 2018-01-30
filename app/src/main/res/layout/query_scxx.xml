@@ -114,6 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black_pressed"
+        android:layout_below="@+id/scxx_ly_title"
         android:visibility="gone"
         >
         <ImageView

@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zxhl.entity.BytxInfo;
 import com.zxhl.entity.CarInfo;
@@ -79,6 +80,21 @@ public class QuerySyBytx extends StatusBarUtil implements View.OnClickListener,T
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case 0x403:
+                    list.setVisibility(View.GONE);
+                    bytx_ly_sche.setVisibility(View.GONE);
+                    anima.stop();
+                    img.setVisibility(View.VISIBLE);
+                    text.setVisibility(View.VISIBLE);
+                    break;
+                case 0x404:
+                    list.setVisibility(View.GONE);
+                    bytx_ly_sche.setVisibility(View.GONE);
+                    anima.stop();
+                    img.setVisibility(View.VISIBLE);
+                    text.setVisibility(View.VISIBLE);
+                    Toast.makeText(context,"服务器有点问题，我们正在全力修复！",Toast.LENGTH_SHORT).show();
+                    break;
                 case 0x001:
                     showInfo();
                     list.setVisibility(View.VISIBLE);
@@ -86,14 +102,6 @@ public class QuerySyBytx extends StatusBarUtil implements View.OnClickListener,T
                     anima.stop();
                     img.setVisibility(View.GONE);
                     text.setVisibility(View.GONE);
-                    break;
-                case 0x002:
-                    list.setVisibility(View.GONE);
-                    bytx_ly_sche.setVisibility(View.GONE);
-                    anima.stop();
-                    img.setVisibility(View.VISIBLE);
-                    text.setVisibility(View.VISIBLE);
-                    //Toast.makeText(context,"信息查询失败，请重新查询",Toast.LENGTH_SHORT).show();
                     break;
                 case 0x003:
                     adapter = new ArrayAdapter<String>(context, R.layout.simple_autoedit_dropdown_item, R.id.tv_spinner, autoVehLic);
@@ -166,15 +174,28 @@ public class QuerySyBytx extends StatusBarUtil implements View.OnClickListener,T
                 break;
             case R.id.bytx_btn_get:
                 ShowKeyboard.hideKeyboard(vehicle);
-                list.setVisibility(View.GONE);
-                bytx_ly_sche.setVisibility(View.VISIBLE);
-                anima.start();
-                getVehicleTimeCheckInfo();
-                title.setVisibility(View.VISIBLE);
-                search.setVisibility(View.VISIBLE);
-                img1.setVisibility(View.GONE);
-                img2.setVisibility(View.GONE);
-                vehicle.setVisibility(View.GONE);
+                int permiss=0;
+                for(int i=0;i<autoVehLic.size();i++)
+                {
+                    if(vehicle.getText().toString().equalsIgnoreCase(autoVehLic.get(i))){
+                        permiss=1;
+                        break;
+                    }
+                }
+                if(permiss==1){
+                    list.setVisibility(View.GONE);
+                    bytx_ly_sche.setVisibility(View.VISIBLE);
+                    anima.start();
+                    getVehicleTimeCheckInfo();
+                    title.setVisibility(View.VISIBLE);
+                    search.setVisibility(View.VISIBLE);
+                    img1.setVisibility(View.GONE);
+                    img2.setVisibility(View.GONE);
+                    vehicle.setVisibility(View.GONE);
+                }
+                else{
+                    Toast.makeText(QuerySyBytx.this,"机号输入有误或者您没有权限操作",Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
 
@@ -196,9 +217,13 @@ public class QuerySyBytx extends StatusBarUtil implements View.OnClickListener,T
                         info=list;
                         handler.sendEmptyMessage(0x001);
                     }
-                    else{
-                        handler.sendEmptyMessage(0x002);
+                    else
+                    {
+                        handler.sendEmptyMessage(0x403);
                     }
+                }
+                else{
+                    handler.sendEmptyMessage(0x404);
                 }
             }
         });

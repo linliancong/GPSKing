@@ -80,7 +80,7 @@ public class SettingSy extends Fragment implements View.OnClickListener {
 
     private ShowAct showAct;
 
-    private int verCode_s;
+    private int verCode_s=0;
     private int verCode;
 
     //服务所需的变量
@@ -97,6 +97,9 @@ public class SettingSy extends Fragment implements View.OnClickListener {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
+                case 0x404:
+                    Toast.makeText(context,"服务器有点问题，我们正在全力修复！",Toast.LENGTH_SHORT).show();
+                    break;
                 case 0x0001:
                     showAct = (ShowAct) getActivity();
                     showAct.callBack(0x0001);
@@ -185,14 +188,14 @@ public class SettingSy extends Fragment implements View.OnClickListener {
                     public void callBack(SoapObject result) {
                         if(result!=null) {
                             List<String> list = new ArrayList<String>();
-                            Integer it=new Integer(result.getProperty(0).toString());
-                            verCode_s =it.intValue();
+                            Integer it = new Integer(result.getProperty(0).toString());
+                            verCode_s = it.intValue();
+                            handler.sendEmptyMessage(0x0004);
                         }
-                        else
-                        {
-                            verCode_s =0;
+                        else{
+                            handler.sendEmptyMessage(0x404);
                         }
-                        handler.sendEmptyMessage(0x0004);
+
                     }
                 });
                 break;

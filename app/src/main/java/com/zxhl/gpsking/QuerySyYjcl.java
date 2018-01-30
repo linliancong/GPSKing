@@ -88,6 +88,29 @@ public class QuerySyYjcl extends StatusBarUtil implements View.OnClickListener,T
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case 0x403:
+                    list.setVisibility(View.GONE);
+                    yjcl_ly_sche.setVisibility(View.GONE);
+                    anima.stop();
+                    if(refresh.isRefreshing()){
+                        isRefresh=false;
+                        refresh.setRefreshing(false);
+                    }
+                    img.setVisibility(View.VISIBLE);
+                    text.setVisibility(View.VISIBLE);
+                    break;
+                case 0x404:
+                    list.setVisibility(View.GONE);
+                    yjcl_ly_sche.setVisibility(View.GONE);
+                    anima.stop();
+                    if(refresh.isRefreshing()){
+                        isRefresh=false;
+                        refresh.setRefreshing(false);
+                    }
+                    img.setVisibility(View.VISIBLE);
+                    text.setVisibility(View.VISIBLE);
+                    Toast.makeText(context,"服务器有点问题，我们正在全力修复！",Toast.LENGTH_SHORT).show();
+                    break;
                 case 0x001:
                     page=1;
                     count=info.size()/PAGE_COUNT;
@@ -105,18 +128,6 @@ public class QuerySyYjcl extends StatusBarUtil implements View.OnClickListener,T
                     }
                     img.setVisibility(View.GONE);
                     text.setVisibility(View.GONE);
-                    break;
-                case 0x002:
-                    list.setVisibility(View.GONE);
-                    yjcl_ly_sche.setVisibility(View.GONE);
-                    anima.stop();
-                    if(refresh.isRefreshing()){
-                        isRefresh=false;
-                        refresh.setRefreshing(false);
-                    }
-                    img.setVisibility(View.VISIBLE);
-                    text.setVisibility(View.VISIBLE);
-                    //Toast.makeText(context,"信息查询失败，请重新查询",Toast.LENGTH_SHORT).show();
                     break;
                 case 0x003:
                     adapter=new ArrayAdapter<String>(context,R.layout.simple_autoedit_dropdown_item,R.id.tv_spinner,autoVehLic);
@@ -232,18 +243,31 @@ public class QuerySyYjcl extends StatusBarUtil implements View.OnClickListener,T
                 vehicle.setVisibility(View.VISIBLE);
                 break;
             case R.id.yjcl_btn_get:
-                isData=false;
-                isVehicleLic=true;
                 ShowKeyboard.hideKeyboard(vehicle);
-                list.setVisibility(View.GONE);
-                yjcl_ly_sche.setVisibility(View.VISIBLE);
-                anima.start();
-                getSampleRecord();
-                title.setVisibility(View.VISIBLE);
-                search.setVisibility(View.VISIBLE);
-                img1.setVisibility(View.GONE);
-                img2.setVisibility(View.GONE);
-                vehicle.setVisibility(View.GONE);
+                int permiss=0;
+                for(int i=0;i<autoVehLic.size();i++)
+                {
+                    if(vehicle.getText().toString().equalsIgnoreCase(autoVehLic.get(i))){
+                        permiss=1;
+                        break;
+                    }
+                }
+                if(permiss==1){
+                    isData=false;
+                    isVehicleLic=true;
+                    list.setVisibility(View.GONE);
+                    yjcl_ly_sche.setVisibility(View.VISIBLE);
+                    anima.start();
+                    getSampleRecord();
+                    title.setVisibility(View.VISIBLE);
+                    search.setVisibility(View.VISIBLE);
+                    img1.setVisibility(View.GONE);
+                    img2.setVisibility(View.GONE);
+                    vehicle.setVisibility(View.GONE);
+                }
+                else{
+                    Toast.makeText(QuerySyYjcl.this,"机号输入有误或者您没有权限操作",Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
 
@@ -266,9 +290,13 @@ public class QuerySyYjcl extends StatusBarUtil implements View.OnClickListener,T
                         info=list;
                         handler.sendEmptyMessage(0x001);
                     }
-                    else{
-                        handler.sendEmptyMessage(0x002);
+                    else
+                    {
+                        handler.sendEmptyMessage(0x403);
                     }
+                }
+                else{
+                    handler.sendEmptyMessage(0x404);
                 }
             }
         });

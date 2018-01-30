@@ -2,6 +2,7 @@ package com.zxhl.gpsking;
 
 import android.graphics.Camera;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.navi.AmapPageType;
@@ -89,16 +92,36 @@ public class QuerySyLocation extends StatusBarUtil implements AMapLocationListen
     private boolean isChange=false;
     //定义地图图层
     private MarkerOptions markerOptions;
+    private Marker marker;
+
+    private RelativeLayout ly_sche;
+    private ImageView img_sche;
+    private AnimationDrawable anima;
 
     Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
+                case 0x403:
+                    ly_sche.setVisibility(View.GONE);
+                    map.setVisibility(View.VISIBLE);
+                    anima.stop();
+                    Toast.makeText(QuerySyLocation.this,"没有查询到位置信息，请稍后重试",Toast.LENGTH_SHORT).show();
+                    break;
+                case 0x404:
+                    ly_sche.setVisibility(View.GONE);
+                    map.setVisibility(View.VISIBLE);
+                    anima.stop();
+                    Toast.makeText(QuerySyLocation.this,"服务器有点问题，我们正在全力修复！",Toast.LENGTH_SHORT).show();
+                    break;
                 case 0x001:
                     adapter=new ArrayAdapter<String>(QuerySyLocation.this,R.layout.simple_autoedit_dropdown_item,R.id.tv_spinner,autoVehLic);
                     vehicle.setAdapter(adapter);
                     break;
                 case 0x002:
+                    ly_sche.setVisibility(View.GONE);
+                    map.setVisibility(View.VISIBLE);
+                    anima.stop();
                     double lat=0,lng=0;
                     Double dlat=new Double(locat.get(0));
                     Double dlng=new Double(locat.get(1));
@@ -115,7 +138,7 @@ public class QuerySyLocation extends StatusBarUtil implements AMapLocationListen
                     //将Maeker设置为贴地显示，可以双指下拉地图查看效果
                     markerOptions.setFlat(true);
                     //添加标记
-                    aMap.addMarker(markerOptions);
+                    marker=aMap.addMarker(markerOptions);
                     //将中心点移动到车辆点
                     aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
                     //Toast.makeText(getApplicationContext(),"获取成功",Toast.LENGTH_LONG).show();
@@ -138,6 +161,10 @@ public class QuerySyLocation extends StatusBarUtil implements AMapLocationListen
         vehicle=findViewById(R.id.query_auto_vehiclelic);
         search=findViewById(R.id.query_img_serch);
         getVeh=findViewById(R.id.query_btn_get);
+
+        ly_sche=findViewById(R.id.loction_ly_sche);
+        img_sche=findViewById(R.id.loction_img_sche);
+        anima= (AnimationDrawable) img_sche.getDrawable();
         //获取地图控件引用
         map=(MapView)findViewById(R.id.query_map_loction);
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，实现地图生命周期管理
@@ -148,6 +175,14 @@ public class QuerySyLocation extends StatusBarUtil implements AMapLocationListen
             initMapStyle();
             initLocation();
         }
+
+
+        aMap.setOnMapClickListener(new AMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                marker.hideInfoWindow();
+            }
+        });
 
         search.setOnClickListener(this);
         getVeh.setOnClickListener(this);
@@ -296,10 +331,17 @@ public class QuerySyLocation extends StatusBarUtil implements AMapLocationListen
                 if(result!=null){
                     List<String> list=new ArrayList<String>();
                     list=parase(result);
-                    if(list!=null){
+                    if(list.size()!=0){
                         locat=list;
                         handler.sendEmptyMessage(0x002);
                     }
+                    else
+                    {
+                        handler.sendEmptyMessage(0x403);
+                    }
+                }
+                else{
+                    handler.sendEmptyMessage(0x404);
                 }
             }
         });
@@ -402,12 +444,28 @@ public class QuerySyLocation extends StatusBarUtil implements AMapLocationListen
                 break;
             case R.id.query_btn_get:
                 ShowKeyboard.hideKeyboard(vehicle);
-                getPoi();
-                title.setVisibility(View.VISIBLE);
-                search.setVisibility(View.VISIBLE);
-                img1.setVisibility(View.GONE);
-                img2.setVisibility(View.GONE);
-                vehicle.setVisibility(View.GONE);
+                int permiss=0;
+                for(int i=0;i<autoVehLic.size();i++)
+                {
+                    if(vehicle.getText().toString().equalsIgnoreCase(autoVehLic.get(i))){
+                        permiss=1;
+                        break;
+                    }
+                }
+                if(permiss==1){
+                    ly_sche.setVisibility(View.VISIBLE);
+                    map.setVisibility(View.GONE);
+                    anima.start();
+                    getPoi();
+                    title.setVisibility(View.VISIBLE);
+                    search.setVisibility(View.VISIBLE);
+                    img1.setVisibility(View.GONE);
+                    img2.setVisibility(View.GONE);
+                    vehicle.setVisibility(View.GONE);
+                }
+                else{
+                    Toast.makeText(QuerySyLocation.this,"机号输入有误或者您没有权限操作",Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

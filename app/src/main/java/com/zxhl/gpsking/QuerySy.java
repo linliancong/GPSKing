@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.zxhl.entity.Icon;
 import com.zxhl.util.AdapterUtil;
+import com.zxhl.util.SharedPreferenceUtils;
 
 import java.util.ArrayList;
 
@@ -32,6 +33,8 @@ public class QuerySy extends Fragment implements View.OnClickListener {
     private AdapterUtil adapter=null;
     private ArrayList<Icon> mData=null;
     private int tag=0;
+
+    private SharedPreferenceUtils sp;
 
     public QuerySy(){
     }

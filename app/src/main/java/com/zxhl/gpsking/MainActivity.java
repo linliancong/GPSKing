@@ -24,7 +24,9 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.zxhl.util.ApkVersionUtils;
 import com.zxhl.util.Constants;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.StatusBarUtil;
@@ -99,13 +101,20 @@ public class MainActivity extends StatusBarUtil {
             HashMap<String,String> proper=new HashMap<String,String>();
             proper.put("NickName",sp.getNickName());
             proper.put("PWD",sp.getPWD());
-            WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetPWDState", proper, new WebServiceUtils.WebServiceCallBack() {
+            proper.put("Version", "GPSKing_"+ ApkVersionUtils.getVerName(MainActivity.this));
+            WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "LoginForGPSKing", proper, new WebServiceUtils.WebServiceCallBack() {
                 @Override
                 public void callBack(SoapObject result) {
                     if(result!=null) {
                         List<String> list = new ArrayList<String>();
-                        Integer it=new Integer(result.getProperty(0).toString());
-                        tag =it.intValue();
+                        list= parseSoap(result);
+                        if(list.size()==0)
+                        {
+                            tag=0;
+                        }
+                        else {
+                            tag=1;
+                        }
                     }
                     else
                     {
@@ -123,6 +132,26 @@ public class MainActivity extends StatusBarUtil {
 
         }
 
+    }
+
+    /*
+   *解析SoapObject对象
+   *@param result
+   * @return
+   * */
+    private List<String> parseSoap(SoapObject result)
+    {
+        List<String> list=new ArrayList<String>();
+        SoapObject soapObject= (SoapObject) result.getProperty("LoginForGPSKingResult");
+        if (soapObject==null)
+        {
+            return null;
+        }
+        for (int i=0;i<soapObject.getPropertyCount();i++)
+        {
+            list.add(soapObject.getProperty(i).toString());
+        }
+        return list;
     }
 
     @Override

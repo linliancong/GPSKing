@@ -96,6 +96,18 @@ public class OpcLocation extends StatusBarUtil implements AMapLocationListener,L
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
+                case 0x403:
+                    opc_ly_sche.setVisibility(View.GONE);
+                    map.setVisibility(View.VISIBLE);
+                    anima.stop();
+                    Toast.makeText(OpcLocation.this,"没有查询到位置信息",Toast.LENGTH_SHORT).show();
+                    break;
+                case 0x404:
+                    opc_ly_sche.setVisibility(View.GONE);
+                    map.setVisibility(View.VISIBLE);
+                    anima.stop();
+                    Toast.makeText(OpcLocation.this,"服务器有点问题，我们正在全力修复！",Toast.LENGTH_SHORT).show();
+                    break;
                 case 0x001:
                     adapter=new ArrayAdapter<String>(OpcLocation.this,R.layout.simple_autoedit_dropdown_item,R.id.tv_spinner,autoVehLic);
                     vehicle.setAdapter(adapter);
@@ -117,7 +129,7 @@ public class OpcLocation extends StatusBarUtil implements AMapLocationListener,L
                         markerOptions.title("详细信息");
                         markerOptions.snippet("定位时间："+locat.get(4)+"\n"+
                                 "经度："+locat.get(6)+"\n"+
-                                "纬度："+locat.get(6)+"\n"+
+                                "纬度："+locat.get(5)+"\n"+
                                 "电源状态："+locat.get(0)+"\n"+
                                 "ACC："+locat.get(1)+"\n"+
                                 "速度："+locat.get(8));
@@ -324,10 +336,17 @@ public class OpcLocation extends StatusBarUtil implements AMapLocationListener,L
                 if(result!=null){
                     List<String> list=new ArrayList<String>();
                     list=parase(result);
-                    if(list!=null){
+                    if(list.size()!=0){
                         locat=list;
                         handler.sendEmptyMessage(0x002);
                     }
+                    else
+                    {
+                        handler.sendEmptyMessage(0x403);
+                    }
+                }
+                else{
+                    handler.sendEmptyMessage(0x404);
                 }
             }
         });
@@ -429,16 +448,29 @@ public class OpcLocation extends StatusBarUtil implements AMapLocationListener,L
                 vehicle.setVisibility(View.VISIBLE);
                 break;
             case R.id.opc_btn_get:
-                opc_ly_sche.setVisibility(View.VISIBLE);
-                map.setVisibility(View.GONE);
-                anima.start();
                 ShowKeyboard.hideKeyboard(vehicle);
-                getPoi();
-                title.setVisibility(View.VISIBLE);
-                search.setVisibility(View.VISIBLE);
-                img1.setVisibility(View.GONE);
-                img2.setVisibility(View.GONE);
-                vehicle.setVisibility(View.GONE);
+                int permiss=0;
+                for(int i=0;i<autoVehLic.size();i++)
+                {
+                    if(vehicle.getText().toString().equalsIgnoreCase(autoVehLic.get(i))){
+                        permiss=1;
+                        break;
+                    }
+                }
+                if(permiss==1){
+                    getPoi();
+                    opc_ly_sche.setVisibility(View.VISIBLE);
+                    map.setVisibility(View.GONE);
+                    anima.start();
+                    title.setVisibility(View.VISIBLE);
+                    search.setVisibility(View.VISIBLE);
+                    img1.setVisibility(View.GONE);
+                    img2.setVisibility(View.GONE);
+                    vehicle.setVisibility(View.GONE);
+                }
+                else{
+                    Toast.makeText(OpcLocation.this,"机号输入有误或者您没有权限操作",Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

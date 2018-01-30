@@ -1,6 +1,7 @@
 package com.zxhl.gpsking;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,16 +61,24 @@ public class SettingSyWtfkJl extends StatusBarUtil{
     private ImageView img;
     private TextView txt;
 
+    private RelativeLayout ly_sche;
+    private ImageView img_sche;
+    private AnimationDrawable anima;
+
     Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 0x001:
+                    ly_sche.setVisibility(View.GONE);
+                    anima.stop();
                     img.setVisibility(View.GONE);
                     txt.setVisibility(View.GONE);
                     showQuestion();
                     break;
                 case 0x002:
+                    ly_sche.setVisibility(View.GONE);
+                    anima.stop();
                     img.setVisibility(View.VISIBLE);
                     txt.setVisibility(View.VISIBLE);
                     break;
@@ -87,6 +97,10 @@ public class SettingSyWtfkJl extends StatusBarUtil{
         txt= (TextView) findViewById(R.id.setting_wtfk_txt_fkjl);
         inflater=getLayoutInflater();
         //inflater=LayoutInflater.from(SettingSyWtfkJl.this);
+
+        ly_sche=findViewById(R.id.ly_sche);
+        img_sche=findViewById(R.id.img_sche);
+        anima= (AnimationDrawable) img_sche.getDrawable();
 
         sp=new SharedPreferenceUtils(getApplicationContext(), Constants.SAVE_USER);
         hashMap=new ArrayList<Map<String, String>>();
@@ -109,6 +123,9 @@ public class SettingSyWtfkJl extends StatusBarUtil{
                 finish();
             }
         });
+
+        ly_sche.setVisibility(View.VISIBLE);
+        anima.start();
 
 
         //获取消息记录

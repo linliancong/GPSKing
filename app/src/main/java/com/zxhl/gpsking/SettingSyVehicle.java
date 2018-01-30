@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
+import com.zxhl.util.ShowKeyboard;
 import com.zxhl.util.StatusBarUtil;
 import com.zxhl.util.WebServiceUtils;
 
@@ -108,11 +109,25 @@ public class SettingSyVehicle extends StatusBarUtil implements TextWatcher{
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sp.setVehicleLic(vehicle.getText().toString());
-                sp.setDayCount(count.getText().toString());
-                Toast.makeText(context,finish.getText().toString()+"成功",Toast.LENGTH_SHORT).show();
-                sendBroadcast(new Intent("com.zxhl.gpsking.MYBROADCASTHOMESY"));
-                finish();
+                ShowKeyboard.hideKeyboard(vehicle);
+                int permiss=0;
+                for(int i=0;i<vehicle_list.size();i++)
+                {
+                    if(vehicle.getText().toString().equalsIgnoreCase(vehicle_list.get(i))){
+                        permiss=1;
+                        break;
+                    }
+                }
+                if(permiss==1){
+                    sp.setVehicleLic(vehicle.getText().toString());
+                    sp.setDayCount(count.getText().toString());
+                    Toast.makeText(context,finish.getText().toString()+"成功",Toast.LENGTH_SHORT).show();
+                    sendBroadcast(new Intent("com.zxhl.gpsking.MYBROADCASTHOMESY"));
+                    finish();
+                }
+                else{
+                    Toast.makeText(SettingSyVehicle.this,"机号输入有误或者您没有该车台的权限",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

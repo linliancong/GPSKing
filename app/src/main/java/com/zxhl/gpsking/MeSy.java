@@ -115,6 +115,11 @@ public class MeSy extends Fragment implements View.OnClickListener {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
+                case 0x404:
+                    me_ly_sche.setVisibility(View.GONE);
+                    anima.stop();
+                    Toast.makeText(context,"服务器有点问题，我们正在全力修复！",Toast.LENGTH_SHORT).show();
+                    break;
                 case 0x0010:
                     showAct= (ShowAct) getActivity();
                     showAct.callBack(0x0010);
@@ -291,9 +296,8 @@ public class MeSy extends Fragment implements View.OnClickListener {
                     me_imgtxt_fz.setText(map.get("分组"));
                     handler.sendEmptyMessage(0x0040);
                     list.add(map);
-
-
-
+                }else{
+                    handler.sendEmptyMessage(0x404);
                 }
             }
         });

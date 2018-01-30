@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bigkoo.pickerview.TimePickerView;
 import com.zxhl.util.Constants;
@@ -85,6 +86,18 @@ public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,T
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
+                case 0x403:
+                    anima.stop();
+                    bbtj_ly_sche.setVisibility(View.GONE);
+                    lineChart.setVisibility(View.GONE);
+                    Toast.makeText(QuerySyBbtj.this,"没有查询到数据，请稍后重试",Toast.LENGTH_SHORT).show();
+                    break;
+                case 0x404:
+                    anima.stop();
+                    bbtj_ly_sche.setVisibility(View.GONE);
+                    lineChart.setVisibility(View.GONE);
+                    Toast.makeText(QuerySyBbtj.this,"服务器有点问题，我们正在全力修复！",Toast.LENGTH_SHORT).show();
+                    break;
                 case 0x001:
                     adapter=new ArrayAdapter<String>(QuerySyBbtj.this,R.layout.simple_autoedit_dropdown_item,R.id.tv_spinner,autoVehLic);
                     VehicleLic.setAdapter(adapter);
@@ -93,6 +106,7 @@ public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,T
                     getAxisXLables();
                     getAxisPoints();
                     initLineChart();
+                    lineChart.setVisibility(View.VISIBLE);
                     anima.stop();
                     bbtj_ly_sche.setVisibility(View.GONE);
                     break;
@@ -150,10 +164,22 @@ public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,T
         switch (v.getId()) {
             case R.id.bbtj_btn_get:
                 ShowKeyboard.hideKeyboard(VehicleLic);
-                lineChart.setVisibility(View.VISIBLE);
-                anima.start();
-                bbtj_ly_sche.setVisibility(View.VISIBLE);
-                GetWorkHour();
+                int permiss=0;
+                for(int i=0;i<autoVehLic.size();i++)
+                {
+                    if(VehicleLic.getText().toString().equalsIgnoreCase(autoVehLic.get(i))){
+                        permiss=1;
+                        break;
+                    }
+                }
+                if(permiss==1){
+                    anima.start();
+                    bbtj_ly_sche.setVisibility(View.VISIBLE);
+                    GetWorkHour();
+                }
+                else{
+                    Toast.makeText(QuerySyBbtj.this,"机号输入有误或者您没有权限操作",Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.bbtj_edit_BeginTime:
                 ShowKeyboard.hideKeyboard(VehicleLic);
@@ -360,7 +386,7 @@ public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,T
     //查询工作时间曲线
     private void GetWorkHour(){
         HashMap<String,String> proper=new HashMap<>();
-        proper.put("VehicleLic",sp.getVehicleLic());
+        proper.put("VehicleLic",VehicleLic.getText().toString());
         proper.put("BeginTime",BeginTime.getText().toString());
         proper.put("EndTime",EndTime.getText().toString());
 
@@ -370,11 +396,18 @@ public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,T
                 if(result!=null){
                     List<List<String>> lists=new ArrayList<>();
                     lists=paraseGetWork(result);
-                    if(lists!=null){
+                    if(lists.size()!=0){
                         data=lists.get(0);
                         score=lists.get(1);
                         handler.sendEmptyMessage(0x002);
                     }
+                    else
+                    {
+                        handler.sendEmptyMessage(0x403);
+                    }
+                }
+                else{
+                    handler.sendEmptyMessage(0x404);
                 }
             }
         });

@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
@@ -141,7 +142,15 @@ public class QuerySyGkxx extends StatusBarUtil implements View.OnClickListener,T
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
-                case 0x001:
+                case 0x403:
+                    anima.stop();
+                    gkxx_ly_sche.setVisibility(View.GONE);
+                    Toast.makeText(QuerySyGkxx.this,"没有查询到数据，请稍后重试",Toast.LENGTH_SHORT).show();
+                    break;
+                case 0x404:
+                    anima.stop();
+                    gkxx_ly_sche.setVisibility(View.GONE);
+                    Toast.makeText(QuerySyGkxx.this,"服务器有点问题，我们正在全力修复！",Toast.LENGTH_SHORT).show();
                     break;
                 case 0x002:
                     showWorkData();
@@ -308,14 +317,27 @@ public class QuerySyGkxx extends StatusBarUtil implements View.OnClickListener,T
                 break;
             case R.id.gkxx_btn_get:
                 ShowKeyboard.hideKeyboard(vehicle);
-                anima.start();
-                gkxx_ly_sche.setVisibility(View.VISIBLE);
-                GetWorkData();
-                title.setVisibility(View.VISIBLE);
-                search.setVisibility(View.VISIBLE);
-                img1.setVisibility(View.GONE);
-                img2.setVisibility(View.GONE);
-                vehicle.setVisibility(View.GONE);
+                int permiss=0;
+                for(int i=0;i<autoVehLic.size();i++)
+                {
+                    if(vehicle.getText().toString().equalsIgnoreCase(autoVehLic.get(i))){
+                        permiss=1;
+                        break;
+                    }
+                }
+                if(permiss==1){
+                    anima.start();
+                    gkxx_ly_sche.setVisibility(View.VISIBLE);
+                    GetWorkData();
+                    title.setVisibility(View.VISIBLE);
+                    search.setVisibility(View.VISIBLE);
+                    img1.setVisibility(View.GONE);
+                    img2.setVisibility(View.GONE);
+                    vehicle.setVisibility(View.GONE);
+                }
+                else{
+                    Toast.makeText(QuerySyGkxx.this,"机号输入有误或者您没有权限操作",Toast.LENGTH_SHORT).show();
+                }
                 break;
 
         }
@@ -352,12 +374,15 @@ public class QuerySyGkxx extends StatusBarUtil implements View.OnClickListener,T
                     map=parseSoap(result);
                     if(map.size()==0)
                     {
-                        handler.sendEmptyMessage(0x001);
+                        handler.sendEmptyMessage(0x403);
                     }
-                    else {
+                    else
+                    {
                         handler.sendEmptyMessage(0x002);
                     }
-
+                }
+                else{
+                    handler.sendEmptyMessage(0x404);
                 }
             }
         });

@@ -76,16 +76,25 @@ public class OperatingCenter extends StatusBarUtil implements View.OnClickListen
                 break;
             case R.id.opc_ly_sc:
                 //锁车
+                Intent it2=new Intent(context,OpcLock.class);
+                startActivity(it2);
                 break;
             case R.id.opc_ly_js:
                 //解锁
+                Intent it3=new Intent(context,OpcUnLock.class);
+                startActivity(it3);
                 break;
             case R.id.opc_ly_jk:
                 //监控
+                Intent it4=new Intent(context,OpcMonitor.class);
+                startActivity(it4);
                 break;
             case R.id.opc_ly_yd:
                 //油电控制
+                Intent it5=new Intent(context,OpcOilEleControl.class);
+                startActivity(it5);
                 break;
+
         }
 
     }

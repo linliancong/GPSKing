@@ -21,6 +21,7 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.zxhl.util.ApkVersionUtils;
 import com.zxhl.util.AppManager;
 import com.zxhl.util.Constants;
 import com.zxhl.util.SharedPreferenceUtils;
@@ -140,6 +141,7 @@ public class Login extends StatusBarUtil implements View.OnClickListener,TextWat
 
         proper.put("NickName",username);
         proper.put("PWD",pwd);
+        proper.put("Version", "GPSKing_"+ApkVersionUtils.getVerName(Login.this));
         //调用WebService接口
         WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "LoginForGPSKing", proper, new WebServiceUtils.WebServiceCallBack() {
             //WebService接口返回的数据回调到这个方法中
@@ -164,6 +166,7 @@ public class Login extends StatusBarUtil implements View.OnClickListener,TextWat
                     utils.setOperatorName(list.get(1));
                     utils.setVGroupID(list.get(2));
                     utils.setRolePermission(list.get(3));
+                    utils.setRoleID(list.get(4));
                     utils.setIsFirst(false);
                     Intent it=new Intent(Login.this,HomePage.class);
                     startActivity(it);
@@ -175,7 +178,7 @@ public class Login extends StatusBarUtil implements View.OnClickListener,TextWat
                 {
                     pop.dismiss();
                     utils.setIsFirst(true);
-                    Toast.makeText(Login.this,"账号或密码错误！",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this,"服务器有点问题，我们正在全力修复！",Toast.LENGTH_SHORT).show();
                 }
 
             }

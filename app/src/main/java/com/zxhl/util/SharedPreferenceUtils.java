@@ -76,6 +76,17 @@ public class SharedPreferenceUtils {
         return sp.getString("VGroupID", "");
     }
 
+    //用户角色
+    public void setRoleID(String roleid){
+        editor.putString("RoleID",roleid);
+        editor.commit();
+    }
+
+    public String getRoleID()
+    {
+        return sp.getString("RoleID","");
+    }
+
 
 
     /**

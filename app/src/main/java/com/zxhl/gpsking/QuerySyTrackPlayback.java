@@ -125,6 +125,16 @@ public class QuerySyTrackPlayback extends StatusBarUtil implements View.OnClickL
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
+                case 0x403:
+                    query_ly_sche.setVisibility(View.GONE);
+                    anima.stop();
+                    Toast.makeText(QuerySyTrackPlayback.this,"没有查询到位置信息，请稍后重试",Toast.LENGTH_SHORT).show();
+                    break;
+                case 0x404:
+                    query_ly_sche.setVisibility(View.GONE);
+                    anima.stop();
+                    Toast.makeText(QuerySyTrackPlayback.this,"服务器有点问题，我们正在全力修复！",Toast.LENGTH_SHORT).show();
+                    break;
                 case 0x001:
                     adapter=new ArrayAdapter<String>(QuerySyTrackPlayback.this,R.layout.simple_autoedit_dropdown_item,R.id.tv_spinner,autoVehLic);
                     vehicle.setAdapter(adapter);
@@ -318,10 +328,17 @@ public class QuerySyTrackPlayback extends StatusBarUtil implements View.OnClickL
                 if(result!=null){
                     List<String> list=new ArrayList<String>();
                     list=parase(result);
-                    if(list!=null){
+                    if(list.size()!=0){
                         locat=list;
                         handler.sendEmptyMessage(0x002);
                     }
+                    else
+                    {
+                        handler.sendEmptyMessage(0x403);
+                    }
+                }
+                else{
+                    handler.sendEmptyMessage(0x404);
                 }
             }
         });
@@ -344,11 +361,24 @@ public class QuerySyTrackPlayback extends StatusBarUtil implements View.OnClickL
         switch (v.getId()){
             case R.id.query_btn_get_tra:
                 ShowKeyboard.hideKeyboard(vehicle);
-                query_ly_sche.setVisibility(View.VISIBLE);
-                anima.start();
-                isWait=true;
-                threadForTag=false;
-                getTrackPlay();
+                int permiss=0;
+                for(int i=0;i<autoVehLic.size();i++)
+                {
+                    if(vehicle.getText().toString().equalsIgnoreCase(autoVehLic.get(i))){
+                        permiss=1;
+                        break;
+                    }
+                }
+                if(permiss==1){
+                    query_ly_sche.setVisibility(View.VISIBLE);
+                    anima.start();
+                    isWait=true;
+                    threadForTag=false;
+                    getTrackPlay();
+                }
+                else{
+                    Toast.makeText(QuerySyTrackPlayback.this,"机号输入有误或者您没有权限操作",Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.query_ly_bottom:
                 search_ly.setVisibility(View.VISIBLE);
