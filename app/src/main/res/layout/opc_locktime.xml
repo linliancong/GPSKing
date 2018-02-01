@@ -215,35 +215,7 @@
                         android:id="@+id/locktime_yjsc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="一级样机锁车"
-                        android:layout_marginLeft="10dp"
-                        />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/locktime_ly_ejsc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/lock_back"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:layout_toRightOf="@+id/locktime_ly_yjsc"
-                    android:layout_marginLeft="20dp"
-                    >
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/ejsc"
-                        />
-                    <TextView
-                        android:id="@+id/locktime_ejsc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="二级样机锁车"
+                        android:text="样机锁车"
                         android:layout_marginLeft="10dp"
                         />
                 </LinearLayout>
@@ -259,8 +231,8 @@
                     android:paddingRight="15dp"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
-                    android:layout_below="@+id/locktime_ly_yjsc"
-                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@+id/locktime_ly_yjsc"
+                    android:layout_marginLeft="20dp"
                     >
                     <ImageView
                         android:layout_width="30dp"
@@ -271,7 +243,7 @@
                         android:id="@+id/locktime_tcyj"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="退出样机锁车"
+                        android:text="退出样机"
                         android:layout_marginLeft="10dp"
                         />
                 </LinearLayout>

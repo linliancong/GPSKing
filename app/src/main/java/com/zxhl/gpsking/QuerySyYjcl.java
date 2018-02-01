@@ -160,9 +160,9 @@ public class QuerySyYjcl extends StatusBarUtil implements View.OnClickListener,T
         context=QuerySyYjcl.this;
 
         init();
-        yjcl_ly_sche.setVisibility(View.VISIBLE);
+        /*yjcl_ly_sche.setVisibility(View.VISIBLE);
         anima.start();
-        getSampleRecord();
+        getSampleRecord();*/
         getVehicleLic();
     }
 
@@ -278,7 +278,7 @@ public class QuerySyYjcl extends StatusBarUtil implements View.OnClickListener,T
         HashMap<String,String> proper=new HashMap<>();
         proper.put("OperatorID",sp.getOperatorID());
         proper.put("VehicleLic",vehicle.getText().toString());
-        vehicle.setText("");
+        //vehicle.setText("");
 
         WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetSampleRecord", proper, new WebServiceUtils.WebServiceCallBack() {
             @Override

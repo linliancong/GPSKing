@@ -148,9 +148,9 @@ public class QuerySyYycl extends StatusBarUtil implements View.OnClickListener,T
         context=QuerySyYycl.this;
 
         init();
-        yycl_ly_sche.setVisibility(View.VISIBLE);
+        /*yycl_ly_sche.setVisibility(View.VISIBLE);
         anima.start();
-        getOrderRecord();
+        getOrderRecord();*/
         getVehicleLic();
     }
 
@@ -305,7 +305,7 @@ public class QuerySyYycl extends StatusBarUtil implements View.OnClickListener,T
         HashMap<String,String> proper=new HashMap<>();
         proper.put("OperatorID",sp.getOperatorID());
         proper.put("VehicleLic",vehicle.getText().toString());
-        vehicle.setText("");
+        //vehicle.setText("");
 
         WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetOrderRecord", proper, new WebServiceUtils.WebServiceCallBack() {
             @Override

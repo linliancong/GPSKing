@@ -1,7 +1,6 @@
 package com.zxhl.gpsking;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.zxhl.entity.Logs;
@@ -48,9 +46,8 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
     private AutoCompleteTextView vehicle;
     private TextView veh_info;
     private RelativeLayout visble;
-    private LinearLayout yjyjsc;
-    private LinearLayout ejyjsc;
-    private LinearLayout tcyjsc;
+    private LinearLayout yjsc;
+    private LinearLayout tcyj;
     private EditText time;
     private ImageView opc_cancel;
 
@@ -90,7 +87,7 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
                     locktime_ly_sche.setVisibility(View.GONE);
                     anima.stop();
                     //scroll_visble.setVisibility(View.VISIBLE);
-                    if((type.equals("1")||type.equals("2"))&&time.getText().length()==0) {
+                    if(type.equals("1")&&time.getText().length()==0) {
                         data.add(new Logs("延迟锁车时间为空，请输入时间后重试！"));
                     }else {
                         data.add(new Logs("服务器有点问题，我们正在全力修复！"));
@@ -118,14 +115,14 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
                     locktime_ly_sche.setVisibility(View.GONE);
                     anima.stop();
                     if(remoteLock.equals("1")) {
-                        if(type.equals("3")) {
+                        if(type.equals("0")) {
                             data.add(new Logs("【" + vehicle.getText() + "】：下发 【" + command + "】指令成功！"));
                         }else {
                             data.add(new Logs("【" + vehicle.getText() + "】：下发 【" + command + "】 延迟 【" + time.getText() + "】 分钟指令成功！"));
                         }
                         adapter_log.notifyDataSetChanged();
                     }else{
-                        if(type.equals("3")) {
+                        if(type.equals("0")) {
                             data.add(new Logs("【" + vehicle.getText() + "】：下发 【" + command + "】指令失败！失败原因：" + error));
                         }else {
                             data.add(new Logs("【" + vehicle.getText() + "】：下发 【" + command + "】 延迟 【" + time.getText() + "】 分钟指令失败！失败原因：" + error));
@@ -136,7 +133,7 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
                 case 0x005:
                     locktime_ly_sche.setVisibility(View.GONE);
                     anima.stop();
-                    if(type.equals("3")) {
+                    if(type.equals("0")) {
                         data.add(new Logs("【" + vehicle.getText() + "】：下发 【" + command + "】指令失败！请稍后再试。"));
                     }else {
                         data.add(new Logs("【" + vehicle.getText() + "】：下发 【" + command + "】 延迟 【" + time.getText() + "】 分钟 指令失败！请稍后再试。"));
@@ -169,9 +166,8 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
         vehicle=findViewById(R.id.locktime_vehicle);
         veh_info =findViewById(R.id.locktime_txt_veh);
         visble=findViewById(R.id.locktime_rl_opc);
-        yjyjsc =findViewById(R.id.locktime_ly_yjsc);
-        ejyjsc =findViewById(R.id.locktime_ly_ejsc);
-        tcyjsc=findViewById(R.id.locktime_ly_tcyj);
+        yjsc =findViewById(R.id.locktime_ly_yjsc);
+        tcyj =findViewById(R.id.locktime_ly_tcyj);
         time=findViewById(R.id.locktime_time);
         opc_cancel=findViewById(R.id.opc_cancel);
         opc_cancel.setVisibility(View.GONE);
@@ -201,9 +197,8 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
         vehicle.addTextChangedListener(this);
         opc_cancel.setOnClickListener(this);
 
-        yjyjsc.setOnClickListener(this);
-        ejyjsc.setOnClickListener(this);
-        tcyjsc.setOnClickListener(this);
+        yjsc.setOnClickListener(this);
+        tcyj.setOnClickListener(this);
 
 
         back.setOnClickListener(new ImgTxtLayout.OnClickListener() {
@@ -232,23 +227,16 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
             case R.id.locktime_ly_yjsc:
                 ShowKeyboard.hideKeyboard(time);
                 dialog.show();
-                text.setText("确认下发 【一级样机锁车】 延迟 【"+time.getText()+"】 分钟 指令？");
+                text.setText("确认下发 【样机锁车】 延迟 【"+time.getText()+"】 分钟 指令？");
                 type="1";
-                command="一级样机锁车";
-                break;
-            case R.id.locktime_ly_ejsc:
-                ShowKeyboard.hideKeyboard(time);
-                dialog.show();
-                text.setText("确认下发 【二级样机锁车】 延迟 【"+time.getText()+"】 分钟 指令？");
-                type="2";
-                command="二级样机锁车";
+                command="样机锁车";
                 break;
             case R.id.locktime_ly_tcyj:
                 ShowKeyboard.hideKeyboard(time);
                 dialog.show();
-                text.setText("确认下发 【退出样机锁车】指令？");
-                type="3";
-                command="退出样机锁车";
+                text.setText("确认下发 【退出样机】指令？");
+                type="0";
+                command="退出样机";
                 break;
             case R.id.ad_btn_remotelock_cancel:
                 dialog.dismiss();
@@ -341,10 +329,10 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
     //下发锁车指令
     public void RemoteLock(String type){
         HashMap<String,String> proper=new HashMap<>();
-        if(type.equals("3")){
-            type="1";
-            proper.put("Time","0");
-        }else {
+        if(type.equals("0")){
+            proper.put("Time", "0");
+        }
+        else {
             proper.put("Time", time.getText().toString());
         }
         proper.put("OperatorID", sp.getOperatorID());
