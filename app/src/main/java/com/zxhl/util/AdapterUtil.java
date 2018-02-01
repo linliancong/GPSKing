@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.zxhl.entity.Logs;
+
 import java.util.ArrayList;
 
 /**
@@ -19,12 +21,17 @@ public abstract class AdapterUtil<T> extends BaseAdapter {
     private ArrayList<T> mData;
     private int mLayoutRes;         //布局id
 
-    public AdapterUtil(){}
+    public AdapterUtil(String[] data, int opc_list_item){}
     public AdapterUtil(ArrayList<T> mData,int mLayoutRes)
     {
         this.mData=mData;
         this.mLayoutRes=mLayoutRes;
     }
+
+    public AdapterUtil(T data, int opc_list_item) {
+
+    }
+
     @Override
     public int getCount() {
         return mData!=null?mData.size():0;

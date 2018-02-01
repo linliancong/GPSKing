@@ -15,13 +15,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zxhl.entity.Logs;
 import com.zxhl.util.AdapterUtil;
@@ -42,26 +42,22 @@ import java.util.List;
  * Created by Administrator on 2018/1/29.
  */
 
-public class OpcOilEleControl extends StatusBarUtil implements View.OnClickListener,TextWatcher{
+public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,TextWatcher{
 
     private ImgTxtLayout back;
     private AutoCompleteTextView vehicle;
     private TextView veh_info;
     private RelativeLayout visble;
-    private LinearLayout yjdyd;
-    private LinearLayout ejdyd;
-    private LinearLayout yjhfyd;
-    private LinearLayout ejhfyd;
+    private LinearLayout yjyjsc;
+    private LinearLayout ejyjsc;
+    private LinearLayout tcyjsc;
+    private EditText time;
     private ImageView opc_cancel;
 
     private ListView list;
     private LinearLayout scroll_visble;
     private ArrayList<Logs> data;
     private AdapterUtil<Logs> adapter_log;
-
-    private Button oilelecontrol_js;
-    private Button oilelecontrol_jk;
-    private Button oilelecontrol_sc;
 
     private SharedPreferenceUtils sp;
     private Context context;
@@ -80,10 +76,9 @@ public class OpcOilEleControl extends StatusBarUtil implements View.OnClickListe
     private View view;
     private TextView text;
     private int pression=0;
-    private int length=0;
 
-    private RelativeLayout oilelecontrol_ly_sche;
-    private ImageView oilelecontrol_img_sche;
+    private RelativeLayout locktime_ly_sche;
+    private ImageView locktime_img_sche;
     private AnimationDrawable anima;
 
 
@@ -92,9 +87,14 @@ public class OpcOilEleControl extends StatusBarUtil implements View.OnClickListe
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 0x404:
-                    oilelecontrol_ly_sche.setVisibility(View.GONE);
+                    locktime_ly_sche.setVisibility(View.GONE);
                     anima.stop();
-                    data.add(new Logs("服务器有点问题，我们正在全力修复！"));
+                    //scroll_visble.setVisibility(View.VISIBLE);
+                    if((type.equals("1")||type.equals("2"))&&time.getText().length()==0) {
+                        data.add(new Logs("延迟锁车时间为空，请输入时间后重试！"));
+                    }else {
+                        data.add(new Logs("服务器有点问题，我们正在全力修复！"));
+                    }
                     adapter_log.notifyDataSetChanged();
                     break;
                 case 0x001:
@@ -102,33 +102,45 @@ public class OpcOilEleControl extends StatusBarUtil implements View.OnClickListe
                     vehicle.setAdapter(adapter);
                     break;
                 case 0x002:
-                    oilelecontrol_ly_sche.setVisibility(View.GONE);
+                    locktime_ly_sche.setVisibility(View.GONE);
                     anima.stop();
                     visble.setVisibility(View.VISIBLE);
                     scroll_visble.setVisibility(View.VISIBLE);
                     veh_info.setText("【"+vehicle.getText()+"】 车台在线，可执行以下操作：");
                     break;
                 case 0x003:
-                    oilelecontrol_ly_sche.setVisibility(View.GONE);
+                    locktime_ly_sche.setVisibility(View.GONE);
                     anima.stop();
                     visble.setVisibility(View.GONE);
                     veh_info.setText("没有找到 【"+vehicle.getText()+"】 车台的在线信息，可能原因：\n1、该车台不在线。\n2、您输入的车牌号有误。\n3、您没有权限操作该车台。");
                     break;
                 case 0x004:
-                    oilelecontrol_ly_sche.setVisibility(View.GONE);
+                    locktime_ly_sche.setVisibility(View.GONE);
                     anima.stop();
-                    if(remoteLock.equals("1")||remoteLock.equals("2")) {
-                        data.add(new Logs("【"+vehicle.getText()+"】：下发 【" + command + "】指令成功！"));
+                    if(remoteLock.equals("1")) {
+                        if(type.equals("3")) {
+                            data.add(new Logs("【" + vehicle.getText() + "】：下发 【" + command + "】指令成功！"));
+                        }else {
+                            data.add(new Logs("【" + vehicle.getText() + "】：下发 【" + command + "】 延迟 【" + time.getText() + "】 分钟指令成功！"));
+                        }
                         adapter_log.notifyDataSetChanged();
                     }else{
-                        data.add(new Logs("【"+vehicle.getText()+"】：下发 【" + command + "】指令失败！失败原因："+error));
+                        if(type.equals("3")) {
+                            data.add(new Logs("【" + vehicle.getText() + "】：下发 【" + command + "】指令失败！失败原因：" + error));
+                        }else {
+                            data.add(new Logs("【" + vehicle.getText() + "】：下发 【" + command + "】 延迟 【" + time.getText() + "】 分钟指令失败！失败原因：" + error));
+                        }
                         adapter_log.notifyDataSetChanged();
                     }
                     break;
                 case 0x005:
-                    oilelecontrol_ly_sche.setVisibility(View.GONE);
+                    locktime_ly_sche.setVisibility(View.GONE);
                     anima.stop();
-                    data.add(new Logs("【"+vehicle.getText()+"】：下发 【" + command + "】指令失败！请稍后再试。"));
+                    if(type.equals("3")) {
+                        data.add(new Logs("【" + vehicle.getText() + "】：下发 【" + command + "】指令失败！请稍后再试。"));
+                    }else {
+                        data.add(new Logs("【" + vehicle.getText() + "】：下发 【" + command + "】 延迟 【" + time.getText() + "】 分钟 指令失败！请稍后再试。"));
+                    }
                     adapter_log.notifyDataSetChanged();
                     break;
             }
@@ -138,48 +150,31 @@ public class OpcOilEleControl extends StatusBarUtil implements View.OnClickListe
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context=OpcOilEleControl.this;
+        context=OpcLockTime.this;
 
         init();
         getVehicleLic();
         view=getAlert(R.layout.ad_remotelock);
-        if(getIntent().getStringExtra("VehicleLic")!=null) {
-            if (getIntent().getStringExtra("VehicleLic").length() != 0) {
-                length=1;
-                vehicle.setText(getIntent().getStringExtra("VehicleLic"));
-                vehicle.setSelection(vehicle.getText().length());
-                if (getIntent().getIntExtra("IsOnline", 0) == 1) {
-                    pression = 1;
-                    handler.sendEmptyMessage(0x002);
-                } else {
-                    handler.sendEmptyMessage(0x003);
-                }
-            }
-        }
 
 
     }
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.opc_oilelecontrol;
+        return R.layout.opc_locktime;
     }
 
     public void init(){
-        back=findViewById(R.id.oilelecontrol_back);
-        vehicle=findViewById(R.id.oilelecontrol_vehicle);
-        veh_info =findViewById(R.id.oilelecontrol_txt_veh);
-        visble=findViewById(R.id.oilelecontrol_rl_opc);
-        yjdyd =findViewById(R.id.oilelecontrol_ly_yjdyd);
-        ejdyd =findViewById(R.id.oilelecontrol_ly_ejdyd);
-        yjhfyd =findViewById(R.id.oilelecontrol_ly_yjhfyd);
-        ejhfyd =findViewById(R.id.oilelecontrol_ly_ejhfyd);
-        oilelecontrol_js=findViewById(R.id.oilelecontrol_js);
-        oilelecontrol_jk=findViewById(R.id.oilelecontrol_jk);
-        oilelecontrol_sc =findViewById(R.id.oilelecontrol_sc);
+        back=findViewById(R.id.locktime_back);
+        vehicle=findViewById(R.id.locktime_vehicle);
+        veh_info =findViewById(R.id.locktime_txt_veh);
+        visble=findViewById(R.id.locktime_rl_opc);
+        yjyjsc =findViewById(R.id.locktime_ly_yjsc);
+        ejyjsc =findViewById(R.id.locktime_ly_ejsc);
+        tcyjsc=findViewById(R.id.locktime_ly_tcyj);
+        time=findViewById(R.id.locktime_time);
         opc_cancel=findViewById(R.id.opc_cancel);
         opc_cancel.setVisibility(View.GONE);
-        sp=new SharedPreferenceUtils(context, Constants.SAVE_USER);
 
         //日志
         list=findViewById(R.id.opc_list);
@@ -195,23 +190,21 @@ public class OpcOilEleControl extends StatusBarUtil implements View.OnClickListe
         list.setAdapter(adapter_log);
         ShowKeyboard.hideKeyboard(vehicle);
 
-        oilelecontrol_ly_sche =findViewById(R.id.oilelecontrol_ly_sche);
-        oilelecontrol_img_sche =findViewById(R.id.oilelecontrol_img_sche);
-        anima= (AnimationDrawable) oilelecontrol_img_sche.getDrawable();
+        sp=new SharedPreferenceUtils(context, Constants.SAVE_USER);
+
+        locktime_ly_sche =findViewById(R.id.locktime_ly_sche);
+        locktime_img_sche =findViewById(R.id.locktime_img_sche);
+        anima= (AnimationDrawable) locktime_img_sche.getDrawable();
 
         autoVehLic=new ArrayList<>();
 
         vehicle.addTextChangedListener(this);
         opc_cancel.setOnClickListener(this);
 
-        yjdyd.setOnClickListener(this);
-        ejdyd.setOnClickListener(this);
-        yjhfyd.setOnClickListener(this);
-        ejhfyd.setOnClickListener(this);
+        yjyjsc.setOnClickListener(this);
+        ejyjsc.setOnClickListener(this);
+        tcyjsc.setOnClickListener(this);
 
-        oilelecontrol_js.setOnClickListener(this);
-        oilelecontrol_jk.setOnClickListener(this);
-        oilelecontrol_sc.setOnClickListener(this);
 
         back.setOnClickListener(new ImgTxtLayout.OnClickListener() {
             @Override
@@ -223,9 +216,9 @@ public class OpcOilEleControl extends StatusBarUtil implements View.OnClickListe
         vehicle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                oilelecontrol_ly_sche.setVisibility(View.VISIBLE);
-                scroll_visble.setVisibility(View.GONE);
+                locktime_ly_sche.setVisibility(View.VISIBLE);
                 anima.start();
+                scroll_visble.setVisibility(View.GONE);
                 getVheicleIsOnline();
                 ShowKeyboard.hideKeyboard(vehicle);
                 return true;
@@ -236,67 +229,40 @@ public class OpcOilEleControl extends StatusBarUtil implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.oilelecontrol_ly_yjdyd:
+            case R.id.locktime_ly_yjsc:
+                ShowKeyboard.hideKeyboard(time);
                 dialog.show();
-                text.setText("确认下发 【一级断油断电】 指令？");
+                text.setText("确认下发 【一级样机锁车】 延迟 【"+time.getText()+"】 分钟 指令？");
                 type="1";
-                command="一级断油断电";
+                command="一级样机锁车";
                 break;
-            case R.id.oilelecontrol_ly_ejdyd:
-               dialog.show();
-                text.setText("确认下发 【二级断油断电】 指令？");
-                type="3";
-                command="二级断油断电";
-                break;
-            case R.id.oilelecontrol_ly_yjhfyd:
+            case R.id.locktime_ly_ejsc:
+                ShowKeyboard.hideKeyboard(time);
                 dialog.show();
-                text.setText("确认下发 【一级恢复油电】 指令？");
+                text.setText("确认下发 【二级样机锁车】 延迟 【"+time.getText()+"】 分钟 指令？");
                 type="2";
-                command="一级恢复油电";
+                command="二级样机锁车";
                 break;
-            case R.id.oilelecontrol_ly_ejhfyd:
+            case R.id.locktime_ly_tcyj:
+                ShowKeyboard.hideKeyboard(time);
                 dialog.show();
-                text.setText("确认下发 【二级恢复油电】 指令？");
-                type="4";
-                command="二级恢复油电";
+                text.setText("确认下发 【退出样机锁车】指令？");
+                type="3";
+                command="退出样机锁车";
                 break;
             case R.id.ad_btn_remotelock_cancel:
                 dialog.dismiss();
                 break;
             case R.id.ad_btn_remotelock_confirm:
-                RemoteControl(type);
-                oilelecontrol_ly_sche.setVisibility(View.VISIBLE);
+                RemoteLock(type);
+                locktime_ly_sche.setVisibility(View.VISIBLE);
                 anima.start();
+                //scroll_visble.setVisibility(View.GONE);
                 dialog.dismiss();
                 break;
             case R.id.opc_cancel:
                 vehicle.setText("");
                 opc_cancel.setVisibility(View.GONE);
-                break;
-            //服务直达
-            case R.id.oilelecontrol_js:
-                //解锁
-                Intent it1=new Intent(context,OpcUnLock.class);
-                it1.putExtra("VehicleLic",vehicle.getText().toString());
-                it1.putExtra("IsOnline",pression);
-                startActivity(it1);
-                finish();
-                break;
-            case R.id.oilelecontrol_jk:
-                //监控
-                Intent it3=new Intent(context,OpcMonitor.class);
-                it3.putExtra("VehicleLic",vehicle.getText().toString());
-                it3.putExtra("IsOnline",pression);
-                startActivity(it3);
-                finish();
-                break;
-            case R.id.oilelecontrol_sc:
-                //锁车
-                Intent it2=new Intent(context,OpcLock.class);
-                it2.putExtra("VehicleLic",vehicle.getText().toString());
-                it2.putExtra("IsOnline",pression);
-                startActivity(it2);
-                finish();
                 break;
         }
 
@@ -373,21 +339,27 @@ public class OpcOilEleControl extends StatusBarUtil implements View.OnClickListe
     }
 
     //下发锁车指令
-    public void RemoteControl(String type){
+    public void RemoteLock(String type){
         HashMap<String,String> proper=new HashMap<>();
-        proper.put("OperatorID",sp.getOperatorID());
-        proper.put("VehicleLic",vehicle.getText().toString());
-        proper.put("OptType",type);
+        if(type.equals("3")){
+            type="1";
+            proper.put("Time","0");
+        }else {
+            proper.put("Time", time.getText().toString());
+        }
+        proper.put("OperatorID", sp.getOperatorID());
+        proper.put("VehicleLic", vehicle.getText().toString());
+        proper.put("LockLevel", type);
 
-        WebServiceUtils.callWebService(WebServiceUtils.OperaCenter_URL, "RemoteControlByVehicleLic", proper, new WebServiceUtils.WebServiceCallBack() {
+        WebServiceUtils.callWebService(WebServiceUtils.OperaCenter_URL, "SampleLockByVehicleLic", proper, new WebServiceUtils.WebServiceCallBack() {
             @Override
             public void callBack(SoapObject result) {
                 if(result!=null){
                     List<String> list=new ArrayList<String>();
                     SoapObject soapObject= (SoapObject) result.getProperty(0);
                     if(soapObject!=null){
-                        //解锁车、监控：LockResult
-                        remoteLock=soapObject.getProperty("controlState").toString();
+                        //油电控制：controlState
+                        remoteLock=soapObject.getProperty("LockResult").toString();
                         error=soapObject.getProperty("error").toString();
                         handler.sendEmptyMessage(0x004);
                     }
@@ -424,13 +396,10 @@ public class OpcOilEleControl extends StatusBarUtil implements View.OnClickListe
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        if(length==0) {
-            veh_info.setText("功能可搜索车台，查看可执行的操作。试一试吧！");
-            visble.setVisibility(View.GONE);
-            scroll_visble.setVisibility(View.GONE);
-            opc_cancel.setVisibility(View.GONE);
-            pression=0;
-        }
+        veh_info.setText("功能可搜索车台，查看可执行的操作。试一试吧！");
+        visble.setVisibility(View.GONE);
+        scroll_visble.setVisibility(View.GONE);
+        opc_cancel.setVisibility(View.GONE);
     }
 
     @Override
@@ -440,7 +409,6 @@ public class OpcOilEleControl extends StatusBarUtil implements View.OnClickListe
 
     @Override
     public void afterTextChanged(Editable s) {
-        length=0;
         if(vehicle.getText().length()>0){
             opc_cancel.setVisibility(View.VISIBLE);
         }

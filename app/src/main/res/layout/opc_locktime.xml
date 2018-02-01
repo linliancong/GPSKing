@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/oilelecontrol_rl1"
+        android:id="@+id/locktime_rl1"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:background="@color/bg_white"
@@ -15,7 +15,7 @@
 
 
         <com.zxhl.util.ImgTxtLayout
-            android:id="@+id/oilelecontrol_back"
+            android:id="@+id/locktime_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -25,7 +25,7 @@
             zxhl:iconDrawablePress="@mipmap/cs_ic_back_blue_press"
             zxhl:spacing="10dp"
             zxhl:style="iconLeft"
-            zxhl:text="油电控制"
+            zxhl:text="样机锁车"
             zxhl:textSize="18"
             zxhl:textColor="@color/black"
             />
@@ -39,15 +39,15 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/oilelecontrol_ly_sche"
+        android:id="@+id/locktime_ly_sche"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black_pressed"
         android:visibility="gone"
-        android:layout_below="@+id/oilelecontrol_rl1"
+        android:layout_below="@+id/locktime_rl1"
         >
         <ImageView
-            android:id="@+id/oilelecontrol_img_sche"
+            android:id="@+id/locktime_img_sche"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerInParent="true"
@@ -59,12 +59,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/oilelecontrol_rl1"
+        android:layout_below="@+id/locktime_rl1"
         android:background="@color/black_bg"
         >
 
         <LinearLayout
-            android:id="@+id/oilelecontrol_ly1"
+            android:id="@+id/locktime_ly1"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -73,6 +73,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:gravity="center_vertical"
+
             >
             <ImageView
                 android:layout_width="0dp"
@@ -81,7 +82,7 @@
                 android:src="@mipmap/search_bar"
                 />
             <AutoCompleteTextView
-                android:id="@+id/oilelecontrol_vehicle"
+                android:id="@+id/locktime_vehicle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
@@ -102,67 +103,52 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/oilelecontrol_ly2"
+            android:id="@+id/locktime_ly2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/oilelecontrol_ly1"
+            android:layout_below="@+id/locktime_ly1"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
             android:gravity="center"
             android:padding="20dp"
+            android:visibility="gone"
             >
             <Button
-                android:id="@+id/oilelecontrol_sc"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="26dp"
-                android:text="锁车"
-                android:textColor="@color/light_blue_500"
-                android:background="@null"
-                />
-            <View
-                android:layout_width="1px"
-                android:layout_height="16dp"
-                android:background="@color/black_line"
-                android:layout_marginRight="15dp"
-                android:layout_marginLeft="15dp"
-                />
-            <Button
-                android:id="@+id/oilelecontrol_js"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:id="@+id/locktime_js"
+                android:layout_width="40dp"
                 android:layout_height="26dp"
                 android:text="解锁"
                 android:textColor="@color/light_blue_500"
                 android:background="@null"
                 />
-            <View
-                android:layout_width="1px"
-                android:layout_height="16dp"
-                android:background="@color/black_line"
-                android:layout_marginRight="15dp"
-                android:layout_marginLeft="15dp"
-                />
             <Button
-                android:id="@+id/oilelecontrol_jk"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:id="@+id/locktime_jk"
+                android:layout_width="40dp"
                 android:layout_height="26dp"
                 android:text="监控"
                 android:textColor="@color/light_blue_500"
                 android:background="@null"
+                android:layout_marginLeft="20dp"
+
+                />
+            <Button
+                android:id="@+id/locktime_ydkz"
+                android:layout_width="80dp"
+                android:layout_height="26dp"
+                android:text="油电控制"
+                android:textColor="@color/light_blue_500"
+                android:background="@null"
+                android:layout_marginLeft="20dp"
                 />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/oilelecontrol_txt_veh"
+            android:id="@+id/locktime_txt_veh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/oilelecontrol_ly2"
+            android:layout_below="@+id/locktime_ly2"
             android:gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="60dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:text="该功能可搜索车台，查看可执行的操作。试一试吧！"
@@ -171,121 +157,127 @@
             />
 
         <RelativeLayout
-            android:id="@+id/oilelecontrol_rl_opc"
+            android:id="@+id/locktime_rl_opc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/oilelecontrol_txt_veh"
+            android:layout_below="@+id/locktime_txt_veh"
             android:layout_marginTop="30dp"
-            android:gravity="center_horizontal"
             android:visibility="gone"
             >
             <LinearLayout
-                android:id="@+id/oilelecontrol_ly_yjdyd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/lock_back"
+                android:id="@+id/locktime_ly3"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
+                android:background="@drawable/lock_edit"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="60dp"
+                android:padding="10dp"
+                android:gravity="center"
                 >
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/yjdyd"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="一级断油断电"
-                    android:layout_marginLeft="10dp"
-                    />
+                    <EditText
+                        android:id="@+id/locktime_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="请输入延时锁车时间（分）"
+                        android:textSize="14dp"
+                        android:inputType="number"
+                        />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/oilelecontrol_ly_ejdyd"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/lock_back"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:layout_toRightOf="@+id/oilelecontrol_ly_yjdyd"
-                android:layout_marginLeft="20dp"
+                android:layout_below="@+id/locktime_ly3"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="20dp"
                 >
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ejdyd"
-                    />
-                <TextView
+                <LinearLayout
+                    android:id="@+id/locktime_ly_yjsc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="二级断油断电"
-                    android:layout_marginLeft="10dp"
-                    />
-            </LinearLayout>
+                    android:background="@drawable/lock_back"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    >
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/yjsc"
+                        />
+                    <TextView
+                        android:id="@+id/locktime_yjsc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="一级样机锁车"
+                        android:layout_marginLeft="10dp"
+                        />
+                </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/oilelecontrol_ly_yjhfyd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/lock_back"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:layout_below="@+id/oilelecontrol_ly_yjdyd"
-                android:layout_marginTop="15dp"
-                >
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/yjyd"
-                    />
-                <TextView
+                <LinearLayout
+                    android:id="@+id/locktime_ly_ejsc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="一级恢复油电"
-                    android:layout_marginLeft="10dp"
-                    />
-            </LinearLayout>
+                    android:background="@drawable/lock_back"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_toRightOf="@+id/locktime_ly_yjsc"
+                    android:layout_marginLeft="20dp"
+                    >
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ejsc"
+                        />
+                    <TextView
+                        android:id="@+id/locktime_ejsc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="二级样机锁车"
+                        android:layout_marginLeft="10dp"
+                        />
+                </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/oilelecontrol_ly_ejhfyd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/lock_back"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:layout_toRightOf="@+id/oilelecontrol_ly_yjhfyd"
-                android:layout_marginLeft="20dp"
-                android:layout_below="@+id/oilelecontrol_ly_yjdyd"
-                android:layout_marginTop="15dp"
-                >
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ejyd"
-                    />
-                <TextView
+                <LinearLayout
+                    android:id="@+id/locktime_ly_tcyj"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="二级恢复油电"
-                    android:layout_marginLeft="10dp"
-                    />
-            </LinearLayout>
+                    android:background="@drawable/lock_back"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_below="@+id/locktime_ly_yjsc"
+                    android:layout_marginTop="15dp"
+                    >
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/js"
+                        />
+                    <TextView
+                        android:id="@+id/locktime_tcyj"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="退出样机锁车"
+                        android:layout_marginLeft="10dp"
+                        />
+                </LinearLayout>
+            </RelativeLayout>
+
+
         </RelativeLayout>
 
 
@@ -293,7 +285,7 @@
             android:id="@+id/scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/oilelecontrol_rl_opc"
+            android:layout_below="@+id/locktime_rl_opc"
             android:orientation="vertical"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"

@@ -358,8 +358,8 @@ public class DownloadService extends Service{
             //最后在notificationmanager中创建该通知渠道
             manager.createNotificationChannel(mChannel);
 
-           /* Log.i("SOUND:",mChannel.getSound().toString());
-            Log.i("SOUND:",mChannel.getAudioAttributes().toString());*/
+           /* Logs.i("SOUND:",mChannel.getSound().toString());
+            Logs.i("SOUND:",mChannel.getAudioAttributes().toString());*/
 
             bd = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setTicker("开始下载")

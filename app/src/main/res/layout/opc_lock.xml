@@ -92,6 +92,13 @@
                 android:dropDownVerticalOffset="10dp"
                 android:dropDownHeight="200dp"
                 />
+            <ImageView
+                android:id="@+id/opc_cancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@mipmap/ic_cancel_toolbar"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -101,35 +108,51 @@
             android:layout_below="@+id/lock_ly1"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:gravity="center"
             android:padding="20dp"
             >
             <Button
                 android:id="@+id/lock_js"
-                android:layout_width="40dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="26dp"
                 android:text="解锁"
                 android:textColor="@color/light_blue_500"
                 android:background="@null"
                 />
+            <View
+                android:layout_width="1px"
+                android:layout_height="16dp"
+                android:background="@color/black_line"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                />
             <Button
                 android:id="@+id/lock_jk"
-                android:layout_width="40dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="26dp"
                 android:text="监控"
                 android:textColor="@color/light_blue_500"
                 android:background="@null"
-                android:layout_marginLeft="20dp"
-
+                />
+            <View
+                android:layout_width="1px"
+                android:layout_height="16dp"
+                android:background="@color/black_line"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
                 />
             <Button
                 android:id="@+id/lock_ydkz"
-                android:layout_width="80dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="26dp"
                 android:text="油电控制"
                 android:textColor="@color/light_blue_500"
                 android:background="@null"
-                android:layout_marginLeft="20dp"
                 />
         </LinearLayout>
 
@@ -178,7 +201,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="一级锁车"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="10dp"
                     />
             </LinearLayout>
 
@@ -194,7 +217,7 @@
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 android:layout_toRightOf="@+id/lock_ly_yjsc"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="20dp"
                 >
                 <ImageView
                     android:layout_width="30dp"
@@ -206,22 +229,52 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="二级锁车"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="10dp"
                     />
             </LinearLayout>
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/lock_txt_info"
+        <LinearLayout
+            android:id="@+id/scroll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@+id/lock_rl_opc"
-            android:gravity="center"
-            android:layout_marginTop="50dp"
-            android:text="下发 【XXX】 指令成功！"
-            android:textSize="14sp"
+            android:orientation="vertical"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
             android:visibility="gone"
-            />
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="指令下发记录:"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/lock_back"
+                >
+                <ListView
+                    android:id="@+id/opc_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="#00000000"
+                    android:cacheColorHint="#00000000"
+                    android:scrollbars="none"
+                    android:background="@color/bg_white"
+                    android:listSelector="#00000000"
+                    android:stackFromBottom="false"
+                    android:transcriptMode="alwaysScroll"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
 
     </RelativeLayout>

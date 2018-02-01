@@ -35,6 +35,7 @@ public class OperatingCenter extends StatusBarUtil implements View.OnClickListen
     private RelativeLayout unlock;
     private RelativeLayout monitor;
     private RelativeLayout oil_ele;
+    private RelativeLayout lock_time;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class OperatingCenter extends StatusBarUtil implements View.OnClickListen
         unlock=findViewById(R.id.opc_ly_js);
         monitor=findViewById(R.id.opc_ly_jk);
         oil_ele=findViewById(R.id.opc_ly_yd);
+        lock_time=findViewById(R.id.opc_ly_dssc);
         back=findViewById(R.id.opc_imgtxt_back);
 
         location.setOnClickListener(this);
@@ -53,6 +55,7 @@ public class OperatingCenter extends StatusBarUtil implements View.OnClickListen
         unlock.setOnClickListener(this);
         monitor.setOnClickListener(this);
         oil_ele.setOnClickListener(this);
+        lock_time.setOnClickListener(this);
         back.setOnClickListener(new ImgTxtLayout.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +96,11 @@ public class OperatingCenter extends StatusBarUtil implements View.OnClickListen
                 //油电控制
                 Intent it5=new Intent(context,OpcOilEleControl.class);
                 startActivity(it5);
+                break;
+            case R.id.opc_ly_dssc:
+                //样机锁车
+                Intent it6=new Intent(context,OpcLockTime.class);
+                startActivity(it6);
                 break;
 
         }

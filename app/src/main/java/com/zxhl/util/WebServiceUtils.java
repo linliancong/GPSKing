@@ -48,6 +48,7 @@ public class WebServiceUtils {
                                       final WebServiceCallBack webServiceCallBack) {
         //创建SoapObject对象
         final SoapObject soapObject=new SoapObject(NAMESPACE,methodName);
+
         //添加查询参数
         if(proper!=null)
         {
@@ -62,8 +63,8 @@ public class WebServiceUtils {
         //设置调用.net开发的WebService
         envelope.setOutputSoapObject(soapObject);
         envelope.dotNet=true;
-        //创建HttpsTransportSE对象，传递WebService服务器地址
-        final HttpTransportSE httpsTransportSE=new HttpTransportSE(url);
+        //创建HttpsTransportSE对象，传递WebService服务器地址,设置超时2分钟
+        final HttpTransportSE httpsTransportSE=new HttpTransportSE(url,1000*60*2);
         httpsTransportSE.debug=true;
         //用于子线程与主线程通信
         final Handler hanlder=new Handler(){
