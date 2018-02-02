@@ -213,6 +213,13 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".QuerySyGpsyc">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYGPSYC"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".OperatingCenter">
             <intent-filter>
                 <action android:name="android.intent.action.OPERATINGCENTER"/>
@@ -258,6 +265,13 @@
         <activity android:name=".OpcLockTime">
             <intent-filter>
                 <action android:name="android.intent.action.OPCLOCKTIME"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".OpcLog">
+            <intent-filter>
+                <action android:name="android.intent.action.OPCLOG"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>

@@ -7,11 +7,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -23,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zxhl.entity.CarInfo;
+import com.zxhl.entity.CodeHistory;
 import com.zxhl.util.AdapterUtil;
 import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
@@ -40,10 +39,10 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by Administrator on 2018/1/17.
+ * Created by Administrator on 2018/1/29.
  */
 
-public class QuerySyYycl extends StatusBarUtil implements View.OnClickListener,TextWatcher{
+public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWatcher{
 
     //控件
     private ListView list;
@@ -64,8 +63,8 @@ public class QuerySyYycl extends StatusBarUtil implements View.OnClickListener,T
     private ArrayAdapter<String> adapter;
 
     //查询等待
-    private RelativeLayout yycl_ly_sche;
-    private ImageView yycl_img_sche;
+    private RelativeLayout log_ly_sche;
+    private ImageView log_img_sche;
     private AnimationDrawable anima;
 
     private SharedPreferenceUtils sp;
@@ -73,11 +72,11 @@ public class QuerySyYycl extends StatusBarUtil implements View.OnClickListener,T
 
     private List<List<String>> info;
     private AdapterUtil adapterUtil;
-    private ArrayList<CarInfo> carInfos;
+    private ArrayList<CodeHistory> Log;
 
     private int page=1;
     private int count=0;
-    private static final int PAGE_COUNT=5;
+    private static final int PAGE_COUNT=20;
 
     //是否用车牌号查询
     private boolean isVehicleLic=false;
@@ -92,14 +91,14 @@ public class QuerySyYycl extends StatusBarUtil implements View.OnClickListener,T
             switch (msg.what) {
                 case 0x403:
                     list.setVisibility(View.GONE);
-                    yycl_ly_sche.setVisibility(View.GONE);
+                    log_ly_sche.setVisibility(View.GONE);
                     anima.stop();
                     img.setVisibility(View.VISIBLE);
                     text.setVisibility(View.VISIBLE);
                     break;
                 case 0x404:
                     list.setVisibility(View.GONE);
-                    yycl_ly_sche.setVisibility(View.GONE);
+                    log_ly_sche.setVisibility(View.GONE);
                     anima.stop();
                     img.setVisibility(View.VISIBLE);
                     text.setVisibility(View.VISIBLE);
@@ -113,7 +112,7 @@ public class QuerySyYycl extends StatusBarUtil implements View.OnClickListener,T
                     }
                     showInfo();
                     list.setVisibility(View.VISIBLE);
-                    yycl_ly_sche.setVisibility(View.GONE);
+                    log_ly_sche.setVisibility(View.GONE);
                     anima.stop();
                     isRefresh=false;
                     isData=true;
@@ -143,48 +142,54 @@ public class QuerySyYycl extends StatusBarUtil implements View.OnClickListener,T
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.query_yycl);
+        //setContentView(R.layout.query_log);
 
-        context=QuerySyYycl.this;
+        context=OpcLog.this;
 
         init();
-        /*yycl_ly_sche.setVisibility(View.VISIBLE);
-        anima.start();
-        getOrderRecord();*/
         getVehicleLic();
+        if(getIntent().getStringExtra("VehicleLic")!=null) {
+            if (getIntent().getStringExtra("VehicleLic").length() != 0) {
+                vehicle.setText(getIntent().getStringExtra("VehicleLic"));
+                vehicle.setSelection(vehicle.getText().length());
+                list.setVisibility(View.GONE);
+                log_ly_sche.setVisibility(View.VISIBLE);
+                anima.start();
+                getCodeHistory();
+            }
+        }
     }
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.query_yycl;
+        return R.layout.opc_log;
     }
 
     public void init(){
         sp=new SharedPreferenceUtils(context, Constants.SAVE_USER);
-        back=findViewById(R.id.yycl_imgtxt_title);
-        list=findViewById(R.id.yycl_list);
-        img=findViewById(R.id.yycl_img);
-        text=findViewById(R.id.yycl_text);
-        refresh=findViewById(R.id.yycl_refresh);
+        back=findViewById(R.id.log_imgtxt_title);
+        list=findViewById(R.id.log_list);
+        img=findViewById(R.id.log_img);
+        text=findViewById(R.id.log_text);
+        refresh=findViewById(R.id.log_refresh);
 
         //顶部操作栏
-        back=findViewById(R.id.yycl_imgtxt_title);
-        img1=findViewById(R.id.yycl_edit_img);
-        img2=findViewById(R.id.yycl_img_img);
-        title=findViewById(R.id.yycl_txt_title);
-        vehicle=findViewById(R.id.yycl_auto_vehiclelic);
-        search=findViewById(R.id.yycl_img_serch);
-        getVeh=findViewById(R.id.yycl_btn_get);
+        back=findViewById(R.id.log_imgtxt_title);
+        img1=findViewById(R.id.log_edit_img);
+        img2=findViewById(R.id.log_img_img);
+        title=findViewById(R.id.log_txt_title);
+        vehicle=findViewById(R.id.log_auto_vehiclelic);
+        search=findViewById(R.id.log_img_serch);
+        getVeh=findViewById(R.id.log_btn_get);
 
-        yycl_ly_sche=findViewById(R.id.yycl_ly_sche);
-        yycl_img_sche=findViewById(R.id.yycl_img_sche);
-        anima= (AnimationDrawable) yycl_img_sche.getDrawable();
+        log_ly_sche=findViewById(R.id.log_ly_sche);
+        log_img_sche=findViewById(R.id.log_img_sche);
+        anima= (AnimationDrawable) log_img_sche.getDrawable();
 
-        carInfos=new ArrayList<>();
+        Log =new ArrayList<>();
 
         search.setOnClickListener(this);
         getVeh.setOnClickListener(this);
-        //vehicle.addTextChangedListener(this);
 
         back.setOnClickListener(new ImgTxtLayout.OnClickListener() {
             @Override
@@ -219,57 +224,19 @@ public class QuerySyYycl extends StatusBarUtil implements View.OnClickListener,T
             }
         });
 
-        //设置一页显示的条目
-        //refresh.setItemCount(PAGE_COUNT);
-
-        // 手动调用,通知系统去测量
-        /*refresh.measure(0, 0);
-        refresh.setRefreshing(true);*/
-
-       /* refresh.setOnLoadMoreListener(new SwipeRefreshView.OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                            if (!isRefresh) {
-                                isRefresh = true;
-                                if (info.size() > PAGE_COUNT && info.size() > page * PAGE_COUNT) {
-                                    isVehicleLic = false;
-                                    page += 1;
-                                    handler.sendEmptyMessage(0x004);
-                                    //getSampleRecord();
-                                    //显示或隐藏刷新进度条
-                                    refresh.setRefreshing(true);
-                                    //加载完设置不显示
-                                    refresh.setLoading(true);
-                                } else {
-                                    isData=true;
-                                    isRefresh = false;
-                                    refresh.setRefreshing(false);
-                                    //加载完设置不显示
-                                    refresh.setLoading(false);
-                                }
-                            }
-                    }
-                },2000);
-            }
-        });*/
-
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.yycl_img_serch:
+            case R.id.log_img_serch:
                 title.setVisibility(View.GONE);
                 search.setVisibility(View.GONE);
                 img1.setVisibility(View.VISIBLE);
                 img2.setVisibility(View.VISIBLE);
                 vehicle.setVisibility(View.VISIBLE);
                 break;
-            case R.id.yycl_btn_get:
+            case R.id.log_btn_get:
                 ShowKeyboard.hideKeyboard(vehicle);
                 if(vehicle.getText().length()!=0) {
                     int permiss = 0;
@@ -283,24 +250,24 @@ public class QuerySyYycl extends StatusBarUtil implements View.OnClickListener,T
                         isData = false;
                         isVehicleLic = true;
                         list.setVisibility(View.GONE);
-                        yycl_ly_sche.setVisibility(View.VISIBLE);
+                        log_ly_sche.setVisibility(View.VISIBLE);
                         anima.start();
-                        getOrderRecord();
+                        getCodeHistory();
                         title.setVisibility(View.VISIBLE);
                         search.setVisibility(View.VISIBLE);
                         img1.setVisibility(View.GONE);
                         img2.setVisibility(View.GONE);
                         vehicle.setVisibility(View.GONE);
                     } else {
-                        Toast.makeText(QuerySyYycl.this, "机号输入有误或者您没有权限操作", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpcLog.this, "机号输入有误或者您没有权限操作", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else
                 {
                     list.setVisibility(View.GONE);
-                    yycl_ly_sche.setVisibility(View.VISIBLE);
+                    log_ly_sche.setVisibility(View.VISIBLE);
                     anima.start();
-                    getOrderRecord();
+                    getCodeHistory();
                     title.setVisibility(View.VISIBLE);
                     search.setVisibility(View.VISIBLE);
                     img1.setVisibility(View.GONE);
@@ -312,14 +279,14 @@ public class QuerySyYycl extends StatusBarUtil implements View.OnClickListener,T
 
     }
 
-    //获取样机车辆列表
-    private void getOrderRecord(){
+    //获取指令下发记录列表
+    private void getCodeHistory(){
         HashMap<String,String> proper=new HashMap<>();
         proper.put("OperatorID",sp.getOperatorID());
         proper.put("VehicleLic",vehicle.getText().toString());
         //vehicle.setText("");
 
-        WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetOrderRecord", proper, new WebServiceUtils.WebServiceCallBack() {
+        WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetCodeHistory", proper, new WebServiceUtils.WebServiceCallBack() {
             @Override
             public void callBack(SoapObject result) {
                 if(result!=null){
@@ -349,6 +316,8 @@ public class QuerySyYycl extends StatusBarUtil implements View.OnClickListener,T
     private List<List<String>> parase(SoapObject result){
         List<List<String>> lists=new ArrayList<>();
         List<String> list;
+        String type="";
+        String[] types=new String[]{};
         SoapObject soap= (SoapObject) result.getProperty(0);
         if(soap==null) {
             return null;
@@ -359,6 +328,57 @@ public class QuerySyYycl extends StatusBarUtil implements View.OnClickListener,T
             list.add(soapObject.getProperty(0).toString());
             list.add(soapObject.getProperty(1).toString());
             list.add(soapObject.getProperty(2).toString());
+            types=soapObject.getProperty(3).toString().split(",");
+            if(types.length==1) {
+                switch (types[0]) {
+                    case "锁车监控0":
+                        type = "全部解锁";
+                        break;
+                    case "锁车监控1":
+                        type = "一级锁车";
+                        break;
+                    case "锁车监控2":
+                        type = "二级锁车";
+                        break;
+                    case "锁车监控3":
+                        type = "一级解锁";
+                        break;
+                    case "锁车监控4":
+                        type = "二级解锁";
+                        break;
+                    case "锁车监控5":
+                        type = "退出监控";
+                        break;
+                    case "锁车监控6":
+                        type = "进入监控";
+                        break;
+                    case "断油断电1":
+                        type = "一级断油电";
+                        break;
+                    case "断油断电2":
+                        type = "一级恢复油电";
+                        break;
+                    case "断油断电3":
+                        type = "二级断油电";
+                        break;
+                    case "断油断电4":
+                        type = "二级恢复油电";
+                        break;
+                }
+            }
+            else
+            {
+                switch (types[1]) {
+                    case "0":
+                        type="退出样机模式";
+                        break;
+                    case "1":
+                        type="进入样机模式";
+                        break;
+                }
+            }
+            list.add(type);
+            list.add(soapObject.getProperty(4).toString());
             lists.add(list);
         }
         return lists;
@@ -399,40 +419,32 @@ public class QuerySyYycl extends StatusBarUtil implements View.OnClickListener,T
 
     public void showInfo(){
         int page_last=0;
-        //if(isVehicleLic)
-        {
-            carInfos = new ArrayList<>();
-        }
-        Collections.reverse(carInfos);
+        Log = new ArrayList<>();
+
+        Collections.reverse(Log);
         for(int i=0;i<page*PAGE_COUNT;i++) {
             if(i==info.size()){
                 break;
             }else {
-                carInfos.add(new CarInfo(info.get(i).get(0), info.get(i).get(1), info.get(i).get(2), "剩余天数：", "最后位置：","车牌号："));
+                Log.add(new CodeHistory(info.get(i).get(0), info.get(i).get(1), info.get(i).get(2), info.get(i).get(3), info.get(i).get(4)));
             }
         }
 
-        Collections.reverse(carInfos);
+        Collections.reverse(Log);
 
-        //if(page==1)
-        {
-            adapterUtil=new AdapterUtil<CarInfo>(carInfos,R.layout.query_clxx_item){
-                @Override
-                public void bindView(ViewHolder holder, CarInfo obj) {
-                    holder.setText(R.id.clxx_item_vehicle_title,obj.getVehicle_title());
-                    holder.setText(R.id.clxx_item_vehicle,obj.getVehicle());
-                    holder.setText(R.id.clxx_item_time_title,obj.getTime_title());
-                    holder.setText(R.id.clxx_item_time,obj.getTime());
-                    holder.setText(R.id.clxx_item_info_title,obj.getInfo_title());
-                    holder.setText(R.id.clxx_item_info,obj.getInfo());
-                }
-            };
-            list.setAdapter(adapterUtil);
-            list.setSelection(PAGE_COUNT-1);
-        }
-        /*else {
-            adapterUtil.notifyDataSetChanged();
-        }*/
+        adapterUtil=new AdapterUtil<CodeHistory>(Log,R.layout.opc_log_item){
+            @Override
+            public void bindView(ViewHolder holder, CodeHistory obj) {
+                holder.setText(R.id.log_item_vehicle,obj.getVehicleLic());
+                holder.setText(R.id.log_item_type,obj.getOperaProject());
+                holder.setText(R.id.log_item_result,obj.getOperaResult());
+                holder.setText(R.id.log_item_time,obj.getOperatorTime());
+                holder.setText(R.id.log_item_operator,obj.getOperatorName());
+            }
+
+        };
+        list.setAdapter(adapterUtil);
+        list.setSelection(PAGE_COUNT-1);
 
         if(page==count){
             page_last=info.size()%PAGE_COUNT;

@@ -92,6 +92,8 @@ public class OpcLocation extends StatusBarUtil implements AMapLocationListener,L
     private ImageView opc_img_sche;
     private AnimationDrawable anima;
 
+    private int pression=0;
+
     Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -200,6 +202,22 @@ public class OpcLocation extends StatusBarUtil implements AMapLocationListener,L
         });
 
         getVehicleLic();
+
+        if(getIntent().getStringExtra("VehicleLic")!=null) {
+            if (getIntent().getStringExtra("VehicleLic").length() != 0) {
+                vehicle.setText(getIntent().getStringExtra("VehicleLic"));
+                vehicle.setSelection(vehicle.getText().length());
+                if (getIntent().getIntExtra("IsOnline", 0) == 1) {
+                    getPoi();
+                    opc_ly_sche.setVisibility(View.VISIBLE);
+                    map.setVisibility(View.GONE);
+                    anima.start();
+                } else {
+                    Toast.makeText(OpcLocation.this,"车辆不在线",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
 
 
     }

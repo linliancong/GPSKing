@@ -60,6 +60,9 @@ public class OpcLock extends StatusBarUtil implements View.OnClickListener,TextW
     private Button lock_js;
     private Button lock_jk;
     private Button lock_ydkz;
+    private Button lock_ssdw;
+    private Button lock_yjgl;
+    private Button lock_log;
 
     private SharedPreferenceUtils sp;
     private Context context;
@@ -173,6 +176,9 @@ public class OpcLock extends StatusBarUtil implements View.OnClickListener,TextW
         lock_js=findViewById(R.id.lock_js);
         lock_jk=findViewById(R.id.lock_jk);
         lock_ydkz=findViewById(R.id.lock_ydkz);
+        lock_ssdw=findViewById(R.id.lock_ssdw);
+        lock_yjgl=findViewById(R.id.lock_yjgl);
+        lock_log=findViewById(R.id.lock_log);
         opc_cancel=findViewById(R.id.opc_cancel);
         opc_cancel.setVisibility(View.GONE);
         sp=new SharedPreferenceUtils(context, Constants.SAVE_USER);
@@ -206,6 +212,9 @@ public class OpcLock extends StatusBarUtil implements View.OnClickListener,TextW
         lock_js.setOnClickListener(this);
         lock_jk.setOnClickListener(this);
         lock_ydkz.setOnClickListener(this);
+        lock_ssdw.setOnClickListener(this);
+        lock_yjgl.setOnClickListener(this);
+        lock_log.setOnClickListener(this);
 
         back.setOnClickListener(new ImgTxtLayout.OnClickListener() {
             @Override
@@ -279,6 +288,28 @@ public class OpcLock extends StatusBarUtil implements View.OnClickListener,TextW
                 it3.putExtra("IsOnline",pression);
                 startActivity(it3);
                 finish();
+                break;
+            case R.id.lock_ssdw:
+                //实时定位
+                Intent it4=new Intent(context,OpcLocation.class);
+                it4.putExtra("VehicleLic",vehicle.getText().toString());
+                it4.putExtra("IsOnline",pression);
+                startActivity(it4);
+                break;
+            case R.id.lock_yjgl:
+                //样机管理
+                Intent it5=new Intent(context,OpcLockTime.class);
+                it5.putExtra("VehicleLic",vehicle.getText().toString());
+                it5.putExtra("IsOnline",pression);
+                startActivity(it5);
+                finish();
+                break;
+            case R.id.lock_log:
+                //指令下发记录
+                Intent it6=new Intent(context,OpcLog.class);
+                it6.putExtra("VehicleLic",vehicle.getText().toString());
+                it6.putExtra("IsOnline",pression);
+                startActivity(it6);
                 break;
         }
 

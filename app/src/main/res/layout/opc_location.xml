@@ -113,7 +113,7 @@
         android:id="@+id/opc_ly_sche"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black_pressed"
+        android:background="@color/bg_gray_opc"
         android:visibility="gone"
         android:layout_below="@+id/opc_ly_title"
         >

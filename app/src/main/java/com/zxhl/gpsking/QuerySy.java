@@ -70,17 +70,22 @@ public class QuerySy extends Fragment implements View.OnClickListener {
         mData.add(new Icon(R.drawable.gkxx,"工况信息"));
         mData.add(new Icon(R.drawable.bbtj,"报表统计"));
         mData.add(new Icon(R.drawable.yjcl,"样机车辆"));
-        mData.add(new Icon(R.drawable.bjxx,"报警信息"));
+        mData.add(new Icon(R.drawable.gpsyc,"GPS异常"));
         mData.add(new Icon(R.drawable.scxx,"锁车信息"));
         mData.add(new Icon(R.drawable.bytx,"保养提醒"));
         mData.add(new Icon(R.drawable.sbxx,"设备信息"));
         mData.add(new Icon(R.drawable.yycl,"预约车辆"));
         if(sp.getRoleID().equals("1")) {
+            mData.add(new Icon(R.drawable.bjxx,"报警信息"));
             mData.add(new Icon(R.drawable.yyzx, "运营中心"));
+            mData.add(new Icon(0, ""));
+            mData.add(new Icon(0, ""));
+            mData.add(new Icon(0, ""));
         }
         else {
             mData.add(new Icon(0, ""));
         }
+
 
         adapter=new AdapterUtil<Icon>(mData,R.layout.item_grid_icon) {
             @Override
@@ -128,8 +133,8 @@ public class QuerySy extends Fragment implements View.OnClickListener {
                         startActivity(it5);
                         break;
                     case 6:
-                        //报警信息
-                        Intent it6=new Intent(context,QuerySyBjxx.class);
+                        //GPS异常
+                        Intent it6=new Intent(context,QuerySyGpsyc.class);
                         startActivity(it6);
                         break;
                     case 7:
@@ -153,10 +158,15 @@ public class QuerySy extends Fragment implements View.OnClickListener {
                         startActivity(it10);
                         break;
                     case 11:
+                        //报警设备
+                        Intent it11=new Intent(context,QuerySyBjxx.class);
+                        startActivity(it11);
+                        break;
+                    case 12:
                         //运营中心
                         if(sp.getRoleID().equals("1")) {
-                            Intent it11=new Intent(context,OperatingCenter.class);
-                            startActivity(it11);
+                            Intent it12=new Intent(context,OperatingCenter.class);
+                            startActivity(it12);
                         }
                         else {}
 

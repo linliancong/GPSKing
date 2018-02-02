@@ -25,7 +25,7 @@
             zxhl:iconDrawablePress="@mipmap/cs_ic_back_blue_press"
             zxhl:spacing="10dp"
             zxhl:style="iconLeft"
-            zxhl:text="油电控制"
+            zxhl:text="远程遥控"
             zxhl:textSize="18"
             zxhl:textColor="@color/black"
             />
@@ -38,23 +38,6 @@
             />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/oilelecontrol_ly_sche"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black_pressed"
-        android:visibility="gone"
-        android:layout_below="@+id/oilelecontrol_rl1"
-        >
-        <ImageView
-            android:id="@+id/oilelecontrol_img_sche"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/anima_await"
-            />
-
-    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -105,55 +88,111 @@
             android:id="@+id/oilelecontrol_ly2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_below="@+id/oilelecontrol_ly1"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:gravity="center"
             android:padding="20dp"
             >
-            <Button
-                android:id="@+id/oilelecontrol_sc"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="26dp"
-                android:text="锁车"
-                android:textColor="@color/light_blue_500"
-                android:background="@null"
-                />
-            <View
-                android:layout_width="1px"
-                android:layout_height="16dp"
-                android:background="@color/black_line"
-                android:layout_marginRight="15dp"
-                android:layout_marginLeft="15dp"
-                />
-            <Button
-                android:id="@+id/oilelecontrol_js"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="26dp"
-                android:text="解锁"
-                android:textColor="@color/light_blue_500"
-                android:background="@null"
-                />
-            <View
-                android:layout_width="1px"
-                android:layout_height="16dp"
-                android:background="@color/black_line"
-                android:layout_marginRight="15dp"
-                android:layout_marginLeft="15dp"
-                />
-            <Button
-                android:id="@+id/oilelecontrol_jk"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="26dp"
-                android:text="监控"
-                android:textColor="@color/light_blue_500"
-                android:background="@null"
-                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <Button
+                    android:id="@+id/oilelecontrol_sc"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="26dp"
+                    android:text="锁车"
+                    android:textColor="@color/light_blue_500"
+                    android:background="@null"
+                    />
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="16dp"
+                    android:background="@color/black_line"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="15dp"
+                    />
+                <Button
+                    android:id="@+id/oilelecontrol_js"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="26dp"
+                    android:text="解锁"
+                    android:textColor="@color/light_blue_500"
+                    android:background="@null"
+                    />
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="16dp"
+                    android:background="@color/black_line"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="15dp"
+                    />
+                <Button
+                    android:id="@+id/oilelecontrol_jk"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="26dp"
+                    android:text="监控"
+                    android:textColor="@color/light_blue_500"
+                    android:background="@null"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                >
+                <Button
+                    android:id="@+id/oilelecontrol_ssdw"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="26dp"
+                    android:text="实时定位"
+                    android:textColor="@color/light_blue_500"
+                    android:background="@null"
+                    />
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="16dp"
+                    android:background="@color/black_line"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="15dp"
+                    />
+                <Button
+                    android:id="@+id/oilelecontrol_yjgl"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="26dp"
+                    android:text="样机管理"
+                    android:textColor="@color/light_blue_500"
+                    android:background="@null"
+                    />
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="16dp"
+                    android:background="@color/black_line"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="15dp"
+                    />
+                <Button
+                    android:id="@+id/oilelecontrol_log"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="26dp"
+                    android:text="指令记录"
+                    android:textColor="@color/light_blue_500"
+                    android:background="@null"
+                    />
+            </LinearLayout>
+
         </LinearLayout>
 
         <TextView
@@ -334,6 +373,32 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/oilelecontrol_ly_sche"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_gray_opc"
+        android:visibility="gone"
+        android:layout_below="@+id/oilelecontrol_rl1"
+        >
+        <ImageView
+            android:id="@+id/oilelecontrol_img_sche"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/anima_await"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="指令下发中，请稍后..."
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_below="@+id/oilelecontrol_img_sche"
+            android:layout_centerInParent="true"
+            />
 
+    </RelativeLayout>
 
 </RelativeLayout>

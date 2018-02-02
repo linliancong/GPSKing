@@ -93,54 +93,7 @@
                     />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/opc_ly_dssc"
-            android:layout_width="wrap_content"
-            android:layout_height="46dp"
-            android:paddingRight="15dp"
-            android:paddingLeft="15dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/sy_setting_layout_pressed"
-            android:layout_below="@+id/opc_ly_ssdw"
-            android:clickable="true"
-            android:focusable="true"
-            >
 
-            <ImageView
-                android:id="@+id/opc_img_dssc"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/dssc"
-                android:layout_centerVertical="true"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="样机锁车"
-                android:layout_toRightOf="@+id/opc_img_dssc"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                />
-
-            <com.zxhl.util.ImgTxtLayout
-                android:id="@+id/opc_imgtxt_dssc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                zxhl:iconDrawable="@mipmap/cs_arrow_right"
-                zxhl:style="iconRight"
-                zxhl:textSize="12"
-                zxhl:textColor="@color/black_overlay"
-                />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/black_line"
-                android:layout_alignParentBottom="true"
-                />
-        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/opc_ly_sc"
@@ -150,7 +103,7 @@
             android:paddingLeft="15dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/sy_setting_layout_pressed"
-            android:layout_below="@+id/opc_ly_dssc"
+            android:layout_below="@+id/opc_ly_ssdw"
             android:clickable="true"
             android:focusable="true"
             >
@@ -311,7 +264,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="油电控制"
+                android:text="远程遥控"
                 android:layout_toRightOf="@+id/opc_img_yd"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
@@ -319,6 +272,103 @@
 
             <com.zxhl.util.ImgTxtLayout
                 android:id="@+id/opc_imgtxt_yd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                zxhl:iconDrawable="@mipmap/cs_arrow_right"
+                zxhl:style="iconRight"
+                zxhl:textSize="12"
+                zxhl:textColor="@color/black_overlay"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/black_line"
+                android:layout_alignParentBottom="true"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/opc_ly_dssc"
+            android:layout_width="wrap_content"
+            android:layout_height="46dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:background="@drawable/sy_setting_layout_pressed"
+            android:layout_below="@+id/opc_ly_yd"
+            android:clickable="true"
+            android:focusable="true"
+            >
+
+            <ImageView
+                android:id="@+id/opc_img_dssc"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/dssc"
+                android:layout_centerVertical="true"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="样机管理"
+                android:layout_toRightOf="@+id/opc_img_dssc"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                />
+
+            <com.zxhl.util.ImgTxtLayout
+                android:id="@+id/opc_imgtxt_dssc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                zxhl:iconDrawable="@mipmap/cs_arrow_right"
+                zxhl:style="iconRight"
+                zxhl:textSize="12"
+                zxhl:textColor="@color/black_overlay"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/black_line"
+                android:layout_alignParentBottom="true"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/opc_ly_jl"
+            android:layout_width="wrap_content"
+            android:layout_height="46dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/sy_setting_layout_pressed"
+            android:layout_below="@+id/opc_ly_dssc"
+            android:clickable="true"
+            android:focusable="true"
+            >
+
+            <ImageView
+                android:id="@+id/opc_img_jl"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/zlxfjl"
+                android:layout_centerVertical="true"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="指令下发记录"
+                android:layout_toRightOf="@+id/opc_img_jl"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                />
+
+            <com.zxhl.util.ImgTxtLayout
+                android:id="@+id/opc_imgtxt_jl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

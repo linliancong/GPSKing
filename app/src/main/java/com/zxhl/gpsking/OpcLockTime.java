@@ -1,6 +1,7 @@
 package com.zxhl.gpsking;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -51,6 +53,13 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
     private EditText time;
     private ImageView opc_cancel;
 
+    private Button locktime_js;
+    private Button locktime_jk;
+    private Button locktime_ydkz;
+    private Button locktime_ssdw;
+    private Button locktime_sc;
+    private Button locktime_log;
+
     private ListView list;
     private LinearLayout scroll_visble;
     private ArrayList<Logs> data;
@@ -73,6 +82,7 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
     private View view;
     private TextView text;
     private int pression=0;
+    private int length=0;
 
     private RelativeLayout locktime_ly_sche;
     private ImageView locktime_img_sche;
@@ -152,7 +162,19 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
         init();
         getVehicleLic();
         view=getAlert(R.layout.ad_remotelock);
-
+        if(getIntent().getStringExtra("VehicleLic")!=null) {
+            if (getIntent().getStringExtra("VehicleLic").length() != 0) {
+                length=1;
+                vehicle.setText(getIntent().getStringExtra("VehicleLic"));
+                vehicle.setSelection(vehicle.getText().length());
+                if (getIntent().getIntExtra("IsOnline", 0) == 1) {
+                    pression = 1;
+                    handler.sendEmptyMessage(0x002);
+                } else {
+                    handler.sendEmptyMessage(0x003);
+                }
+            }
+        }
 
     }
 
@@ -169,6 +191,12 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
         yjsc =findViewById(R.id.locktime_ly_yjsc);
         tcyj =findViewById(R.id.locktime_ly_tcyj);
         time=findViewById(R.id.locktime_time);
+        locktime_sc=findViewById(R.id.locktime_sc);
+        locktime_js=findViewById(R.id.locktime_js);
+        locktime_jk=findViewById(R.id.locktime_jk);
+        locktime_ydkz=findViewById(R.id.locktime_ydkz);
+        locktime_ssdw=findViewById(R.id.locktime_ssdw);
+        locktime_log=findViewById(R.id.locktime_log);
         opc_cancel=findViewById(R.id.opc_cancel);
         opc_cancel.setVisibility(View.GONE);
 
@@ -199,6 +227,13 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
 
         yjsc.setOnClickListener(this);
         tcyj.setOnClickListener(this);
+
+        locktime_sc.setOnClickListener(this);
+        locktime_js.setOnClickListener(this);
+        locktime_jk.setOnClickListener(this);
+        locktime_ydkz.setOnClickListener(this);
+        locktime_ssdw.setOnClickListener(this);
+        locktime_log.setOnClickListener(this);
 
 
         back.setOnClickListener(new ImgTxtLayout.OnClickListener() {
@@ -251,6 +286,53 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
             case R.id.opc_cancel:
                 vehicle.setText("");
                 opc_cancel.setVisibility(View.GONE);
+                break;
+            //服务直达
+            case R.id.locktime_sc:
+                //锁车
+                Intent it5=new Intent(context,OpcLock.class);
+                it5.putExtra("VehicleLic",vehicle.getText().toString());
+                it5.putExtra("IsOnline",pression);
+                startActivity(it5);
+                finish();
+                break;
+            case R.id.locktime_js:
+                //解锁
+                Intent it1=new Intent(context,OpcUnLock.class);
+                it1.putExtra("VehicleLic",vehicle.getText().toString());
+                it1.putExtra("IsOnline",pression);
+                startActivity(it1);
+                finish();
+                break;
+            case R.id.locktime_jk:
+                //监控
+                Intent it2=new Intent(context,OpcMonitor.class);
+                it2.putExtra("VehicleLic",vehicle.getText().toString());
+                it2.putExtra("IsOnline",pression);
+                startActivity(it2);
+                finish();
+                break;
+            case R.id.locktime_ydkz:
+                //油电控制
+                Intent it3=new Intent(context,OpcOilEleControl.class);
+                it3.putExtra("VehicleLic",vehicle.getText().toString());
+                it3.putExtra("IsOnline",pression);
+                startActivity(it3);
+                finish();
+                break;
+            case R.id.locktime_ssdw:
+                //实时定位
+                Intent it4=new Intent(context,OpcLocation.class);
+                it4.putExtra("VehicleLic",vehicle.getText().toString());
+                it4.putExtra("IsOnline",pression);
+                startActivity(it4);
+                break;
+            case R.id.locktime_log:
+                //指令下发记录
+                Intent it6=new Intent(context,OpcLog.class);
+                it6.putExtra("VehicleLic",vehicle.getText().toString());
+                it6.putExtra("IsOnline",pression);
+                startActivity(it6);
                 break;
         }
 
@@ -384,10 +466,13 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        veh_info.setText("功能可搜索车台，查看可执行的操作。试一试吧！");
-        visble.setVisibility(View.GONE);
-        scroll_visble.setVisibility(View.GONE);
-        opc_cancel.setVisibility(View.GONE);
+        if(length==0) {
+            veh_info.setText("功能可搜索车台，查看可执行的操作。试一试吧！");
+            visble.setVisibility(View.GONE);
+            scroll_visble.setVisibility(View.GONE);
+            opc_cancel.setVisibility(View.GONE);
+            pression=0;
+        }
     }
 
     @Override
@@ -397,6 +482,7 @@ public class OpcLockTime extends StatusBarUtil implements View.OnClickListener,T
 
     @Override
     public void afterTextChanged(Editable s) {
+        length=0;
         if(vehicle.getText().length()>0){
             opc_cancel.setVisibility(View.VISIBLE);
         }

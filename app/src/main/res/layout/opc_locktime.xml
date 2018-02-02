@@ -25,7 +25,7 @@
             zxhl:iconDrawablePress="@mipmap/cs_ic_back_blue_press"
             zxhl:spacing="10dp"
             zxhl:style="iconLeft"
-            zxhl:text="样机锁车"
+            zxhl:text="样机管理"
             zxhl:textSize="18"
             zxhl:textColor="@color/black"
             />
@@ -36,24 +36,6 @@
             android:background="@color/div_white"
             android:layout_alignParentBottom="true"
             />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/locktime_ly_sche"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black_pressed"
-        android:visibility="gone"
-        android:layout_below="@+id/locktime_rl1"
-        >
-        <ImageView
-            android:id="@+id/locktime_img_sche"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/anima_await"
-            />
-
     </RelativeLayout>
 
     <RelativeLayout
@@ -106,41 +88,116 @@
             android:id="@+id/locktime_ly2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_below="@+id/locktime_ly1"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:gravity="center"
             android:padding="20dp"
-            android:visibility="gone"
             >
-            <Button
-                android:id="@+id/locktime_js"
-                android:layout_width="40dp"
-                android:layout_height="26dp"
-                android:text="解锁"
-                android:textColor="@color/light_blue_500"
-                android:background="@null"
-                />
-            <Button
-                android:id="@+id/locktime_jk"
-                android:layout_width="40dp"
-                android:layout_height="26dp"
-                android:text="监控"
-                android:textColor="@color/light_blue_500"
-                android:background="@null"
-                android:layout_marginLeft="20dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <Button
+                    android:id="@+id/locktime_sc"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="26dp"
+                    android:text="锁车"
+                    android:textColor="@color/light_blue_500"
+                    android:background="@null"
+                    />
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="16dp"
+                    android:background="@color/black_line"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="15dp"
+                    />
+                <Button
+                    android:id="@+id/locktime_js"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="26dp"
+                    android:text="解锁"
+                    android:textColor="@color/light_blue_500"
+                    android:background="@null"
+                    />
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="16dp"
+                    android:background="@color/black_line"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="15dp"
+                    />
+                <Button
+                    android:id="@+id/locktime_jk"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="26dp"
+                    android:text="监控"
+                    android:textColor="@color/light_blue_500"
+                    android:background="@null"
+                    />
 
-                />
-            <Button
-                android:id="@+id/locktime_ydkz"
-                android:layout_width="80dp"
-                android:layout_height="26dp"
-                android:text="油电控制"
-                android:textColor="@color/light_blue_500"
-                android:background="@null"
-                android:layout_marginLeft="20dp"
-                />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                >
+                <Button
+                    android:id="@+id/locktime_ydkz"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="26dp"
+                    android:text="远程遥控"
+                    android:textColor="@color/light_blue_500"
+                    android:background="@null"
+                    />
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="16dp"
+                    android:background="@color/black_line"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="15dp"
+                    />
+                <Button
+                    android:id="@+id/locktime_ssdw"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="26dp"
+                    android:text="实时定位"
+                    android:textColor="@color/light_blue_500"
+                    android:background="@null"
+                    />
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="16dp"
+                    android:background="@color/black_line"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="15dp"
+                    />
+                <Button
+                    android:id="@+id/locktime_log"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="26dp"
+                    android:text="指令记录"
+                    android:textColor="@color/light_blue_500"
+                    android:background="@null"
+                    />
+            </LinearLayout>
+
         </LinearLayout>
+
+
 
         <TextView
             android:id="@+id/locktime_txt_veh"
@@ -148,7 +205,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/locktime_ly2"
             android:gravity="center"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:text="该功能可搜索车台，查看可执行的操作。试一试吧！"
@@ -209,7 +266,7 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/yjsc"
+                        android:src="@drawable/jryj"
                         />
                     <TextView
                         android:id="@+id/locktime_yjsc"
@@ -237,7 +294,7 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/js"
+                        android:src="@drawable/tcyj"
                         />
                     <TextView
                         android:id="@+id/locktime_tcyj"
@@ -298,6 +355,31 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/locktime_ly_sche"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_gray_opc"
+        android:visibility="gone"
+        android:layout_below="@+id/locktime_rl1"
+        >
+        <ImageView
+            android:id="@+id/locktime_img_sche"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/anima_await"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="指令下发中，请稍后..."
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_below="@+id/locktime_img_sche"
+            android:layout_centerInParent="true"
+            />
 
+    </RelativeLayout>
 
 </RelativeLayout>

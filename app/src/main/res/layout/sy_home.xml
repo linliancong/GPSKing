@@ -4,22 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/home_ly_sche"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black_pressed"
-        android:visibility="gone"
-        >
-        <ImageView
-            android:id="@+id/home_img_sche"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/anima_sche"
-            />
 
-    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/sy_home_visible"
@@ -280,5 +265,22 @@
         android:layout_weight="9"
         android:layout_marginBottom="15dp"
         />
+
+    <RelativeLayout
+        android:id="@+id/home_ly_sche"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_gray_opc"
+        android:visibility="gone"
+        >
+        <ImageView
+            android:id="@+id/home_img_sche"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/anima_sche"
+            />
+
+    </RelativeLayout>
 
 </LinearLayout>

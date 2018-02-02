@@ -17,6 +17,7 @@
 
     <color name="bg_white">#FFFFFF</color>
     <color name="bg_gray">#F1F1F1</color>
+    <color name="bg_gray_opc">#99F1F1F1</color>
     <color name="bg_topbar">#FCFCFC</color>
     <color name="text_gray">#8D7A71</color>
     <color name="text_white">#FFFFFF</color>

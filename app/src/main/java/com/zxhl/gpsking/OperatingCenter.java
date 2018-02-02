@@ -36,6 +36,7 @@ public class OperatingCenter extends StatusBarUtil implements View.OnClickListen
     private RelativeLayout monitor;
     private RelativeLayout oil_ele;
     private RelativeLayout lock_time;
+    private RelativeLayout log;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class OperatingCenter extends StatusBarUtil implements View.OnClickListen
         monitor=findViewById(R.id.opc_ly_jk);
         oil_ele=findViewById(R.id.opc_ly_yd);
         lock_time=findViewById(R.id.opc_ly_dssc);
+        log=findViewById(R.id.opc_ly_jl);
         back=findViewById(R.id.opc_imgtxt_back);
 
         location.setOnClickListener(this);
@@ -56,6 +58,7 @@ public class OperatingCenter extends StatusBarUtil implements View.OnClickListen
         monitor.setOnClickListener(this);
         oil_ele.setOnClickListener(this);
         lock_time.setOnClickListener(this);
+        log.setOnClickListener(this);
         back.setOnClickListener(new ImgTxtLayout.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,6 +104,11 @@ public class OperatingCenter extends StatusBarUtil implements View.OnClickListen
                 //样机锁车
                 Intent it6=new Intent(context,OpcLockTime.class);
                 startActivity(it6);
+                break;
+            case R.id.opc_ly_jl:
+                //指令下发记录
+                Intent it7=new Intent(context,OpcLog.class);
+                startActivity(it7);
                 break;
 
         }

@@ -62,6 +62,9 @@ public class OpcOilEleControl extends StatusBarUtil implements View.OnClickListe
     private Button oilelecontrol_js;
     private Button oilelecontrol_jk;
     private Button oilelecontrol_sc;
+    private Button oilelecontrol_ssdw;
+    private Button oilelecontrol_yjgl;
+    private Button oilelecontrol_log;
 
     private SharedPreferenceUtils sp;
     private Context context;
@@ -177,6 +180,9 @@ public class OpcOilEleControl extends StatusBarUtil implements View.OnClickListe
         oilelecontrol_js=findViewById(R.id.oilelecontrol_js);
         oilelecontrol_jk=findViewById(R.id.oilelecontrol_jk);
         oilelecontrol_sc =findViewById(R.id.oilelecontrol_sc);
+        oilelecontrol_ssdw=findViewById(R.id.oilelecontrol_ssdw);
+        oilelecontrol_yjgl=findViewById(R.id.oilelecontrol_yjgl);
+        oilelecontrol_log=findViewById(R.id.oilelecontrol_log);
         opc_cancel=findViewById(R.id.opc_cancel);
         opc_cancel.setVisibility(View.GONE);
         sp=new SharedPreferenceUtils(context, Constants.SAVE_USER);
@@ -212,6 +218,9 @@ public class OpcOilEleControl extends StatusBarUtil implements View.OnClickListe
         oilelecontrol_js.setOnClickListener(this);
         oilelecontrol_jk.setOnClickListener(this);
         oilelecontrol_sc.setOnClickListener(this);
+        oilelecontrol_ssdw.setOnClickListener(this);
+        oilelecontrol_yjgl.setOnClickListener(this);
+        oilelecontrol_log.setOnClickListener(this);
 
         back.setOnClickListener(new ImgTxtLayout.OnClickListener() {
             @Override
@@ -297,6 +306,28 @@ public class OpcOilEleControl extends StatusBarUtil implements View.OnClickListe
                 it2.putExtra("IsOnline",pression);
                 startActivity(it2);
                 finish();
+                break;
+            case R.id.oilelecontrol_ssdw:
+                //实时定位
+                Intent it4=new Intent(context,OpcLocation.class);
+                it4.putExtra("VehicleLic",vehicle.getText().toString());
+                it4.putExtra("IsOnline",pression);
+                startActivity(it4);
+                break;
+            case R.id.oilelecontrol_yjgl:
+                //样机管理
+                Intent it5=new Intent(context,OpcLockTime.class);
+                it5.putExtra("VehicleLic",vehicle.getText().toString());
+                it5.putExtra("IsOnline",pression);
+                startActivity(it5);
+                finish();
+                break;
+            case R.id.oilelecontrol_log:
+                //指令下发记录
+                Intent it6=new Intent(context,OpcLog.class);
+                it6.putExtra("VehicleLic",vehicle.getText().toString());
+                it6.putExtra("IsOnline",pression);
+                startActivity(it6);
                 break;
         }
 
