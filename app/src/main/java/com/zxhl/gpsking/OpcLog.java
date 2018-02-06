@@ -373,6 +373,9 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
                     case "断油断电4":
                         type = "二级恢复油电";
                         break;
+                    case "车辆位置查询":
+                        type = "车辆位置查询";
+                        break;
                 }
             }
             else
