@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -202,6 +203,14 @@ public class OpcLocation extends StatusBarUtil implements AMapLocationListener,L
         });
 
         getVehicleLic();
+
+        vehicle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                getVeh.callOnClick();
+                return true;
+            }
+        });
 
         if(getIntent().getStringExtra("VehicleLic")!=null) {
             if (getIntent().getStringExtra("VehicleLic").length() != 0) {

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -45,6 +46,7 @@ import org.ksoap2.serialization.SoapObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -121,6 +123,8 @@ public class QuerySyTrackPlayback extends StatusBarUtil implements View.OnClickL
     private List<Marker> markers;
     private MarkerOptions markerOptions;
 
+    private Calendar selectedDate;
+
     Handler handler= new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -173,6 +177,14 @@ public class QuerySyTrackPlayback extends StatusBarUtil implements View.OnClickL
 
         getVehicleLic();
 
+        vehicle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                getVeh.callOnClick();
+                return true;
+            }
+        });
+
 
     }
 
@@ -213,6 +225,7 @@ public class QuerySyTrackPlayback extends StatusBarUtil implements View.OnClickL
 
 
         //设置默认显示时间
+        selectedDate=Calendar.getInstance();
         Date today=new Date();
         Date olyday=new Date(today.getTime()-3*24*60*60*1000);
         SimpleDateFormat sf=new SimpleDateFormat("yyyy-MM-dd");
@@ -433,10 +446,27 @@ public class QuerySyTrackPlayback extends StatusBarUtil implements View.OnClickL
                 break;
             case R.id.query_edit_BeginTime:
                 ShowKeyboard.hideKeyboard(vehicle);
+                Date etoday=new Date();
+                Date olyday=new Date(etoday.getTime()-3*24*60*60*1000);
+                SimpleDateFormat esf=new SimpleDateFormat("yyyy");
+                SimpleDateFormat esf2=new SimpleDateFormat("MM");
+                SimpleDateFormat esf3=new SimpleDateFormat("dd");
+                Integer eyear=new Integer(esf.format(olyday));
+                Integer emonth=new Integer(esf2.format(olyday));
+                Integer eday=new Integer(esf3.format(olyday));
+                selectedDate.set(eyear.intValue(),emonth.intValue()-1,eday.intValue());
                 TimePicker(1);
                 break;
             case R.id.query_edit_EndTime:
                 ShowKeyboard.hideKeyboard(vehicle);
+                Date today=new Date();
+                SimpleDateFormat sf=new SimpleDateFormat("yyyy");
+                SimpleDateFormat sf2=new SimpleDateFormat("MM");
+                SimpleDateFormat sf3=new SimpleDateFormat("dd");
+                Integer year=new Integer(sf.format(today));
+                Integer month=new Integer(sf2.format(today));
+                Integer day=new Integer(sf3.format(today));
+                selectedDate.set(year.intValue(),month.intValue()-1,day.intValue());
                 TimePicker(0);
                 break;
 
@@ -709,6 +739,7 @@ public class QuerySyTrackPlayback extends StatusBarUtil implements View.OnClickL
                 }
             }
         })
+                .setDate(selectedDate)
                 .setType(new boolean[]{true,true,true,false,false,false})
                 .setLabel("","","","","","")
                 .build();

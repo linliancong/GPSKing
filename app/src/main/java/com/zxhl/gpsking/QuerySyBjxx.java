@@ -1,40 +1,42 @@
 package com.zxhl.gpsking;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.zxhl.entity.CarInfo;
+import com.zxhl.entity.VehicleAlarm;
 import com.zxhl.util.AdapterUtil;
 import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.ShowKeyboard;
 import com.zxhl.util.StatusBarUtil;
-import com.zxhl.util.SwipeRefreshView;
 import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,7 +44,7 @@ import java.util.List;
  * Created by Administrator on 2018/1/17.
  */
 
-public class QuerySyBjxx extends StatusBarUtil implements View.OnClickListener,TextWatcher{
+public class QuerySyBjxx extends StatusBarUtil implements View.OnClickListener,TextWatcher,RadioGroup.OnCheckedChangeListener{
 
     //控件
     private ListView list;
@@ -70,8 +72,17 @@ public class QuerySyBjxx extends StatusBarUtil implements View.OnClickListener,T
     private Context context;
 
     private List<List<String>> info;
+    private List<List<String>> infoveh;
+    private List<List<String>> infotype;
     private AdapterUtil adapterUtil;
-    private ArrayList<CarInfo> carInfos;
+    private ArrayList<VehicleAlarm> vehicleAlarm;
+    private int positions=0;
+
+    //类型查询
+    private RadioGroup rg;
+    private RadioButton rb_qb;
+    private RadioButton rb_wcl;
+    private RadioButton rb_ycl;
 
 
     Handler handler=new Handler(){
@@ -94,7 +105,7 @@ public class QuerySyBjxx extends StatusBarUtil implements View.OnClickListener,T
                     Toast.makeText(context,"服务器有点问题，我们正在全力修复！",Toast.LENGTH_SHORT).show();
                     break;
                 case 0x001:
-                    showInfo();
+                    showInfo(info);
                     list.setVisibility(View.VISIBLE);
                     bjxx_ly_sche.setVisibility(View.GONE);
                     anima.stop();
@@ -119,6 +130,11 @@ public class QuerySyBjxx extends StatusBarUtil implements View.OnClickListener,T
         init();
 
         getVehicleLic();
+
+        list.setVisibility(View.GONE);
+        bjxx_ly_sche.setVisibility(View.VISIBLE);
+        anima.start();
+        getVehicleAlarmInfo();
     }
 
     @Override
@@ -142,11 +158,18 @@ public class QuerySyBjxx extends StatusBarUtil implements View.OnClickListener,T
         search=findViewById(R.id.bjxx_img_serch);
         getVeh=findViewById(R.id.bjxx_btn_get);
 
+        //类型查询
+        rg=findViewById(R.id.bjxx_rg_type);
+        rb_qb=findViewById(R.id.bjxx_rb_qb);
+        rb_wcl=findViewById(R.id.bjxx_rb_wcl);
+        rb_ycl=findViewById(R.id.bjxx_rb_ycl);
+        rg.setOnCheckedChangeListener(this);
+
         bjxx_ly_sche=findViewById(R.id.bjxx_ly_sche);
         bjxx_img_sche=findViewById(R.id.bjxx_img_sche);
         anima= (AnimationDrawable) bjxx_img_sche.getDrawable();
 
-        carInfos=new ArrayList<>();
+        vehicleAlarm =new ArrayList<>();
 
         search.setOnClickListener(this);
         getVeh.setOnClickListener(this);
@@ -156,6 +179,14 @@ public class QuerySyBjxx extends StatusBarUtil implements View.OnClickListener,T
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        vehicle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                getVeh.callOnClick();
+                return true;
             }
         });
 
@@ -173,28 +204,19 @@ public class QuerySyBjxx extends StatusBarUtil implements View.OnClickListener,T
                 break;
             case R.id.bjxx_btn_get:
                 ShowKeyboard.hideKeyboard(vehicle);
-                int permiss=0;
-                for(int i=0;i<autoVehLic.size();i++)
-                {
-                    if(vehicle.getText().toString().equalsIgnoreCase(autoVehLic.get(i))){
-                        permiss=1;
-                        break;
-                    }
-                }
-                if(permiss==1){
+                if(vehicle.getText().length()==0) {
                     list.setVisibility(View.GONE);
                     bjxx_ly_sche.setVisibility(View.VISIBLE);
                     anima.start();
                     getVehicleAlarmInfo();
-                    title.setVisibility(View.VISIBLE);
-                    search.setVisibility(View.VISIBLE);
-                    img1.setVisibility(View.GONE);
-                    img2.setVisibility(View.GONE);
-                    vehicle.setVisibility(View.GONE);
+                }else {
+                    getAlarmInfoByVeh();
                 }
-                else{
-                    Toast.makeText(QuerySyBjxx.this,"机号输入有误或者您没有权限操作",Toast.LENGTH_SHORT).show();
-                }
+                title.setVisibility(View.VISIBLE);
+                search.setVisibility(View.VISIBLE);
+                img1.setVisibility(View.GONE);
+                img2.setVisibility(View.GONE);
+                vehicle.setVisibility(View.GONE);
                 break;
         }
 
@@ -204,9 +226,8 @@ public class QuerySyBjxx extends StatusBarUtil implements View.OnClickListener,T
     private void getVehicleAlarmInfo(){
         HashMap<String,String> proper=new HashMap<>();
         proper.put("OperatorID",sp.getOperatorID());
-        proper.put("VehicleLic",vehicle.getText().toString());
 
-        WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetVehicleAlarmInfo", proper, new WebServiceUtils.WebServiceCallBack() {
+        WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetAlarm", proper, new WebServiceUtils.WebServiceCallBack() {
             @Override
             public void callBack(SoapObject result) {
                 if(result!=null){
@@ -243,9 +264,14 @@ public class QuerySyBjxx extends StatusBarUtil implements View.OnClickListener,T
         for (int i=0;i<soap.getPropertyCount();i++){
             SoapObject soapObject= (SoapObject) soap.getProperty(i);
             list=new ArrayList<>();
-            list.add(soapObject.getProperty(0).toString());
-            list.add(soapObject.getProperty(1).toString());
-            list.add(soapObject.getProperty(2).toString());
+            for(int j=0;j<soapObject.getPropertyCount();j++){
+                if(soapObject.getProperty(j).toString().equals("anyType{}")){
+                    list.add("");
+                }
+                else {
+                    list.add(soapObject.getProperty(j).toString());
+                }
+            }
             lists.add(list);
         }
         return lists;
@@ -284,37 +310,84 @@ public class QuerySyBjxx extends StatusBarUtil implements View.OnClickListener,T
         return list;
     }
 
-    public void showInfo(){
-        carInfos = new ArrayList<>();
+    //机号查询报警信息
+    private void getAlarmInfoByVeh(){
+        infoveh=new ArrayList<>();
+        ArrayList<String> list1=new ArrayList<>();
+        if(vehicle.getText().length()==0){
+            infoveh=info;
+        }else {
+            for (int i = 0; i < info.size(); i++) {
+                if (info.get(i).get(4).equalsIgnoreCase(vehicle.getText().toString())) {
+                    list1 = (ArrayList<String>) info.get(i);
+                    infoveh.add(list1);
+                }
+            }
+        }
+        showInfo(infoveh);
+    }
+
+    //类型查询报警信息
+    private void getAlarmInfoByType(String type){
+        infotype=new ArrayList<>();
+        ArrayList<String> list1=new ArrayList<>();
+        if(type.equals("0")){
+            infotype=info;
+        }else {
+            for (int i = 0; i < info.size(); i++) {
+                if (info.get(i).get(8).equals(type)) {
+                    list1 = (ArrayList<String>) info.get(i);
+                    infotype.add(list1);
+                }
+            }
+        }
+        showInfo(infotype);
+    }
+
+    public void showInfo(List<List<String>> info){
+        vehicleAlarm = new ArrayList<>();
 
         for(int i=0;i<info.size();i++) {
             if(i==info.size()){
                 break;
             }else {
-                carInfos.add(new CarInfo(info.get(i).get(0), info.get(i).get(2), info.get(i).get(1), "报警类型：", "报警位置：","报警时间："));
+                vehicleAlarm.add(new VehicleAlarm(info.get(i).get(0), info.get(i).get(1), info.get(i).get(2),
+                        info.get(i).get(3), info.get(i).get(4), info.get(i).get(5),
+                        info.get(i).get(6), info.get(i).get(7), info.get(i).get(8),
+                        info.get(i).get(9), info.get(i).get(10), info.get(i).get(11)));
             }
         }
 
-        adapterUtil=new AdapterUtil<CarInfo>(carInfos,R.layout.query_clxx_item){
+        adapterUtil=new AdapterUtil<VehicleAlarm>(vehicleAlarm,R.layout.query_bjxx_item){
             @Override
-            public void bindView(ViewHolder holder, CarInfo obj) {
-                holder.setText(R.id.clxx_item_vehicle_title,obj.getVehicle_title());
-                holder.setText(R.id.clxx_item_vehicle,obj.getVehicle());
-                holder.setText(R.id.clxx_item_time_title,obj.getTime_title());
-                holder.setText(R.id.clxx_item_time,obj.getTime());
-                holder.setText(R.id.clxx_item_info_title,obj.getInfo_title());
-                holder.setText(R.id.clxx_item_info,obj.getInfo());
+            public void bindView(ViewHolder holder, VehicleAlarm obj) {
+                holder.setText(R.id.bjxx_item_time,obj.getGPSDateTime());
+                holder.setText(R.id.bjxx_item_jh,obj.getVehicleLic());
+                if(obj.getDealType().equals("1")){
+                    holder.setText(R.id.bjxx_item_sfcl,"未处理");
+                }else if(obj.getDealType().equals("2")) {
+                    holder.setText(R.id.bjxx_item_sfcl,"正在处理");
+                }else if(obj.getDealType().equals("3")){
+                    holder.setText(R.id.bjxx_item_sfcl,"恢复正常");
+                }
             }
         };
         list.setAdapter(adapterUtil);
 
 
-        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //这里处理点击，暂时不用
+                positions=position;
+                Intent intent=new Intent(QuerySyBjxx.this,SendAlarmInfo.class);
+                Bundle bd=new Bundle();
+                ArrayList<VehicleAlarm> list=new ArrayList();
+                list.add(vehicleAlarm.get(position));
+                bd.putSerializable("info", (Serializable) list);
+                intent.putExtras(bd);
+                startActivityForResult(intent,0x001);
             }
-        });*/
+        });
 
     }
 
@@ -333,5 +406,44 @@ public class QuerySyBjxx extends StatusBarUtil implements View.OnClickListener,T
         if(vehicle.getText().length()!=0){
             getVeh.setEnabled(true);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==0x001 && resultCode==0x001 && data.getExtras().getString("state").equals("2")){
+            ArrayList<String> list1= (ArrayList<String>) info.get(positions);
+            list1.set(7,sp.getOperatorName());
+            list1.set(8,data.getExtras().getString("state").toString());
+            info.set(positions,list1);
+            showInfo(info);
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        switch (checkedId){
+            case R.id.bjxx_rb_qb:
+                setChecked();
+                rb_qb.setChecked(true);
+                getAlarmInfoByType("0");
+                break;
+            case R.id.bjxx_rb_wcl:
+                setChecked();
+                rb_wcl.setChecked(true);
+                getAlarmInfoByType("1");
+                break;
+            case R.id.bjxx_rb_ycl:
+                setChecked();
+                rb_ycl.setChecked(true);
+                getAlarmInfoByType("2");
+                break;
+        }
+    }
+
+    public void setChecked(){
+        rb_qb.setChecked(false);
+        rb_wcl.setChecked(false);
+        rb_ycl.setChecked(false);
     }
 }

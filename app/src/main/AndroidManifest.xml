@@ -220,6 +220,13 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".SendAlarmInfo">
+            <intent-filter>
+                <action android:name="android.intent.action.SENDALARMINFO"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".OperatingCenter">
             <intent-filter>
                 <action android:name="android.intent.action.OPERATINGCENTER"/>
@@ -350,8 +357,8 @@
     <uses-permission android:name="android.permission.CONTROL_KEYGUARD"/>
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-
+    <!--发送短信-->
+    <uses-permission android:name="android.permission.SEND_SMS"/>
 
     //地图包、搜索包需要的基础权限
 

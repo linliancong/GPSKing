@@ -65,6 +65,8 @@
             android:id="@+id/scxx_auto_vehiclelic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
             android:background="@null"
             android:drawableBottom="@drawable/line"
             android:dropDownVerticalOffset="10dp"

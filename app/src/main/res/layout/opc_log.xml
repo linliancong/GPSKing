@@ -64,6 +64,8 @@
             android:id="@+id/log_auto_vehiclelic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
             android:background="@null"
             android:drawableBottom="@drawable/line"
             android:dropDownVerticalOffset="10dp"
@@ -73,7 +75,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:visibility="gone"
-            android:hint="请输入机号（机号为空时查询全部）"
+            android:hint="请输入机号"
             />
 
         <ImageView

@@ -65,6 +65,8 @@
             android:id="@+id/bjxx_auto_vehiclelic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
             android:background="@null"
             android:drawableBottom="@drawable/line"
             android:dropDownVerticalOffset="10dp"
@@ -85,6 +87,7 @@
             android:layout_toLeftOf="@+id/bjxx_btn_get"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
+            android:visibility="visible"
             />
 
         <Button
@@ -109,22 +112,80 @@
             />
     </RelativeLayout>
 
-
-
     <RelativeLayout
         android:id="@+id/bjxx_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/bjxx_ly_title"
+        android:background="@color/black_bg"
         >
+        <RadioGroup
+            android:id="@+id/bjxx_rg_type"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/setting_wtfk_text_normal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            >
+            <RadioButton
+                android:id="@+id/bjxx_rb_qb"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:gravity="center"
+                android:text="全部"
+                android:padding="10dp"
+                android:background="@drawable/bjxx_type_color"
+                android:checked="true"
+                />
+            <View
+                android:layout_width="1px"
+                android:layout_height="20dp"
+                android:background="@color/black_line"
+                android:layout_gravity="center"
+                />
+            <RadioButton
+                android:id="@+id/bjxx_rb_wcl"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:gravity="center"
+                android:text="未处理"
+                android:padding="10dp"
+                android:background="@drawable/bjxx_type_color2"
+                />
+            <View
+                android:layout_width="1px"
+                android:layout_height="20dp"
+                android:background="@color/black_line"
+                android:layout_gravity="center"
+                />
+            <RadioButton
+                android:id="@+id/bjxx_rb_ycl"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:gravity="center"
+                android:text="已处理"
+                android:padding="10dp"
+                android:background="@drawable/bjxx_type_color3"
+                />
+
+        </RadioGroup>
         <ListView
             android:id="@+id/bjxx_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/bjxx_rg_type"
             android:divider="#00000000"
             android:cacheColorHint="#00000000"
             android:scrollbars="none"
-            android:background="@color/black_bg"
             android:listSelector="#00000000"
             android:stackFromBottom="false"
             android:transcriptMode="alwaysScroll"

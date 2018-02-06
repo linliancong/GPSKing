@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bigkoo.pickerview.TimePickerView;
@@ -32,6 +34,7 @@ import org.ksoap2.serialization.SoapObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -80,6 +83,8 @@ public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,T
     private RelativeLayout bbtj_ly_sche;
     private ImageView bbtj_img_sche;
     private AnimationDrawable anima;
+
+    private Calendar selectedDate;
 
 
     Handler handler=new Handler(){
@@ -142,6 +147,16 @@ public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,T
         bbtj_img_sche=findViewById(R.id.bbtj_img_sche);
         anima= (AnimationDrawable) bbtj_img_sche.getDrawable();
 
+        //设置默认显示时间
+        selectedDate=Calendar.getInstance();
+        Date today=new Date();
+        Date olyday=new Date(today.getTime()-7*24*60*60*1000);
+        SimpleDateFormat sf=new SimpleDateFormat("yyyy-MM-dd");
+        String end=sf.format(today);
+        String begin=sf.format(olyday);
+        BeginTime.setText(begin);
+        EndTime.setText(end);
+
         BeginTime.setOnClickListener(this);
         EndTime.setOnClickListener(this);
         query.setOnClickListener(this);
@@ -153,6 +168,14 @@ public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,T
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        VehicleLic.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                query.callOnClick();
+                return true;
             }
         });
 
@@ -183,10 +206,27 @@ public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,T
                 break;
             case R.id.bbtj_edit_BeginTime:
                 ShowKeyboard.hideKeyboard(VehicleLic);
+                Date etoday=new Date();
+                Date olyday=new Date(etoday.getTime()-7*24*60*60*1000);
+                SimpleDateFormat esf=new SimpleDateFormat("yyyy");
+                SimpleDateFormat esf2=new SimpleDateFormat("MM");
+                SimpleDateFormat esf3=new SimpleDateFormat("dd");
+                Integer eyear=new Integer(esf.format(olyday));
+                Integer emonth=new Integer(esf2.format(olyday));
+                Integer eday=new Integer(esf3.format(olyday));
+                selectedDate.set(eyear.intValue(),emonth.intValue()-1,eday.intValue());
                 TimePicker(1);
                 break;
             case R.id.bbtj_edit_EndTime:
                 ShowKeyboard.hideKeyboard(VehicleLic);
+                Date today=new Date();
+                SimpleDateFormat sf=new SimpleDateFormat("yyyy");
+                SimpleDateFormat sf2=new SimpleDateFormat("MM");
+                SimpleDateFormat sf3=new SimpleDateFormat("dd");
+                Integer year=new Integer(sf.format(today));
+                Integer month=new Integer(sf2.format(today));
+                Integer day=new Integer(sf3.format(today));
+                selectedDate.set(year.intValue(),month.intValue()-1,day.intValue());
                 TimePicker(2);
                 break;
         }
@@ -348,6 +388,7 @@ public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,T
                 }
             }
         })
+                .setDate(selectedDate)
                 .setType(new boolean[]{true,true,true,false,false,false})
                 .setLabel("","","","","","")
                 .build();

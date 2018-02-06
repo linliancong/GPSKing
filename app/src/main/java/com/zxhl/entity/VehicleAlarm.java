@@ -1,10 +1,13 @@
 package com.zxhl.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2018/2/1.
  */
 
-public class VehicleAlarm {
+public class VehicleAlarm implements Serializable {
+    public String VehicleID = "";
     public String Mobile = "";
     public String DeviceNum = "";
     public String MModelName = "";
@@ -22,11 +25,12 @@ public class VehicleAlarm {
     {
     }
 
-    public VehicleAlarm(String Mobile, String DeviceNum, String MModelName,
+    public VehicleAlarm(String VehicleID,String Mobile, String DeviceNum, String MModelName,
                         String VehicleLic, String GPSDateTime, String Position,
                         String OperatorName, String DealType, String OwnerName,
                         String GroupName, String FranchiserID)
     {
+        this.VehicleID = VehicleID;
         this.Mobile = Mobile;
         this.DeviceNum = DeviceNum;
         this.MModelName = MModelName;
@@ -40,6 +44,9 @@ public class VehicleAlarm {
         this.FranchiserID = FranchiserID;
     }
 
+    public void setVehicleID(String VehicleID) {
+        this.VehicleID = VehicleID;
+    }
     public void setMobile(String Mobile){
         this.Mobile = Mobile;
     }
@@ -75,6 +82,9 @@ public class VehicleAlarm {
     }
 
 
+    public String getVehicleID() {
+        return VehicleID;
+    }
     public String getMobile(){
         return Mobile;
     }

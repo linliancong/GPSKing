@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -159,6 +160,14 @@ public class QuerySyScxx extends StatusBarUtil implements View.OnClickListener,T
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        vehicle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                getVeh.callOnClick();
+                return true;
             }
         });
 
