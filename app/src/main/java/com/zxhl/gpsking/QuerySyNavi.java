@@ -48,12 +48,18 @@ import com.zxhl.util.WebServiceUtils;
 
 import org.ksoap2.serialization.SoapObject;
 
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import static java.lang.Math.atan2;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 /**
  * Created by Administrator on 2018/1/8.
@@ -146,7 +152,7 @@ public class QuerySyNavi extends StatusBarUtil implements AMapLocationListener,L
                         sTag=msg.getData().getInt("startLatLng");
                     }
                     if(sTag==1&&eTag==1) {
-                        if(isInstalled){
+                        if(isInstalled&&!isInstalled2){
                             StringBuilder str=new StringBuilder();
                             str.append("androidamap://navi?");
                             try{
@@ -169,10 +175,15 @@ public class QuerySyNavi extends StatusBarUtil implements AMapLocationListener,L
                             //传递组装的数据
                             intent.setData(Uri.parse(str.toString()));
                             startActivity(intent);
-                        }else if(!isInstalled&&isInstalled2){
+                        }else if(isInstalled2){
                             StringBuilder baidu=new StringBuilder();
                             baidu.append("baidumap://map/marker?");
-                            baidu.append("location="+eLat+","+eLng);
+                            //坐标转换
+                            LngLat lngLat_gcj = new LngLat(eLng,eLat);
+                            LngLat lngLat_bd = bd_encrypt(lngLat_gcj);
+                            double eeLat= lngLat_bd.getLantitude();
+                            double eeLng= lngLat_bd.getLongitude();
+                            baidu.append("location="+eeLat+","+eeLng);
                             try {
                                 baidu.append("&title=" + URLEncoder.encode(vehicle.getText().toString(), "UTF-8"));
                                 baidu.append("&content=" + URLEncoder.encode(locat.get(2), "UTF-8"));
@@ -594,5 +605,89 @@ public class QuerySyNavi extends StatusBarUtil implements AMapLocationListener,L
         msg.what=0x003;
         msg.getData().putInt("endLatLng",1);
         handler.sendMessage(msg);
+    }
+
+
+    /**
+    *地图坐标转换
+     *封装坐标
+    * */
+    public static class LngLat {
+        private double longitude;//经度
+        private double lantitude;//维度
+
+        public LngLat() {
+        }
+
+        public LngLat(double longitude, double lantitude) {
+            this.longitude = longitude;
+            this.lantitude = lantitude;
+        }
+
+        public double getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(double longitude) {
+            this.longitude = longitude;
+        }
+
+        public double getLantitude() {
+            return lantitude;
+        }
+
+        public void setLantitude(double lantitude) {
+            this.lantitude = lantitude;
+        }
+
+        @Override
+        public String toString() {
+            return "LngLat{" +
+                    "longitude=" + longitude +
+                    ", lantitude=" + lantitude +
+                    '}';
+        }
+    }
+
+
+    private static double x_pi = 3.14159265358979324 * 3000.0 / 180.0;
+
+    /**
+     * 对double类型数据保留小数点后多少位
+     *  高德地图转码返回的就是 小数点后6位，为了统一封装一下
+     * @param digit 位数
+     * @param in 输入
+     * @return 保留小数位后的数
+     */
+    static double dataDigit(int digit,double in){
+        return new BigDecimal(in).setScale(6,   BigDecimal.ROUND_HALF_UP).doubleValue();
+
+    }
+
+    /**
+     * 将火星坐标转变成百度坐标
+     * @param lngLat_gd 火星坐标（高德、腾讯地图坐标等）
+     * @return 百度坐标
+     */
+    public static LngLat bd_encrypt(LngLat lngLat_gd)
+    {
+        double x = lngLat_gd.getLongitude(), y = lngLat_gd.getLantitude();
+        double z = sqrt(x * x + y * y) + 0.00002 * sin(y * x_pi);
+        double theta = atan2(y, x) + 0.000003 * cos(x *  x_pi);
+        return new LngLat(dataDigit(6,z * cos(theta) + 0.0065),dataDigit(6,z * sin(theta) + 0.006));
+
+    }
+    /**
+     * 将百度坐标转变成火星坐标
+     * @param lngLat_bd 百度坐标（百度地图坐标）
+     * @return 火星坐标(高德、腾讯地图等)
+     */
+    static LngLat bd_decrypt(LngLat lngLat_bd)
+    {
+        double x = lngLat_bd.getLongitude() - 0.0065, y = lngLat_bd.getLantitude() - 0.006;
+        double z = sqrt(x * x + y * y) - 0.00002 * sin(y * x_pi);
+        double theta = atan2(y, x) - 0.000003 * cos(x * x_pi);
+        return new LngLat( dataDigit(6,z * cos(theta)),dataDigit(6,z * sin(theta)));
+
     }
 }
