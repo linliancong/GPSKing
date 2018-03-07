@@ -75,14 +75,11 @@ public class QuerySy extends Fragment implements View.OnClickListener {
         mData.add(new Icon(R.drawable.bytx,"保养提醒"));
         mData.add(new Icon(R.drawable.sbxx,"设备信息"));
         mData.add(new Icon(R.drawable.yycl,"预约车辆"));
+        mData.add(new Icon(R.drawable.jk,"遥控设备"));
         if(sp.getRoleID().equals("1")) {
             mData.add(new Icon(R.drawable.bjxx,"报警信息"));
             mData.add(new Icon(R.drawable.yyzx, "运营中心"));
             mData.add(new Icon(0, ""));
-            mData.add(new Icon(0, ""));
-            mData.add(new Icon(0, ""));
-        }
-        else {
             mData.add(new Icon(0, ""));
         }
 
@@ -158,15 +155,20 @@ public class QuerySy extends Fragment implements View.OnClickListener {
                         startActivity(it10);
                         break;
                     case 11:
-                        //报警设备
-                        Intent it11=new Intent(context,QuerySyBjxx.class);
+                        //遥控设备
+                        Intent it11=new Intent(context,QuerySyRemote.class);
                         startActivity(it11);
                         break;
                     case 12:
+                        //报警设备
+                        Intent it12=new Intent(context,QuerySyBjxx.class);
+                        startActivity(it12);
+                        break;
+                    case 13:
                         //运营中心
                         if(sp.getRoleID().equals("1")) {
-                            Intent it12=new Intent(context,OperatingCenter.class);
-                            startActivity(it12);
+                            Intent it13=new Intent(context,OperatingCenter.class);
+                            startActivity(it13);
                         }
                         else {}
 

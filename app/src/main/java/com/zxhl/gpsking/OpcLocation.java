@@ -11,11 +11,15 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +38,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.zxhl.entity.LatLngInfo;
 import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
@@ -41,6 +46,8 @@ import com.zxhl.util.ShowKeyboard;
 import com.zxhl.util.StatusBarUtil;
 import com.zxhl.util.WebServiceUtils;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
 
 import java.text.SimpleDateFormat;
@@ -53,7 +60,7 @@ import java.util.List;
  * Created by Administrator on 2018/1/8.
  */
 
-public class OpcLocation extends StatusBarUtil implements AMapLocationListener,LocationSource,View.OnClickListener,TextWatcher{
+public class OpcLocation extends StatusBarUtil implements AMapLocationListener,LocationSource,View.OnClickListener,TextWatcher,RadioGroup.OnCheckedChangeListener{
 
     private MapView map;
     private ImgTxtLayout back;
@@ -95,19 +102,42 @@ public class OpcLocation extends StatusBarUtil implements AMapLocationListener,L
 
     private int pression=0;
 
+    //Google地图相关
+    //类型查询
+    private RadioGroup rg;
+    private RadioButton gaodemap;
+    private RadioButton googlemap;
+
+    private WebView google_map;
+    //是否有数据
+    private boolean isPoi=false;
+    //该地图是否显示过
+    private boolean isShowMapTag=false;
+    private boolean isShowMapTag2=false;
+    //现在显示的是什么地图1、高德2、谷歌
+    private int mapType=1;
+
     Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 0x403:
                     opc_ly_sche.setVisibility(View.GONE);
-                    map.setVisibility(View.VISIBLE);
+                    if(mapType==1) {
+                        map.setVisibility(View.VISIBLE);
+                    }else {
+                        google_map.setVisibility(View.VISIBLE);
+                    }
                     anima.stop();
                     Toast.makeText(OpcLocation.this,"没有查询到位置信息",Toast.LENGTH_SHORT).show();
                     break;
                 case 0x404:
                     opc_ly_sche.setVisibility(View.GONE);
-                    map.setVisibility(View.VISIBLE);
+                    if(mapType==1) {
+                        map.setVisibility(View.VISIBLE);
+                    }else {
+                        google_map.setVisibility(View.VISIBLE);
+                    }
                     anima.stop();
                     Toast.makeText(OpcLocation.this,"服务器有点问题，我们正在全力修复！",Toast.LENGTH_SHORT).show();
                     break;
@@ -119,37 +149,22 @@ public class OpcLocation extends StatusBarUtil implements AMapLocationListener,L
                     opc_ly_sche.setVisibility(View.GONE);
                     map.setVisibility(View.VISIBLE);
                     anima.stop();
-                    if(locat.size()>6) {
-                        double lat = 0, lng = 0;
-                        Double dlat = new Double(locat.get(5));
-                        Double dlng = new Double(locat.get(6));
-                        lat = dlat.doubleValue();
-                        lng = dlng.doubleValue();
-                        markerOptions = new MarkerOptions();
-                        LatLng latLng = new LatLng(lat, lng);
-                        markerOptions.position(latLng);
-                        //点标记标题及内容
-                        markerOptions.title("详细信息");
-                        markerOptions.snippet("定位时间："+locat.get(4)+"\n"+
-                                "经度："+locat.get(6)+"\n"+
-                                "纬度："+locat.get(5)+"\n"+
-                                "电源状态："+locat.get(0)+"\n"+
-                                "ACC："+locat.get(1)+"\n"+
-                                "速度："+locat.get(8));
-                        //点标记是否可拖动
-                        markerOptions.draggable(true);
-                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.gps_point));
-                        //将Maeker设置为贴地显示，可以双指下拉地图查看效果
-                        markerOptions.setFlat(true);
-                        //添加标记
-                        marker=aMap.addMarker(markerOptions);
-                        //将中心点移动到车辆点
-                        aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
-                        //Toast.makeText(getApplicationContext(),"获取成功",Toast.LENGTH_LONG).show();
+                    isShowMapTag=false;
+                    isShowMapTag2=false;
+                    isPoi=true;
+                    if(mapType==1){
+                        map.setVisibility(View.VISIBLE);
+                        showGaodeMap();
+                        isShowMapTag=true;
                     }
                     else {
-                        Toast.makeText(OpcLocation.this,"没有查询到位置信息",Toast.LENGTH_SHORT).show();
+                        //showGoogleMap();
+                        google_map.setVisibility(View.VISIBLE);
+                        google_map.addJavascriptInterface(new SharpJS(),"sharp");
+                        google_map.loadUrl("file:///android_asset/google_mapTag.html");
+                        isShowMapTag2=true;
                     }
+
                     break;
             }
         }
@@ -177,6 +192,22 @@ public class OpcLocation extends StatusBarUtil implements AMapLocationListener,L
         map=(MapView)findViewById(R.id.opc_map_loction);
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，实现地图生命周期管理
         map.onCreate(savedInstanceState);
+
+        //Google地图相关
+        //类型查询
+        rg=findViewById(R.id.loction_rg_type);
+        gaodemap =findViewById(R.id.loction_gaodemap);
+        googlemap =findViewById(R.id.loction_googlemap);
+        rg.setOnCheckedChangeListener(this);
+
+        google_map=findViewById(R.id.map);
+        //设置WebView属性,依次如下
+        //支持js,不支持缩放
+        //同时绑定Java对象
+        google_map.getSettings().setJavaScriptEnabled(true);
+        google_map.getSettings().setSupportZoom(false);
+        google_map.getSettings().setDefaultTextEncodingName("UTF-8");
+        google_map.loadUrl("file:///android_asset/google_mapInit.html");
 
 
         if(aMap==null){
@@ -488,6 +519,7 @@ public class OpcLocation extends StatusBarUtil implements AMapLocationListener,L
                     getPoi();
                     opc_ly_sche.setVisibility(View.VISIBLE);
                     map.setVisibility(View.GONE);
+                    google_map.setVisibility(View.GONE);
                     anima.start();
                     title.setVisibility(View.VISIBLE);
                     search.setVisibility(View.VISIBLE);
@@ -518,5 +550,146 @@ public class OpcLocation extends StatusBarUtil implements AMapLocationListener,L
             getVeh.setEnabled(true);
         }
 
+    }
+
+    //Google地图相关
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        switch (checkedId){
+            case R.id.loction_gaodemap:
+                setChecked();
+                gaodemap.setChecked(true);
+                mapType=1;
+                map.setVisibility(View.VISIBLE);
+                if (isPoi){
+                    if (!isShowMapTag){
+                        isShowMapTag2=true;
+                        showGaodeMap();
+                    }
+                }
+                break;
+            case R.id.loction_googlemap:
+                setChecked();
+                googlemap.setChecked(true);
+                mapType=2;
+                google_map.setVisibility(View.VISIBLE);
+                if(isPoi){
+                    if (!isShowMapTag2){
+                        isShowMapTag2=true;
+                        //showGoogleMap();
+                        google_map.addJavascriptInterface(new SharpJS(),"sharp");
+                        google_map.loadUrl("file:///android_asset/google_mapTag.html");
+                    }
+                }
+                break;
+        }
+    }
+
+    public void setChecked(){
+        gaodemap.setChecked(false);
+        googlemap.setChecked(false);
+        map.setVisibility(View.GONE);
+        google_map.setVisibility(View.GONE);
+    }
+
+    public void showGaodeMap(){
+        if(locat.size()>6) {
+            double lat = 0, lng = 0;
+            Double dlat = new Double(locat.get(5));
+            Double dlng = new Double(locat.get(6));
+            lat = dlat.doubleValue();
+            lng = dlng.doubleValue();
+            markerOptions = new MarkerOptions();
+            LatLng latLng = new LatLng(lat, lng);
+            markerOptions.position(latLng);
+            //点标记标题及内容
+            markerOptions.title("详细信息");
+            markerOptions.snippet("定位时间："+locat.get(4)+"\n"+
+                    "经度："+locat.get(6)+"\n"+
+                    "纬度："+locat.get(5)+"\n"+
+                    "电源状态："+locat.get(0)+"\n"+
+                    "ACC："+locat.get(1)+"\n"+
+                    "速度："+locat.get(8));
+            //点标记是否可拖动
+            markerOptions.draggable(true);
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.gps_point));
+            //将Maeker设置为贴地显示，可以双指下拉地图查看效果
+            markerOptions.setFlat(true);
+            //添加标记
+            marker=aMap.addMarker(markerOptions);
+            //将中心点移动到车辆点
+            aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
+            //Toast.makeText(getApplicationContext(),"获取成功",Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(OpcLocation.this,"没有查询到位置信息",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    /*public void showGoogleMap(){
+        double lat=0,lng=0;
+        Double dlat=new Double(locat.get(0));
+        Double dlng=new Double(locat.get(1));
+        lat=dlat.doubleValue();
+        lng=dlng.doubleValue();
+
+        //标记地图的点
+        google_map.loadUrl("http://www.google.cn/maps?q="+lat+","+lng+"(zxhl)&z=17&hl=cn");
+    }*/
+
+    //自定义一个js业务类
+    public class SharpJS{
+        @JavascriptInterface
+        public void showLatLng(){
+            google_map.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        String json = buildJson(getLatLng());
+                        google_map.loadUrl("javascript:showTag('" + json + "')");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+
+
+        }
+
+        //将获取的坐标写入到JsonObject中在添加到JsonArray数组中
+        public String buildJson(List<LatLngInfo> latLngs)throws Exception{
+            JSONArray jsonArray=new JSONArray();
+            for(LatLngInfo latLng:latLngs){
+                JSONObject jsonObject=new JSONObject();
+                jsonObject.put("lat",latLng.getLat());
+                jsonObject.put("lng",latLng.getLng());
+                jsonArray.put(jsonObject);
+            }
+            return jsonArray.toString();
+        }
+
+        //定义一个获取坐标的方法 返回的是List<LatLngInfo>
+        public List<LatLngInfo> getLatLng(){
+            List<LatLngInfo> latLngInfos=new ArrayList<LatLngInfo>();
+            LatLngInfo latLngInfo=new LatLngInfo();
+
+            if(locat.size()>6) {
+                double lat = 0, lng = 0;
+                Double dlat = new Double(locat.get(5));
+                Double dlng = new Double(locat.get(6));
+                lat = dlat.doubleValue();
+                lng = dlng.doubleValue();
+                latLngInfo.setLat(lat);
+                latLngInfo.setLng(lng);
+            }
+            else {
+                Toast.makeText(OpcLocation.this,"没有查询到位置信息",Toast.LENGTH_SHORT).show();
+            }
+
+
+            latLngInfos.add(latLngInfo);
+            return latLngInfos;
+        }
     }
 }

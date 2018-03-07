@@ -1,25 +1,27 @@
 package com.zxhl.gpsking;
 
-import android.graphics.Camera;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
-import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,13 +35,12 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
-import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
-import com.amap.api.navi.AmapPageType;
+import com.zxhl.entity.LatLngInfo;
 import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
 import com.zxhl.util.SharedPreferenceUtils;
@@ -47,6 +48,8 @@ import com.zxhl.util.ShowKeyboard;
 import com.zxhl.util.StatusBarUtil;
 import com.zxhl.util.WebServiceUtils;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
 
 import java.text.SimpleDateFormat;
@@ -59,7 +62,7 @@ import java.util.List;
  * Created by Administrator on 2018/1/8.
  */
 
-public class QuerySyLocation extends StatusBarUtil implements AMapLocationListener,LocationSource,View.OnClickListener,TextWatcher{
+public class QuerySyLocation extends StatusBarUtil implements AMapLocationListener,LocationSource,View.OnClickListener,TextWatcher,RadioGroup.OnCheckedChangeListener{
 
     private MapView map;
     private ImgTxtLayout back;
@@ -99,19 +102,44 @@ public class QuerySyLocation extends StatusBarUtil implements AMapLocationListen
     private ImageView img_sche;
     private AnimationDrawable anima;
 
+    //Google地图相关
+    //类型查询
+    private RadioGroup rg;
+    private RadioButton gaodemap;
+    private RadioButton googlemap;
+
+    private WebView google_map;
+    //是否有数据
+    private boolean isPoi=false;
+    //该地图是否显示过
+    private boolean isShowMapTag=false;
+    private boolean isShowMapTag2=false;
+    //现在显示的是什么地图1、高德2、谷歌
+    private int mapType=1;
+
     Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 0x403:
+                    rg.setEnabled(true);
                     ly_sche.setVisibility(View.GONE);
-                    map.setVisibility(View.VISIBLE);
+                    if(mapType==1) {
+                        map.setVisibility(View.VISIBLE);
+                    }else {
+                        google_map.setVisibility(View.VISIBLE);
+                    }
                     anima.stop();
                     Toast.makeText(QuerySyLocation.this,"没有查询到位置信息，请稍后重试",Toast.LENGTH_SHORT).show();
                     break;
                 case 0x404:
+                    rg.setEnabled(true);
                     ly_sche.setVisibility(View.GONE);
-                    map.setVisibility(View.VISIBLE);
+                    if(mapType==1) {
+                        map.setVisibility(View.VISIBLE);
+                    }else {
+                        google_map.setVisibility(View.VISIBLE);
+                    }
                     anima.stop();
                     Toast.makeText(QuerySyLocation.this,"服务器有点问题，我们正在全力修复！",Toast.LENGTH_SHORT).show();
                     break;
@@ -120,29 +148,24 @@ public class QuerySyLocation extends StatusBarUtil implements AMapLocationListen
                     vehicle.setAdapter(adapter);
                     break;
                 case 0x002:
+                    rg.setEnabled(true);
                     ly_sche.setVisibility(View.GONE);
-                    map.setVisibility(View.VISIBLE);
                     anima.stop();
-                    double lat=0,lng=0;
-                    Double dlat=new Double(locat.get(0));
-                    Double dlng=new Double(locat.get(1));
-                    lat=dlat.doubleValue();
-                    lng=dlng.doubleValue();
-                    markerOptions=new MarkerOptions();
-                    LatLng latLng=new LatLng(lat,lng);
-                    markerOptions.position(latLng);
-                    //点标记标题及内容
-                    markerOptions.title("详细位置").snippet(locat.get(2));
-                    //点标记是否可拖动
-                    markerOptions.draggable(true);
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.gps_point));
-                    //将Maeker设置为贴地显示，可以双指下拉地图查看效果
-                    markerOptions.setFlat(true);
-                    //添加标记
-                    marker=aMap.addMarker(markerOptions);
-                    //将中心点移动到车辆点
-                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
-                    //Toast.makeText(getApplicationContext(),"获取成功",Toast.LENGTH_LONG).show();
+                    isShowMapTag=false;
+                    isShowMapTag2=false;
+                    isPoi=true;
+                    if(mapType==1){
+                        map.setVisibility(View.VISIBLE);
+                        showGaodeMap();
+                        isShowMapTag=true;
+                    }
+                    else {
+                        //showGoogleMap();
+                        google_map.setVisibility(View.VISIBLE);
+                        google_map.addJavascriptInterface(new SharpJS(),"sharp");
+                        google_map.loadUrl("file:///android_asset/google_mapTag.html");
+                        isShowMapTag2=true;
+                    }
                     break;
             }
         }
@@ -170,6 +193,43 @@ public class QuerySyLocation extends StatusBarUtil implements AMapLocationListen
         map=(MapView)findViewById(R.id.query_map_loction);
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，实现地图生命周期管理
         map.onCreate(savedInstanceState);
+
+        //Google地图相关
+        //类型查询
+        rg=findViewById(R.id.loction_rg_type);
+        gaodemap =findViewById(R.id.loction_gaodemap);
+        googlemap =findViewById(R.id.loction_googlemap);
+        rg.setOnCheckedChangeListener(this);
+
+        google_map=findViewById(R.id.map);
+        //设置WebView属性,依次如下
+        //支持js,不支持缩放
+        //同时绑定Java对象
+        google_map.getSettings().setJavaScriptEnabled(true);
+        google_map.getSettings().setSupportZoom(false);
+        google_map.getSettings().setDefaultTextEncodingName("UTF-8");
+        google_map.loadUrl("file:///android_asset/google_mapInit.html");
+
+
+        //初始化地图
+        /*google_map.loadUrl("http://www.google.cn/maps?geo:0,0?q=35.780287,104.1361118(zxhl)&z=4&hl=cn");
+        google_map.setWebChromeClient(new WebChromeClient(){
+            //这里设置获取到的网站title
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+            }
+        });
+
+        google_map.setWebViewClient(new WebViewClient() {
+            //在webview里打开新链接
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });*/
+
 
         if(aMap==null){
             aMap=map.getMap();
@@ -462,8 +522,10 @@ public class QuerySyLocation extends StatusBarUtil implements AMapLocationListen
                     }
                 }
                 if(permiss==1){
+                    rg.setEnabled(false);
                     ly_sche.setVisibility(View.VISIBLE);
                     map.setVisibility(View.GONE);
+                    google_map.setVisibility(View.GONE);
                     anima.start();
                     getPoi();
                     title.setVisibility(View.VISIBLE);
@@ -495,5 +557,129 @@ public class QuerySyLocation extends StatusBarUtil implements AMapLocationListen
             getVeh.setEnabled(true);
         }
 
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        switch (checkedId){
+            case R.id.loction_gaodemap:
+                setChecked();
+                gaodemap.setChecked(true);
+                mapType=1;
+                map.setVisibility(View.VISIBLE);
+                if (isPoi){
+                    if (!isShowMapTag){
+                        isShowMapTag2=true;
+                        showGaodeMap();
+                    }
+                }
+                break;
+            case R.id.loction_googlemap:
+                setChecked();
+                googlemap.setChecked(true);
+                mapType=2;
+                google_map.setVisibility(View.VISIBLE);
+                if(isPoi){
+                    if (!isShowMapTag2){
+                        //showGoogleMap();
+                        isShowMapTag2=true;
+                        google_map.addJavascriptInterface(new SharpJS(),"sharp");
+                        google_map.loadUrl("file:///android_asset/google_mapTag.html");
+                    }
+                }
+                break;
+        }
+    }
+
+    public void setChecked(){
+        gaodemap.setChecked(false);
+        googlemap.setChecked(false);
+        map.setVisibility(View.GONE);
+        google_map.setVisibility(View.GONE);
+    }
+
+    public void showGaodeMap(){
+        double lat=0,lng=0;
+        Double dlat=new Double(locat.get(0));
+        Double dlng=new Double(locat.get(1));
+        lat=dlat.doubleValue();
+        lng=dlng.doubleValue();
+
+        markerOptions=new MarkerOptions();
+        LatLng latLng=new LatLng(lat,lng);
+        markerOptions.position(latLng);
+        //点标记标题及内容
+        markerOptions.title("详细位置").snippet(locat.get(2));
+        //点标记是否可拖动
+        markerOptions.draggable(true);
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.gps_point));
+        //将Maeker设置为贴地显示，可以双指下拉地图查看效果
+        markerOptions.setFlat(true);
+        //添加标记
+        marker=aMap.addMarker(markerOptions);
+        //将中心点移动到车辆点
+        aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
+        //Toast.makeText(getApplicationContext(),"获取成功",Toast.LENGTH_LONG).show();
+
+    }
+    /*public void showGoogleMap(){
+        double lat=0,lng=0;
+        Double dlat=new Double(locat.get(0));
+        Double dlng=new Double(locat.get(1));
+        lat=dlat.doubleValue();
+        lng=dlng.doubleValue();
+
+        //标记地图的点
+        google_map.loadUrl("http://www.google.cn/maps?q="+lat+","+lng+"(zxhl)&z=17&hl=cn");
+    }*/
+
+    //自定义一个js业务类
+    public class SharpJS{
+        @JavascriptInterface
+        public void showLatLng(){
+            google_map.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        String json = buildJson(getLatLng());
+                        google_map.loadUrl("javascript:showTag('" + json + "')");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+
+
+        }
+
+        //将获取的坐标写入到JsonObject中在添加到JsonArray数组中
+        public String buildJson(List<LatLngInfo> latLngs)throws Exception{
+            JSONArray jsonArray=new JSONArray();
+            for(LatLngInfo latLng:latLngs){
+                JSONObject jsonObject=new JSONObject();
+                jsonObject.put("lat",latLng.getLat());
+                jsonObject.put("lng",latLng.getLng());
+                jsonArray.put(jsonObject);
+            }
+            return jsonArray.toString();
+        }
+
+        //定义一个获取坐标的方法 返回的是List<LatLngInfo>
+        public List<LatLngInfo> getLatLng(){
+            List<LatLngInfo> latLngInfos=new ArrayList<LatLngInfo>();
+            LatLngInfo latLngInfo=new LatLngInfo();
+
+            double lat=0,lng=0;
+            Double dlat=new Double(locat.get(0));
+            Double dlng=new Double(locat.get(1));
+            lat=dlat.doubleValue();
+            lng=dlng.doubleValue();
+            latLngInfo.setLat(lat);
+            latLngInfo.setLng(lng);
+
+            latLngInfos.add(latLngInfo);
+            return latLngInfos;
+        }
     }
 }

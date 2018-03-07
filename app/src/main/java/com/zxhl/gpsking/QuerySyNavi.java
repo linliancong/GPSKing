@@ -38,6 +38,7 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.zxhl.util.ApkVersionUtils;
 import com.zxhl.util.Constants;
 import com.zxhl.util.GPSNaviUtil;
 import com.zxhl.util.ImgTxtLayout;
@@ -154,7 +155,7 @@ public class QuerySyNavi extends StatusBarUtil implements AMapLocationListener,L
                     if(sTag==1&&eTag==1) {
                         if(isInstalled&&!isInstalled2){
                             StringBuilder str=new StringBuilder();
-                            str.append("androidamap://navi?");
+                            /*str.append("androidamap://navi?");
                             try{
                                 //填写应用名称
                                 str.append("sourceApplication="+ URLEncoder.encode(vehicle.getText().toString(),"UTF-8"));
@@ -164,6 +165,19 @@ public class QuerySyNavi extends StatusBarUtil implements AMapLocationListener,L
                                 str.append("&lat="+eLat);
                                 str.append("&lon="+eLng);
                                 str.append("&dev=1&style=2");
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }*/
+                            str.append("androidamap://viewMap?");
+                            try{
+                                //填写应用名称
+                                str.append("sourceApplication="+ URLEncoder.encode(ApkVersionUtils.getVerName(QuerySyNavi.this),"UTF-8"));
+                                //导航目的地
+                                str.append("&poiname="+URLEncoder.encode(vehicle.getText().toString(),"UTF-8"));
+                                //目的地经纬度
+                                str.append("&lat="+eLat);
+                                str.append("&lon="+eLng);
+                                str.append("&dev=0&style=2");
                             }catch (Exception e){
                                 e.printStackTrace();
                             }

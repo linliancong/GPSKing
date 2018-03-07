@@ -44,7 +44,7 @@ import java.util.List;
  * Created by Administrator on 2018/1/29.
  */
 
-public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWatcher,RadioGroup.OnCheckedChangeListener{
+public class QuerySyRemote extends StatusBarUtil implements View.OnClickListener,TextWatcher{
 
     //控件
     private ListView list;
@@ -91,18 +91,6 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
     //数据加载完毕
     private boolean isData=false;
 
-    //类型查询
-    private RadioGroup rg;
-    private RadioButton app;
-    private RadioButton pc;
-
-    //是否有数据
-    private boolean isLog=false;
-    //记录是否显示过
-    private boolean isShowMapTag1=false;
-    private boolean isShowMapTag2=false;
-    //现在显示的是什么记录1、APP2、PC
-    private int logType =1;
 
     Handler handler=new Handler(){
         @Override
@@ -128,15 +116,6 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
                     count=info.size()/PAGE_COUNT;
                     if(info.size()%PAGE_COUNT>0){
                         count+=1;
-                    }
-                    if(logType==1){
-                        info1=info;
-                        count1=count;
-                        isShowMapTag1=true;
-                    }else{
-                        info2=info;
-                        count2=count;
-                        isShowMapTag2=true;
                     }
                     showInfo();
                     list.setVisibility(View.VISIBLE);
@@ -172,7 +151,7 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.query_log);
 
-        context=OpcLog.this;
+        context=QuerySyRemote.this;
 
         init();
         getVehicleLic();
@@ -190,7 +169,7 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.opc_log;
+        return R.layout.query_remote;
     }
 
     public void init(){
@@ -214,12 +193,6 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
         log_img_sche=findViewById(R.id.log_img_sche);
         anima= (AnimationDrawable) log_img_sche.getDrawable();
 
-        //类型查询
-        rg=findViewById(R.id.log_rg_type);
-        app =findViewById(R.id.log_app);
-        pc =findViewById(R.id.log_pc);
-        rg.setOnCheckedChangeListener(this);
-        app.setChecked(true);
 
         Log =new ArrayList<>();
 
@@ -295,18 +268,14 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
                         list.setVisibility(View.GONE);
                         log_ly_sche.setVisibility(View.VISIBLE);
                         anima.start();
-                        if(logType==1) {
-                            getCodeHistory();
-                        }else {
-                            getCodeHistory_PC();
-                        }
+                        getCodeHistory();
                         title.setVisibility(View.VISIBLE);
                         search.setVisibility(View.VISIBLE);
                         img1.setVisibility(View.GONE);
                         img2.setVisibility(View.GONE);
                         vehicle.setVisibility(View.GONE);
                     } else {
-                        Toast.makeText(OpcLog.this, "机号输入有误或者您没有权限操作", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(QuerySyRemote.this, "机号输入有误或者您没有权限操作", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else
@@ -314,11 +283,7 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
                     list.setVisibility(View.GONE);
                     log_ly_sche.setVisibility(View.VISIBLE);
                     anima.start();
-                    if(logType==1) {
-                        getCodeHistory();
-                    }else {
-                        getCodeHistory_PC();
-                    }
+                    getCodeHistory();
                     title.setVisibility(View.VISIBLE);
                     search.setVisibility(View.VISIBLE);
                     img1.setVisibility(View.GONE);
@@ -337,7 +302,7 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
         proper.put("VehicleLic",vehicle.getText().toString());
         //vehicle.setText("");
 
-        WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetCodeHistory", proper, new WebServiceUtils.WebServiceCallBack() {
+        WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetCarRemote", proper, new WebServiceUtils.WebServiceCallBack() {
             @Override
             public void callBack(SoapObject result) {
                 if(result!=null){
@@ -359,34 +324,6 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
         });
     }
 
-    //获取指令下发记录列表（PC）
-    private void getCodeHistory_PC(){
-        HashMap<String,String> proper=new HashMap<>();
-        proper.put("OperatorID",sp.getOperatorID());
-        proper.put("VehicleLic",vehicle.getText().toString());
-        //vehicle.setText("");
-
-        WebServiceUtils.callWebService(WebServiceUtils.WEB_SERVER_URL, "GetCodeHistory_PC", proper, new WebServiceUtils.WebServiceCallBack() {
-            @Override
-            public void callBack(SoapObject result) {
-                if(result!=null){
-                    List<List<String>> list=new ArrayList<>();
-                    list=parase2(result);
-                    if(list.size()!=0){
-                        info=list;
-                        handler.sendEmptyMessage(0x001);
-                    }
-                    else
-                    {
-                        handler.sendEmptyMessage(0x403);
-                    }
-                }
-                else{
-                    handler.sendEmptyMessage(0x404);
-                }
-            }
-        });
-    }
 
     /**
      *解析SoapObject对象
@@ -397,7 +334,7 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
         List<List<String>> lists=new ArrayList<>();
         List<String> list;
         String type="";
-        String[] types=new String[]{};
+        String types=null;
         SoapObject soap= (SoapObject) result.getProperty(0);
         if(soap==null) {
             return null;
@@ -408,57 +345,26 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
             list.add(soapObject.getProperty(0).toString());
             list.add(soapObject.getProperty(1).toString());
             list.add(soapObject.getProperty(2).toString());
-            types=soapObject.getProperty(3).toString().split(",");
-            if(types.length==1) {
-                switch (types[0]) {
-                    case "锁车监控0":
-                        type = "全部解锁";
+            types=soapObject.getProperty(3).toString();
+            if(types!=null) {
+                switch (types) {
+                    case "0":
+                        type = "原状态";
                         break;
-                    case "锁车监控1":
-                        type = "一级锁车";
+                    case "1":
+                        type = "锁机";
                         break;
-                    case "锁车监控2":
-                        type = "二级锁车";
+                    case "2":
+                        type = "复机";
                         break;
-                    case "锁车监控3":
-                        type = "一级解锁";
-                        break;
-                    case "锁车监控4":
-                        type = "二级解锁";
-                        break;
-                    case "锁车监控5":
-                        type = "退出监控";
-                        break;
-                    case "锁车监控6":
-                        type = "进入监控";
-                        break;
-                    case "断油断电1":
-                        type = "一级断油电";
-                        break;
-                    case "断油断电2":
-                        type = "一级恢复油电";
-                        break;
-                    case "断油断电3":
-                        type = "二级断油电";
-                        break;
-                    case "断油断电4":
-                        type = "二级恢复油电";
-                        break;
-                    case "车辆位置查询":
-                        type = "车辆位置查询";
+                    default:
+                        type = "锁机";
                         break;
                 }
             }
             else
             {
-                switch (types[1]) {
-                    case "0":
-                        type="退出样机模式";
-                        break;
-                    case "1":
-                        type="进入样机模式";
-                        break;
-                }
+                type="锁机";
             }
             list.add(type);
             list.add(soapObject.getProperty(4).toString());
@@ -467,32 +373,6 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
         return lists;
     }
 
-    /**
-     *解析SoapObject对象
-     *@param result
-     * @return
-     * */
-    private List<List<String>> parase2(SoapObject result){
-        List<List<String>> lists=new ArrayList<>();
-        List<String> list;
-        String type="";
-        String[] types=new String[]{};
-        SoapObject soap= (SoapObject) result.getProperty(0);
-        if(soap==null) {
-            return null;
-        }
-        for (int i=0;i<soap.getPropertyCount();i++){
-            SoapObject soapObject= (SoapObject) soap.getProperty(i);
-            list=new ArrayList<>();
-            list.add(soapObject.getProperty(0).toString());
-            list.add(soapObject.getProperty(1).toString());
-            list.add(soapObject.getProperty(2).toString());
-            list.add(soapObject.getProperty(3).toString());
-            list.add(soapObject.getProperty(4).toString());
-            lists.add(list);
-        }
-        return lists;
-    }
 
     //获取车辆列表
     private void getVehicleLic(){
@@ -531,13 +411,6 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
         int page_last=0;
         Log = new ArrayList<>();
 
-        if(logType==1){
-            info=info1;
-            count=count1;
-        }else {
-            info=info2;
-            count=count2;
-        }
 
         Collections.reverse(Log);
         for(int i=0;i<page*PAGE_COUNT;i++) {
@@ -550,12 +423,12 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
 
         Collections.reverse(Log);
 
-        adapterUtil=new AdapterUtil<CodeHistory>(Log,R.layout.opc_log_item){
+        adapterUtil=new AdapterUtil<CodeHistory>(Log,R.layout.query_remote_item){
             @Override
             public void bindView(ViewHolder holder, CodeHistory obj) {
                 holder.setText(R.id.log_item_vehicle,obj.getVehicleLic());
                 holder.setText(R.id.log_item_type,obj.getOperaProject());
-                holder.setText(R.id.log_item_result,obj.getOperaResult());
+                holder.setText(R.id.log_item_position,obj.getOperaResult());
                 holder.setText(R.id.log_item_time,obj.getOperatorTime());
                 holder.setText(R.id.log_item_operator,obj.getOperatorName());
             }
@@ -599,40 +472,4 @@ public class OpcLog extends StatusBarUtil implements View.OnClickListener,TextWa
         }
     }
 
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId){
-            case R.id.log_app:
-                setChecked();
-                app.setChecked(true);
-                logType =1;
-                if(isShowMapTag1) {
-                    showInfo();
-                }else {
-                    list.setVisibility(View.GONE);
-                    log_ly_sche.setVisibility(View.VISIBLE);
-                    anima.start();
-                    getCodeHistory();
-                }
-                break;
-            case R.id.log_pc:
-                setChecked();
-                pc.setChecked(true);
-                logType =2;
-                if(isShowMapTag2) {
-                    showInfo();
-                }else {
-                    list.setVisibility(View.GONE);
-                    log_ly_sche.setVisibility(View.VISIBLE);
-                    anima.start();
-                    getCodeHistory_PC();
-                }
-                break;
-        }
-    }
-
-    public void setChecked(){
-        app.setChecked(false);
-        pc.setChecked(false);
-    }
 }

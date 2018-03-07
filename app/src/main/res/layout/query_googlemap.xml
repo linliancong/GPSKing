@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:zxhl="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -111,89 +110,11 @@
             />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/loction_ly_sche"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_gray_opc"
-        android:visibility="gone"
-        android:layout_below="@+id/query_ly_title"
-        >
-        <ImageView
-            android:id="@+id/loction_img_sche"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/anima_sche"
-            />
-
-    </RelativeLayout>
-
-
-    <RelativeLayout
+    <WebView
+        android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/query_ly_title"
-        >
+        ></WebView>
 
-        <com.amap.api.maps.MapView
-            android:id="@+id/query_map_loction"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:visibility="visible"
-            />
-
-        <WebView
-            android:id="@+id/map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            ></WebView>
-
-        <RadioGroup
-            android:id="@+id/loction_rg_type"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/setting_wtfk_text_normal"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            >
-            <RadioButton
-                android:id="@+id/loction_gaodemap"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:button="@null"
-                android:gravity="center"
-                android:text="高德地图"
-                android:textSize="10sp"
-                android:padding="10dp"
-                android:background="@drawable/bjxx_type_color"
-                android:checked="true"
-                />
-            <View
-                android:layout_width="1px"
-                android:layout_height="20dp"
-                android:background="@color/black_line"
-                android:layout_gravity="center"
-                />
-            <RadioButton
-                android:id="@+id/loction_googlemap"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:button="@null"
-                android:gravity="center"
-                android:text="谷歌地图"
-                android:textSize="10sp"
-                android:padding="10dp"
-                android:background="@drawable/bjxx_type_color3"
-                />
-
-        </RadioGroup>
-
-    </RelativeLayout>
 </RelativeLayout>

@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/log_imgtxt_title"
             android:layout_centerVertical="true"
-            android:text="指令下发记录"
+            android:text="遥控设备"
             android:textSize="18sp"
             android:textColor="@color/black"
             />
@@ -131,51 +131,6 @@
             android:visibility="visible"
             ></ListView>
     </com.zxhl.util.SwipeRefreshView>
-
-    <RadioGroup
-        android:id="@+id/log_rg_type"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/setting_wtfk_text_normal"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="53dp"
-        >
-        <RadioButton
-            android:id="@+id/log_app"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:button="@null"
-            android:gravity="center"
-            android:text="APP端"
-            android:textSize="10sp"
-            android:padding="10dp"
-            android:background="@drawable/bjxx_type_color"
-            android:checked="true"
-            />
-        <View
-            android:layout_width="1px"
-            android:layout_height="20dp"
-            android:background="@color/black_line"
-            android:layout_gravity="center"
-            />
-        <RadioButton
-            android:id="@+id/log_pc"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:button="@null"
-            android:gravity="center"
-            android:text="PC端"
-            android:textSize="10sp"
-            android:padding="10dp"
-            android:background="@drawable/bjxx_type_color3"
-            />
-
-    </RadioGroup>
-
 
 
     <ImageView

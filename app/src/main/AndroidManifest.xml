@@ -33,6 +33,15 @@
             android:value="be2dbd9bb005e98a381f4102cb880c89"
             />
 
+        <!--Google Map配置-->
+        <!--<meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />-->
+
         <!--
          在android4.0以上系统中的 Activity加上下面这句，可以支持地图横竖屏切换
          android:configChanges="orientation|keyboardHidden|screenSize"
@@ -217,6 +226,13 @@
         <activity android:name=".QuerySyGpsyc">
             <intent-filter>
                 <action android:name="android.intent.action.QUERYSYGPSYC"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".QuerySyRemote">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYREMOTE"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
