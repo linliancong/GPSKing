@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:zxhl="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/clgl_ly_title"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:background="@color/bg_white"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_alignParentTop="true"
+        >
+
+        <com.zxhl.util.ImgTxtLayout
+            android:id="@+id/clgl_imgtxt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="15dp"
+            zxhl:iconDrawable="@mipmap/cs_ic_back_blue"
+            zxhl:iconDrawablePress="@mipmap/cs_ic_back_blue_press"
+            zxhl:spacing="10dp"
+            zxhl:style="iconLeft"
+            />
+
+        <TextView
+            android:id="@+id/clgl_txt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/clgl_imgtxt_title"
+            android:layout_centerVertical="true"
+            android:text="车辆管理"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            />
+
+        <EditText
+            android:id="@+id/clgl_edit_img"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:drawableBottom="@drawable/line"
+            android:layout_toRightOf="@+id/clgl_imgtxt_title"
+            android:layout_centerVertical="true"
+            android:focusable="false"
+            android:clickable="false"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/clgl_img_img"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/search_bar"
+            android:layout_toRightOf="@+id/clgl_imgtxt_title"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            />
+
+        <AutoCompleteTextView
+            android:id="@+id/clgl_auto_vehiclelic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:background="@null"
+            android:drawableBottom="@drawable/line"
+            android:dropDownVerticalOffset="10dp"
+            android:dropDownHeight="200dp"
+            android:layout_toRightOf="@+id/clgl_edit_img"
+            android:layout_toLeftOf="@+id/clgl_btn_get"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:visibility="gone"
+            android:hint="请输入机号"
+            />
+
+        <ImageView
+            android:id="@+id/clgl_img_serch"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/search_bar"
+            android:layout_toLeftOf="@+id/clgl_btn_get"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            />
+
+        <Button
+            android:id="@+id/clgl_btn_get"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_width="50dp"
+            android:layout_height="26dp"
+            android:background="@drawable/me_sy_btn"
+            android:text="搜索"
+            android:textColor="@color/bg_white"
+            android:textSize="12sp"
+            android:enabled="true"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@color/div_white"
+            android:layout_alignParentBottom="true"
+            />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_below="@+id/clgl_ly_title"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="机号"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:gravity="right"
+                android:layout_marginRight="20dp"
+                />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="30dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal"
+                android:background="@drawable/add"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:gravity="center"
+                >
+                <EditText
+                    android:id="@+id/query_clgl_jh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="分组"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:gravity="right"
+                android:layout_marginRight="20dp"
+                />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="30dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal"
+                android:background="@drawable/add"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:gravity="center"
+                >
+                <Spinner
+                    android:id="@+id/query_clgl_fz"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown"
+                    android:dropDownVerticalOffset="34dp"
+                    android:popupBackground="@drawable/simlpe_spinner_bg"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="机械型号"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:gravity="right"
+                android:layout_marginRight="20dp"
+                />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="30dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal"
+                android:background="@drawable/add"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:gravity="center"
+
+                >
+                <Spinner
+                    android:id="@+id/query_clgl_jxxh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown"
+                    android:dropDownVerticalOffset="34dp"
+                    android:popupBackground="@drawable/simlpe_spinner_bg"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="40dp"
+        >
+        <Button
+            android:id="@+id/query_clgl_xg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="XG修改"
+            android:background="@drawable/me_sy_btn"
+            android:textColor="@color/bg_white"
+
+            />
+    </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/clgl_ly_sche"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/clgl_ly_title"
+        android:background="@color/bg_gray_opc"
+        android:visibility="gone"
+        >
+        <ImageView
+            android:id="@+id/clgl_img_sche"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/anima_sche"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="查询中，请稍后..."
+            android:textSize="10sp"
+            android:layout_below="@+id/clgl_img_sche"
+            android:layout_centerInParent="true"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>

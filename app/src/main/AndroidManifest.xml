@@ -237,6 +237,13 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".QuerySyClgl">
+            <intent-filter>
+                <action android:name="android.intent.action.QUERYSYCLGL"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".SendAlarmInfo">
             <intent-filter>
                 <action android:name="android.intent.action.SENDALARMINFO"/>

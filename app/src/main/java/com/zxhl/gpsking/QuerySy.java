@@ -79,7 +79,7 @@ public class QuerySy extends Fragment implements View.OnClickListener {
         if(sp.getRoleID().equals("1")) {
             mData.add(new Icon(R.drawable.bjxx,"报警信息"));
             mData.add(new Icon(R.drawable.yyzx, "运营中心"));
-            mData.add(new Icon(0, ""));
+            mData.add(new Icon(R.drawable.clgl, "车辆管理"));
             mData.add(new Icon(0, ""));
         }
 
@@ -169,6 +169,13 @@ public class QuerySy extends Fragment implements View.OnClickListener {
                         if(sp.getRoleID().equals("1")) {
                             Intent it13=new Intent(context,OperatingCenter.class);
                             startActivity(it13);
+                        }
+                        else {}
+                    case 14:
+                        //车辆管理
+                        if(sp.getRoleID().equals("1")) {
+                            Intent it14=new Intent(context,QuerySyClgl.class);
+                            startActivity(it14);
                         }
                         else {}
 
