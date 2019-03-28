@@ -168,6 +168,8 @@ public class Login extends StatusBarUtil implements View.OnClickListener,TextWat
                     utils.setRolePermission(list.get(3));
                     utils.setRoleID(list.get(4));
                     utils.setIsFirst(false);
+                    utils.setVehicleLic("");
+                    utils.setDayCount("7");
                     Intent it=new Intent(Login.this,HomePage.class);
                     startActivity(it);
                     pop.dismiss();

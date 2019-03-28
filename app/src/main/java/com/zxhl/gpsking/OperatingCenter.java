@@ -16,7 +16,9 @@ import android.widget.RelativeLayout;
 
 import com.zxhl.entity.Icon;
 import com.zxhl.util.AdapterUtil;
+import com.zxhl.util.Constants;
 import com.zxhl.util.ImgTxtLayout;
+import com.zxhl.util.SharedPreferenceUtils;
 import com.zxhl.util.StatusBarUtil;
 
 import java.util.ArrayList;
@@ -38,10 +40,13 @@ public class OperatingCenter extends StatusBarUtil implements View.OnClickListen
     private RelativeLayout lock_time;
     private RelativeLayout log;
 
+    private SharedPreferenceUtils sp;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context=OperatingCenter.this;
+        sp=new SharedPreferenceUtils(context, Constants.SAVE_USER);
 
         location=findViewById(R.id.opc_ly_ssdw);
         lock=findViewById(R.id.opc_ly_sc);
@@ -51,6 +56,11 @@ public class OperatingCenter extends StatusBarUtil implements View.OnClickListen
         lock_time=findViewById(R.id.opc_ly_dssc);
         log=findViewById(R.id.opc_ly_jl);
         back=findViewById(R.id.opc_imgtxt_back);
+
+        if(sp.getRoleID().equals("12")){
+            oil_ele.setVisibility(View.GONE);
+            lock_time.setVisibility(View.GONE);
+        }
 
         location.setOnClickListener(this);
         lock.setOnClickListener(this);

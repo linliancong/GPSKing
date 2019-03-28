@@ -64,23 +64,36 @@ public class QuerySy extends Fragment implements View.OnClickListener {
         sp=new SharedPreferenceUtils(context, Constants.SAVE_USER);
 
         mData=new ArrayList<Icon>();
-        mData.add(new Icon(R.drawable.clwz,"车辆位置"));
-        mData.add(new Icon(R.drawable.ccdh,"查车导航"));
-        mData.add(new Icon(R.drawable.gjhf,"轨迹回放"));
-        mData.add(new Icon(R.drawable.gkxx,"工况信息"));
-        mData.add(new Icon(R.drawable.bbtj,"报表统计"));
-        mData.add(new Icon(R.drawable.yjcl,"样机车辆"));
-        mData.add(new Icon(R.drawable.gpsyc,"GPS异常"));
-        mData.add(new Icon(R.drawable.scxx,"锁车信息"));
-        mData.add(new Icon(R.drawable.bytx,"保养提醒"));
-        mData.add(new Icon(R.drawable.sbxx,"设备信息"));
-        mData.add(new Icon(R.drawable.yycl,"预约车辆"));
-        mData.add(new Icon(R.drawable.jk,"遥控设备"));
-        if(sp.getRoleID().equals("1")) {
-            mData.add(new Icon(R.drawable.bjxx,"报警信息"));
+        if(sp.getRoleID().equals("12")){
+            mData.add(new Icon(R.drawable.clwz, "车辆位置"));
+            mData.add(new Icon(R.drawable.ccdh, "查车导航"));
+            mData.add(new Icon(R.drawable.gjhf, "轨迹回放"));
+            mData.add(new Icon(R.drawable.gkxx, "工况信息"));
+            mData.add(new Icon(R.drawable.bbtj, "设备工作时间"));
+            mData.add(new Icon(R.drawable.clgl, "发动机工作时间"));
+            mData.add(new Icon(R.drawable.sbxx, "设备信息"));
+            mData.add(new Icon(R.drawable.jk, "遥控设备"));
             mData.add(new Icon(R.drawable.yyzx, "运营中心"));
-            mData.add(new Icon(R.drawable.clgl, "车辆管理"));
-            mData.add(new Icon(0, ""));
+        }
+        else {
+            mData.add(new Icon(R.drawable.clwz, "车辆位置"));
+            mData.add(new Icon(R.drawable.ccdh, "查车导航"));
+            mData.add(new Icon(R.drawable.gjhf, "轨迹回放"));
+            mData.add(new Icon(R.drawable.gkxx, "工况信息"));
+            mData.add(new Icon(R.drawable.bbtj, "报表统计"));
+            mData.add(new Icon(R.drawable.yjcl, "样机车辆"));
+            mData.add(new Icon(R.drawable.gpsyc, "GPS异常"));
+            mData.add(new Icon(R.drawable.scxx, "锁车信息"));
+            mData.add(new Icon(R.drawable.bytx, "保养提醒"));
+            mData.add(new Icon(R.drawable.sbxx, "设备信息"));
+            mData.add(new Icon(R.drawable.yycl, "预约车辆"));
+            mData.add(new Icon(R.drawable.jk, "遥控设备"));
+            if (sp.getRoleID().equals("1")) {
+                mData.add(new Icon(R.drawable.bjxx, "报警信息"));
+                mData.add(new Icon(R.drawable.yyzx, "运营中心"));
+                mData.add(new Icon(R.drawable.clgl, "车辆管理"));
+                mData.add(new Icon(0, ""));
+            }
         }
 
 
@@ -98,88 +111,135 @@ public class QuerySy extends Fragment implements View.OnClickListener {
         grid_icon.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch(position){
-                    case 0:
-                        //车辆位置
-                        Intent it0=new Intent(context,QuerySyLocation.class);
-                        startActivity(it0);
-                        break;
-                    case 1:
-                        //查车导航
-                        Intent it1=new Intent(context,QuerySyNavi.class);
-                        startActivity(it1);
-                        break;
-                    case 2:
-                        //轨迹回放
-                        Intent it2=new Intent(context,QuerySyTrackPlayback.class);
-                        startActivity(it2);
-                        break;
-                    case 3:
-                        //工况信息
-                        Intent it3=new Intent(context,QuerySyGkxx.class);
-                        startActivity(it3);
-                        break;
-                    case 4:
-                        //报表统计
-                        Intent it4=new Intent(context,QuerySyBbtj.class);
-                        startActivity(it4);
-                        break;
-                    case 5:
-                        //样机车辆
-                        Intent it5=new Intent(context,QuerySyYjcl.class);
-                        startActivity(it5);
-                        break;
-                    case 6:
-                        //GPS异常
-                        Intent it6=new Intent(context,QuerySyGpsyc.class);
-                        startActivity(it6);
-                        break;
-                    case 7:
-                        //锁车信息
-                        Intent it7=new Intent(context,QuerySyScxx.class);
-                        startActivity(it7);
-                        break;
-                    case 8:
-                        //保养提醒
-                        Intent it8=new Intent(context,QuerySyBytx.class);
-                        startActivity(it8);
-                        break;
-                    case 9:
-                        //设备信息
-                        Intent it9=new Intent(context,QuerySySbxx.class);
-                        startActivity(it9);
-                        break;
-                    case 10:
-                        //预约车辆
-                        Intent it10=new Intent(context,QuerySyYycl.class);
-                        startActivity(it10);
-                        break;
-                    case 11:
-                        //遥控设备
-                        Intent it11=new Intent(context,QuerySyRemote.class);
-                        startActivity(it11);
-                        break;
-                    case 12:
-                        //报警设备
-                        Intent it12=new Intent(context,QuerySyBjxx.class);
-                        startActivity(it12);
-                        break;
-                    case 13:
-                        //运营中心
-                        if(sp.getRoleID().equals("1")) {
-                            Intent it13=new Intent(context,OperatingCenter.class);
+                if(sp.getRoleID().equals("12")){
+                    switch (position) {
+                        case 0:
+                            //车辆位置
+                            Intent it0 = new Intent(context, QuerySyLocation.class);
+                            startActivity(it0);
+                            break;
+                        case 1:
+                            //查车导航
+                            Intent it1 = new Intent(context, QuerySyNavi.class);
+                            startActivity(it1);
+                            break;
+                        case 2:
+                            //轨迹回放
+                            Intent it2 = new Intent(context, QuerySyTrackPlayback.class);
+                            startActivity(it2);
+                            break;
+                        case 3:
+                            //工况信息
+                            Intent it3 = new Intent(context, QuerySyGkxxNFLG.class);
+                            startActivity(it3);
+                            break;
+                        case 4:
+                            //报表统计(设备工作时间)
+                            Intent it4 = new Intent(context, QuerySyBbtj.class);
+                            it4.putExtra("key",1);
+                            startActivity(it4);
+                            break;
+                        case 5:
+                            //报表统计(发动机工作时间)
+                            Intent it5 = new Intent(context, QuerySyBbtj.class);
+                            it5.putExtra("key",2);
+                            startActivity(it5);
+                            break;
+                        case 6:
+                            //设备信息
+                            Intent it9 = new Intent(context, QuerySySbxx.class);
+                            startActivity(it9);
+                            break;
+                        case 7:
+                            //遥控设备
+                            Intent it11 = new Intent(context, QuerySyRemote.class);
+                            startActivity(it11);
+                            break;
+                        case 8:
+                            //运营中心
+                            Intent it13 = new Intent(context, OperatingCenter.class);
                             startActivity(it13);
-                        }
-                        else {}
-                    case 14:
-                        //车辆管理
-                        if(sp.getRoleID().equals("1")) {
-                            Intent it14=new Intent(context,QuerySyClgl.class);
+                            break;
+                    }
+                }
+                else {
+                    switch (position) {
+                        case 0:
+                            //车辆位置
+                            Intent it0 = new Intent(context, QuerySyLocation.class);
+                            startActivity(it0);
+                            break;
+                        case 1:
+                            //查车导航
+                            Intent it1 = new Intent(context, QuerySyNavi.class);
+                            startActivity(it1);
+                            break;
+                        case 2:
+                            //轨迹回放
+                            Intent it2 = new Intent(context, QuerySyTrackPlayback.class);
+                            startActivity(it2);
+                            break;
+                        case 3:
+                            //工况信息
+                            Intent it3 = new Intent(context, QuerySyGkxx.class);
+                            startActivity(it3);
+                            break;
+                        case 4:
+                            //报表统计
+                            Intent it4 = new Intent(context, QuerySyBbtj.class);
+                            startActivity(it4);
+                            break;
+                        case 5:
+                            //样机车辆
+                            Intent it5 = new Intent(context, QuerySyYjcl.class);
+                            startActivity(it5);
+                            break;
+                        case 6:
+                            //GPS异常
+                            Intent it6 = new Intent(context, QuerySyGpsyc.class);
+                            startActivity(it6);
+                            break;
+                        case 7:
+                            //锁车信息
+                            Intent it7 = new Intent(context, QuerySyScxx.class);
+                            startActivity(it7);
+                            break;
+                        case 8:
+                            //保养提醒
+                            Intent it8 = new Intent(context, QuerySyBytx.class);
+                            startActivity(it8);
+                            break;
+                        case 9:
+                            //设备信息
+                            Intent it9 = new Intent(context, QuerySySbxx.class);
+                            startActivity(it9);
+                            break;
+                        case 10:
+                            //预约车辆
+                            Intent it10 = new Intent(context, QuerySyYycl.class);
+                            startActivity(it10);
+                            break;
+                        case 11:
+                            //遥控设备
+                            Intent it11 = new Intent(context, QuerySyRemote.class);
+                            startActivity(it11);
+                            break;
+                        case 12:
+                            //报警设备
+                            Intent it12 = new Intent(context, QuerySyBjxx.class);
+                            startActivity(it12);
+                            break;
+                        case 13:
+                            //运营中心
+                            Intent it13 = new Intent(context, OperatingCenter.class);
+                            startActivity(it13);
+                            break;
+                        case 14:
+                            //车辆管理
+                            Intent it14 = new Intent(context, QuerySyClgl.class);
                             startActivity(it14);
-                        }
-                        else {}
-
-                        break;
+                            break;
+                    }
                 }
 
             }

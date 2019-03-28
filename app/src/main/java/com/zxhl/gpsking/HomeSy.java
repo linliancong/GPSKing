@@ -525,9 +525,17 @@ public class HomeSy extends Fragment implements View.OnClickListener {
         if(soap==null) {
             return null;
         }
-        for (int i=0;i<soap.getPropertyCount();i+=2){
-            listTime.add(soap.getProperty(i).toString());
-            listWork.add(soap.getProperty(i+1).toString());
+        if(sp.getRoleID().equals("12")&& !sp.getVehicleLic().equals("")){
+            for (int i = 0; i < soap.getPropertyCount(); i += 3) {
+                listTime.add(soap.getProperty(i).toString());
+                listWork.add(soap.getProperty(i + 1).toString());
+            }
+        }
+        else {
+            for (int i = 0; i < soap.getPropertyCount(); i += 2) {
+                listTime.add(soap.getProperty(i).toString());
+                listWork.add(soap.getProperty(i + 1).toString());
+            }
         }
         lists.add(listTime);
         lists.add(listWork);

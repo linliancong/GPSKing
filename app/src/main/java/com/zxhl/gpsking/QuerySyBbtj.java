@@ -1,6 +1,7 @@
 package com.zxhl.gpsking;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -86,6 +87,8 @@ public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,T
 
     private Calendar selectedDate;
 
+    private int tag=0;
+
 
     Handler handler=new Handler(){
         @Override
@@ -126,6 +129,13 @@ public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,T
 
         init();
         getVehicleLic();
+        Intent intent=getIntent();
+        tag=intent.getIntExtra("key",0);
+        if(tag!=2){
+            gkxx_imgtxt_title.setText("设备工作时间");
+        }else {
+            gkxx_imgtxt_title.setText("发动机工作时间");
+        }
     }
 
     @Override
@@ -474,9 +484,24 @@ public class QuerySyBbtj extends StatusBarUtil implements View.OnClickListener,T
         if(soap==null) {
             return null;
         }
-        for (int i=0;i<soap.getPropertyCount();i+=2){
-            listTime.add(soap.getProperty(i).toString());
-            listWork.add(soap.getProperty(i+1).toString());
+        if(tag==0) {
+            for (int i = 0; i < soap.getPropertyCount(); i += 2) {
+                listTime.add(soap.getProperty(i).toString());
+                listWork.add(soap.getProperty(i + 1).toString());
+            }
+        }
+        else{
+            if(tag==1) {
+                for (int i = 0; i < soap.getPropertyCount(); i += 3) {
+                    listTime.add(soap.getProperty(i).toString());
+                    listWork.add(soap.getProperty(i + 1).toString());
+                }
+            }else {
+                for (int i = 0; i < soap.getPropertyCount(); i += 3) {
+                    listTime.add(soap.getProperty(i).toString());
+                    listWork.add(soap.getProperty(i + 2).toString());
+                }
+            }
         }
         lists.add(listTime);
         lists.add(listWork);
